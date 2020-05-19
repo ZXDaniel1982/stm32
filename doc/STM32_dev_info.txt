@@ -1,0 +1,2 @@
+To disassembling Cortex-M3 bin file
+    arm-none-eabi-objdump -D -bbinary -marm <input.bin> -Mforce-thumb > <output.s>

@@ -197,7 +197,9 @@ $(BUILD_DIR)/%.hex: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
 	$(HEX) $< $@
 	
 $(BUILD_DIR)/%.bin: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
-	$(BIN) $< $@	
+	$(BIN) $< $@
+	$(RM) $(BUILD_DIR)/*.d
+	$(RM) $(BUILD_DIR)/*.lst
 	
 $(BUILD_DIR):
 	mkdir $@	
@@ -212,8 +214,8 @@ install:
 # clean up
 #######################################
 clean:
-	-rm -fR $(BUILD_DIR)
-	-rm $(ROOT)/Core/Inc/boardcfg.h
+	$(RM) -fR $(BUILD_DIR)
+	$(RM) $(ROOT)/Core/Inc/boardcfg.h
 
 #######################################
 # dependencies

@@ -117,12 +117,12 @@ $(BUILD_DIR)/%.hex: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
 
 $(BUILD_DIR)/%.bin: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
 	$(CP) -O binary -S $< $@
-	echo $(shell date)
+	$(RM) $(BUILD_DIR)/*.d
+	$(RM) $(BUILD_DIR)/*.lst
 
 $(BUILD_DIR):
-	echo $(shell date)
 	mkdir $@
 
 clean :
-	rm build/ -rf
+	$(RM) $(BUILD_DIR) -rf
 

@@ -1,0 +1,12 @@
+.\objects\flash.o: Core\Src\flash.c
+.\objects\flash.o: .\Core\Inc\stm32f1xx.h
+.\objects\flash.o: .\Core\Inc\stm32f103xe.h
+.\objects\flash.o: .\Core\Inc\core_cm3.h
+.\objects\flash.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\flash.o: .\Core\Inc\core_cmInstr.h
+.\objects\flash.o: .\Core\Inc\cmsis_armcc.h
+.\objects\flash.o: .\Core\Inc\core_cmFunc.h
+.\objects\flash.o: .\Core\Inc\system_stm32f1xx.h
+.\objects\flash.o: .\Core\Inc\common.h
+.\objects\flash.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
+.\objects\flash.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h

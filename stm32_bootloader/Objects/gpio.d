@@ -1,0 +1,12 @@
+.\objects\gpio.o: Core\Src\gpio.c
+.\objects\gpio.o: .\Core\Inc\stm32f1xx.h
+.\objects\gpio.o: .\Core\Inc\stm32f103xe.h
+.\objects\gpio.o: .\Core\Inc\core_cm3.h
+.\objects\gpio.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\gpio.o: .\Core\Inc\core_cmInstr.h
+.\objects\gpio.o: .\Core\Inc\cmsis_armcc.h
+.\objects\gpio.o: .\Core\Inc\core_cmFunc.h
+.\objects\gpio.o: .\Core\Inc\system_stm32f1xx.h
+.\objects\gpio.o: .\Core\Inc\common.h
+.\objects\gpio.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
+.\objects\gpio.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h

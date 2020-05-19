@@ -1,0 +1,12 @@
+.\objects\spi.o: Core\Src\spi.c
+.\objects\spi.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+.\objects\spi.o: .\Core\Inc\stm32f1xx.h
+.\objects\spi.o: .\Core\Inc\stm32f103xe.h
+.\objects\spi.o: .\Core\Inc\core_cm3.h
+.\objects\spi.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\spi.o: .\Core\Inc\core_cmInstr.h
+.\objects\spi.o: .\Core\Inc\cmsis_armcc.h
+.\objects\spi.o: .\Core\Inc\core_cmFunc.h
+.\objects\spi.o: .\Core\Inc\system_stm32f1xx.h
+.\objects\spi.o: .\Core\Inc\common.h
+.\objects\spi.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h

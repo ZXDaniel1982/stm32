@@ -1,0 +1,16 @@
+--cpu Cortex-M3
+".\objects\startup_stm32f103xe.o"
+".\objects\main.o"
+".\objects\system_stm32f1xx.o"
+".\objects\flash.o"
+".\objects\gpio.o"
+".\objects\usart.o"
+".\objects\sdio.o"
+".\objects\stm32_sdio.o"
+".\objects\boot.o"
+".\objects\eeprom.o"
+".\objects\spi.o"
+--strict --scatter ".\Objects\stm32iap.sct"
+--summary_stderr --info summarysizes --map --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list ".\Listings\stm32iap.map" -o .\Objects\stm32iap.axf

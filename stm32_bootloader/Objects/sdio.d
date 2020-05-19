@@ -1,0 +1,14 @@
+.\objects\sdio.o: Core\Src\sdio.c
+.\objects\sdio.o: .\Core\Inc\stm32f1xx.h
+.\objects\sdio.o: .\Core\Inc\stm32f103xe.h
+.\objects\sdio.o: .\Core\Inc\core_cm3.h
+.\objects\sdio.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\sdio.o: .\Core\Inc\core_cmInstr.h
+.\objects\sdio.o: .\Core\Inc\cmsis_armcc.h
+.\objects\sdio.o: .\Core\Inc\core_cmFunc.h
+.\objects\sdio.o: .\Core\Inc\system_stm32f1xx.h
+.\objects\sdio.o: .\Core\Inc\common.h
+.\objects\sdio.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
+.\objects\sdio.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+.\objects\sdio.o: .\Core\Inc\stm32_sdio.h
+.\objects\sdio.o: .\Core\Inc\sdio.h

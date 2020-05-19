@@ -1,0 +1,14 @@
+.\objects\eeprom.o: Core\Src\eeprom.c
+.\objects\eeprom.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\objects\eeprom.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+.\objects\eeprom.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+.\objects\eeprom.o: .\Core\Inc\stm32f1xx.h
+.\objects\eeprom.o: .\Core\Inc\stm32f103xe.h
+.\objects\eeprom.o: .\Core\Inc\core_cm3.h
+.\objects\eeprom.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\eeprom.o: .\Core\Inc\core_cmInstr.h
+.\objects\eeprom.o: .\Core\Inc\cmsis_armcc.h
+.\objects\eeprom.o: .\Core\Inc\core_cmFunc.h
+.\objects\eeprom.o: .\Core\Inc\system_stm32f1xx.h
+.\objects\eeprom.o: .\Core\Inc\common.h
+.\objects\eeprom.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h

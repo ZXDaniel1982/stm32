@@ -1,0 +1,15 @@
+.\objects\usart.o: Core\Src\usart.c
+.\objects\usart.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\objects\usart.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+.\objects\usart.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+.\objects\usart.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdarg.h
+.\objects\usart.o: .\Core\Inc\stm32f1xx.h
+.\objects\usart.o: .\Core\Inc\stm32f103xe.h
+.\objects\usart.o: .\Core\Inc\core_cm3.h
+.\objects\usart.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\usart.o: .\Core\Inc\core_cmInstr.h
+.\objects\usart.o: .\Core\Inc\cmsis_armcc.h
+.\objects\usart.o: .\Core\Inc\core_cmFunc.h
+.\objects\usart.o: .\Core\Inc\system_stm32f1xx.h
+.\objects\usart.o: .\Core\Inc\common.h
+.\objects\usart.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h

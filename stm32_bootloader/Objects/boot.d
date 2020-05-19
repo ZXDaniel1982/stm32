@@ -1,0 +1,15 @@
+.\objects\boot.o: Core\Src\boot.c
+.\objects\boot.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+.\objects\boot.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+.\objects\boot.o: .\Core\Inc\stm32f1xx.h
+.\objects\boot.o: .\Core\Inc\stm32f103xe.h
+.\objects\boot.o: .\Core\Inc\core_cm3.h
+.\objects\boot.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\boot.o: .\Core\Inc\core_cmInstr.h
+.\objects\boot.o: .\Core\Inc\cmsis_armcc.h
+.\objects\boot.o: .\Core\Inc\core_cmFunc.h
+.\objects\boot.o: .\Core\Inc\system_stm32f1xx.h
+.\objects\boot.o: .\Core\Inc\sdio.h
+.\objects\boot.o: .\Core\Inc\common.h
+.\objects\boot.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
+.\objects\boot.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h

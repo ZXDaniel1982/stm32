@@ -1,18 +1,10 @@
 #include "driver.hpp"
-#include "spc.hpp"
+#include "engin.hpp"
 
 int main()
 {
     auto stm32f103vet = std::shared_ptr<STM32F103VET>();
-    
-    SinglePC singlePC(stm32f103vet);
-    
-    singlePC.Right();
-    singlePC.Right();
-    singlePC.Right();
-    singlePC.Right();
-    singlePC.Right();
-    singlePC.Right();
+    auto engin = std::make_shared<SpcEngin>();
     
     while (1) {
         

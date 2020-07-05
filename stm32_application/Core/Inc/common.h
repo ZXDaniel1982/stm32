@@ -146,7 +146,7 @@ void LCD_Init(void);
 void tftprintf(const char* fmt, ...);
 
 // RTC
-void RTC_Init(void);
+// void RTC_Init(void);
 
 // ADC
 void ADC_Init(void);
@@ -173,7 +173,7 @@ void Error_Handle(void);
 
 #ifdef BOARD_ADV1
 void LedBlink(void);
-void DMA_Init(void);
+// void DMA_Init(void);
 #endif
 
 #ifdef __cplusplus

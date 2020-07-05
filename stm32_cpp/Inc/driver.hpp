@@ -29,16 +29,6 @@ public:
     STM32F103VET_USART();
 };
 
-class STM32F103VET_RTC {
-public:
-    STM32F103VET_RTC();
-};
-
-class STM32F103VET_DMA {
-public:
-    STM32F103VET_DMA();
-};
-
 class STM32F103VET_FSMC {
 public:
     STM32F103VET_FSMC();
@@ -63,8 +53,6 @@ private:
     std::unique_ptr<STM32F103VET_IO>       iIO;
     std::unique_ptr<STM32F103VET_USART>    iUsart;
     std::shared_ptr<STM32F103VET_SPI>      iSpi;
-    std::unique_ptr<STM32F103VET_RTC>      iRtc;
-    std::unique_ptr<STM32F103VET_DMA>      iDMA;
     std::unique_ptr<STM32F103VET_FSMC>     iFSMC;
     std::shared_ptr<HX8347D>               iLcd;
     std::unique_ptr<STM32F103VET_SD>       iSd;

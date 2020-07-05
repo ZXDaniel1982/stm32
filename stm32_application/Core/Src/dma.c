@@ -2,6 +2,7 @@
 #include "stm32f103xe.h"
 #include "common.h"
 
+#if 0
 void DMA_Init()
 {
     MODIFY_REG(DMA1_Channel2->CCR, (DMA_CCR_DIR | DMA_CCR_MEM2MEM | DMA_CCR_PL | DMA_CCR_CIRC | DMA_CCR_PINC | DMA_CCR_MINC |
@@ -48,3 +49,4 @@ void DMA1_Channel3_IRQHandler(void)
         CLEAR_BIT(SPI1->CR2, SPI_CR2_TXDMAEN | SPI_CR2_RXDMAEN);
     }
 }
+#endif

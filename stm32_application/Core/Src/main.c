@@ -51,7 +51,7 @@ static void RCC_Init(void)
     
 #ifdef BOARD_ADV1
     // Config SPI DMA
-    SET_BIT(RCC->AHBENR, RCC_AHBENR_DMA1EN);
+    // SET_BIT(RCC->AHBENR, RCC_AHBENR_DMA1EN);
 #endif
 } 
 
@@ -64,10 +64,6 @@ int main()
     TIMER_Init();
     USART_Init();
     SPI_Init();
-#ifdef BOARD_ADV1
-    RTC_Init();
-    DMA_Init();
-#endif
     FSMC_Init();
     LCD_Init();
     SDIOEx_Init();

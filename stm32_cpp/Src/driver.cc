@@ -177,33 +177,6 @@ STM32F103VET_USART::STM32F103VET_USART()
     NVIC_EnableIRQ(USART1_IRQn);
 }
 
-STM32F103VET_RTC::STM32F103VET_RTC()
-{
-    SET_BIT(PWR->CR, PWR_CR_DBP);
-    SET_BIT(RCC->BDCR, RCC_BDCR_RTCEN);
-
-    CLEAR_BIT(RTC->CRL, RTC_CRL_RSF);
-    while (READ_BIT(RTC->CRL, RTC_CRL_RSF)) {}
-
-    while (!READ_BIT(RTC->CRL, RTC_CRL_RTOFF)) {}
-    SET_BIT(RTC->CRL, RTC_CRL_CNF);
-    
-    MODIFY_REG(RTC->PRLH, RTC_PRLH_PRL, (0xFFFFFFFFU >> 16));
-    MODIFY_REG(RTC->PRLL, RTC_PRLL_PRL, (0xFFFFFFFFU & RTC_PRLL_PRL));
-    
-    while (!READ_BIT(RTC->CRL, RTC_CRL_RTOFF)) {}
-    SET_BIT(RTC->CRL, RTC_CRL_CNF);
-
-    uint32_t time = ((uint32_t)16 * 3600U) + ((uint32_t)50 * 60U);
-    /* Set RTC COUNTER MSB word */
-    WRITE_REG(RTC->CNTH, (time >> 16U));
-    /* Set RTC COUNTER LSB word */
-    WRITE_REG(RTC->CNTL, (time & RTC_CNTL_RTC_CNT));
-
-    CLEAR_BIT(RTC->CRL, RTC_CRL_CNF);
-    while (!READ_BIT(RTC->CRL, RTC_CRL_RTOFF)) {}
-}
-
 STM32F103VET_FSMC::STM32F103VET_FSMC()
 {
     /* Initialize SRAM control Interface */
@@ -249,11 +222,6 @@ STM32F103VET::STM32F103VET()
     
     iUsart.reset(new STM32F103VET_USART());
     iSpi.reset(new STM32F103VET_SPI());
-    
-#ifdef BOARD_ADV1
-    iRtc.reset(new STM32F103VET_RTC());
-    iDMA.reset(new STM32F103VET_DMA());
-#endif
     
     iFSMC.reset(new STM32F103VET_FSMC());
     iLcd.reset(new HX8347D());

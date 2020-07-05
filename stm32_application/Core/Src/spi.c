@@ -27,16 +27,16 @@ void SPI_Init()
     SPI1->CR1 |= SPI_CR1_SPE;
     
 #ifdef BOARD_ADV1
-    NVIC_SetPriority(DMA1_Channel2_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
+/*    NVIC_SetPriority(DMA1_Channel2_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
     NVIC_EnableIRQ(DMA1_Channel2_IRQn);
     NVIC_SetPriority(DMA1_Channel3_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
-    NVIC_EnableIRQ(DMA1_Channel3_IRQn);
+    NVIC_EnableIRQ(DMA1_Channel3_IRQn);*/
 #endif
 }
 
 uint8_t SPI_Transmit(uint8_t *data, uint16_t size)
 {
-#ifdef BOARD_ADV1
+#if 0
     /* Disable the DMA1_3 peripheral */
     CLEAR_BIT(DMA1_Channel3->CCR, DMA_CCR_EN);
     
@@ -52,7 +52,7 @@ uint8_t SPI_Transmit(uint8_t *data, uint16_t size)
     
     SET_BIT(SPI1->CR2, SPI_CR2_ERRIE);
     SET_BIT(SPI1->CR2, SPI_CR2_TXDMAEN);
-#else
+#endif
     uint16_t i;
     __IO uint32_t tmpreg_ovr = 0x00U;
     
@@ -71,14 +71,13 @@ uint8_t SPI_Transmit(uint8_t *data, uint16_t size)
     tmpreg_ovr = SPI1->DR;
     tmpreg_ovr = SPI1->SR;
     UNUSED(tmpreg_ovr);
-#endif
 
     return 1;
 }
 
 uint8_t SPI_TransmitReceive(uint8_t *txData, uint8_t *rxData, uint16_t size)
 {
-#ifdef BOARD_ADV1
+#if 0
     //===============RX=====================================//
     /* Disable the DMA1_2 peripheral */
     CLEAR_BIT(DMA1_Channel2->CCR, DMA_CCR_EN);
@@ -111,7 +110,7 @@ uint8_t SPI_TransmitReceive(uint8_t *txData, uint8_t *rxData, uint16_t size)
     
     SET_BIT(SPI1->CR2, SPI_CR2_ERRIE);
     SET_BIT(SPI1->CR2, SPI_CR2_TXDMAEN);
-#else
+#endif
     if((txData == NULL) || (rxData == NULL ) || (size == 0U)) {
         return 0;
     }
@@ -132,7 +131,6 @@ uint8_t SPI_TransmitReceive(uint8_t *txData, uint8_t *rxData, uint16_t size)
     tmpreg_ovr = SPI1->DR;
     tmpreg_ovr = SPI1->SR;
     UNUSED(tmpreg_ovr);
-#endif
 
     return 1;
 }

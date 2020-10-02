@@ -47,7 +47,7 @@ public:
 class STM32F103VET
     : public HardwareDriver {
 public:
-    STM32F103VET();
+    STM32F103VET(std::shared_ptr<IDeviceLogger>);
 private:
     std::unique_ptr<STM32F103VET_RCC>      iRCC;
     std::unique_ptr<STM32F103VET_IO>       iIO;

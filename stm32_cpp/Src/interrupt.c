@@ -42,3 +42,12 @@ void TIM8_UP_IRQHandler(void)
 {
     CLEAR_BIT(TIM8->SR, TIM_SR_UIF);
 }
+
+void USART1_IRQHandler(void)
+{
+    uint8_t buf;
+    if((USART1->SR & USART_CR1_RXNEIE) != 0) {
+        buf = USART1->DR;
+        //USART_RxProcess(buf);
+    }
+}

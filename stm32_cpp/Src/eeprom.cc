@@ -4,18 +4,17 @@
 #define EEPROM_ID 0xbf41
 SST25VF016B::SST25VF016B(
     std::shared_ptr<ISPI> aSpi,
-    std::shared_ptr<ILCD> aLcd)
+    std::shared_ptr<IDeviceLogger> aLogger)
     :   iSpi   (aSpi)
-    ,   iLcd   (aLcd)
 {
     uint8_t i;
     for (i=0;i<5;++i) {
         if (EEPROM_ID == ReadID()) {
-            aLcd->print("EEPROM initaion success");
+            aLogger->WriteLine(ODevice::LCD, std::string("EEPROM initaion success"));
             return;
         }
     }
-    aLcd->print("EEPROM initaion failed");
+    aLogger->WriteLine(ODevice::LCD, std::string("EEPROM initaion failed"));
 }
 
 void

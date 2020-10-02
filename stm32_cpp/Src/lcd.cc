@@ -314,19 +314,18 @@ HX8347D::TFT_ShowString(uint8_t x,uint16_t y,const uint8_t *p)
 }
 
 void
-HX8347D::print(const char* fmt, ...)
+HX8347D::print(std::string aInfo)
 {
-    uint8_t cmd[40] = {0};
-
-    va_list ap;
-    va_start(ap, fmt);
-    vsnprintf((char *)cmd, sizeof(cmd), fmt, ap);
-
     if (strIndex > LCD_STR_NUM_MAX) {
         strIndex = 0;
         LCD_Clear();
     }
-    TFT_ShowString(2,(strIndex*14+2),cmd);
+    TFT_ShowString(2, (strIndex*14+2), (uint8_t *)aInfo.c_str());
     strIndex++;
-    va_end(ap);
+}
+
+std::shared_ptr<ILoggerHandle>
+HX8347D::CreateLogger()
+{
+    return std::make_shared<LcdLogger>(*this);
 }

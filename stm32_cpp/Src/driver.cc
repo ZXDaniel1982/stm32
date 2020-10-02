@@ -202,7 +202,7 @@ STM32F103VET_FSMC::STM32F103VET_FSMC()
     SET_BIT(AFIO->MAPR2, AFIO_MAPR2_FSMC_NADV_REMAP);
 }
 
-STM32F103VET::STM32F103VET()
+STM32F103VET::STM32F103VET(std::shared_ptr<IDeviceLogger> aLogger)
 {
     iRCC.reset(new STM32F103VET_RCC());
     iIO.reset(new STM32F103VET_IO());
@@ -226,8 +226,11 @@ STM32F103VET::STM32F103VET()
     iFSMC.reset(new STM32F103VET_FSMC());
     iLcd.reset(new HX8347D());
     iSd.reset(new STM32F103VET_SD());
-    iEEPROM.reset(new SST25VF016B(iSpi, iLcd));
+
+    aLogger->Register(ODevice::LCD, iLcd->CreateLogger());
     
+    iEEPROM.reset(new SST25VF016B(iSpi, aLogger));
+
     for (int i=0;i<7200000;++i) {}
-    iLcd->print("Start application");
+    aLogger->WriteLine(ODevice::LCD, std::string("Start application"));
 }

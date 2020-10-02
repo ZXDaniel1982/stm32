@@ -23,52 +23,11 @@ STM32F103VET_SPI::STM32F103VET_SPI()
 
     /* Enable SPI peripheral */
     SPI1->CR1 |= SPI_CR1_SPE;
-    
-#ifdef BOARD_ADV1
-    NVIC_SetPriority(DMA1_Channel2_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
-    NVIC_EnableIRQ(DMA1_Channel2_IRQn);
-    NVIC_SetPriority(DMA1_Channel3_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
-    NVIC_EnableIRQ(DMA1_Channel3_IRQn);
-#endif
 }
 
 uint16_t
 STM32F103VET_SPI::TransmitReceive(uint8_t *txData, uint8_t *rxData, uint16_t size)
 {
-#ifdef BOARD_ADV1
-    //===============RX=====================================//
-    /* Disable the DMA1_2 peripheral */
-    CLEAR_BIT(DMA1_Channel2->CCR, DMA_CCR_EN);
-    
-    /* Configure the source, destination address and the data length & clear flags*/
-    WRITE_REG(DMA1->IFCR, DMA_ISR_TCIF2);
-    WRITE_REG(DMA1_Channel2->CNDTR, size);
-    WRITE_REG(DMA1_Channel2->CPAR, (uint32_t)SPI1->DR);
-    WRITE_REG(DMA1_Channel2->CMAR, (uint32_t)rxData);
-    
-    CLEAR_BIT(DMA1_Channel2->CCR , DMA_CCR_HTIE);
-    SET_BIT(DMA1_Channel2->CCR , (DMA_CCR_TCIE | DMA_CCR_TEIE));
-    SET_BIT(DMA1_Channel2->CCR , DMA_CCR_EN);
-    
-    SET_BIT(SPI1->CR2, SPI_CR2_RXDMAEN);
-    
-    //================TX=====================================//
-    /* Disable the DMA1_3 peripheral */
-    CLEAR_BIT(DMA1_Channel3->CCR, DMA_CCR_EN);
-    
-    /* Configure the source, destination address and the data length & clear flags*/
-    WRITE_REG(DMA1->IFCR, DMA_ISR_TCIF3);
-    WRITE_REG(DMA1_Channel3->CNDTR, size);
-    WRITE_REG(DMA1_Channel3->CPAR, (uint32_t)SPI1->DR);
-    WRITE_REG(DMA1_Channel3->CMAR, (uint32_t)txData);
-    
-    CLEAR_BIT(DMA1_Channel3->CCR , DMA_CCR_HTIE);
-    SET_BIT(DMA1_Channel3->CCR , (DMA_CCR_TCIE | DMA_CCR_TEIE));
-    SET_BIT(DMA1_Channel3->CCR , DMA_CCR_EN);
-    
-    SET_BIT(SPI1->CR2, SPI_CR2_ERRIE);
-    SET_BIT(SPI1->CR2, SPI_CR2_TXDMAEN);
-#else
     if((txData == NULL) || (rxData == NULL ) || (size == 0U)) {
         return 0;
     }
@@ -89,7 +48,6 @@ STM32F103VET_SPI::TransmitReceive(uint8_t *txData, uint8_t *rxData, uint16_t siz
     tmpreg_ovr = SPI1->DR;
     tmpreg_ovr = SPI1->SR;
     UNUSED(tmpreg_ovr);
-#endif
 
     return 1;
 }

@@ -134,7 +134,7 @@ static BootState_t GetImageInfo(Imageargs_t *iargs, uint8_t *src)
     } else { // read version from sd card
         memset(ImageBuf, 0, IMAGE_BUFFER_SIZE);
         if (SD_ReadBlock((uint32_t *)ImageBuf, IMAGE_SDCARD_ARGS_ADDR, IMAGE_BUFFER_SIZE) == SD_OK) {
-                    memcpy(iargs, ImageBuf, sizeof(Imageargs_t));
+            memcpy(iargs, ImageBuf, sizeof(Imageargs_t));
 
             if ((IMAGEARGS_HEADER == iargs->header) &&
                 (IMAGEARGS_TAIL == iargs->tail)) {
@@ -143,7 +143,7 @@ static BootState_t GetImageInfo(Imageargs_t *iargs, uint8_t *src)
                 return STM32_FALSE;
             }
         } else {
-                      uartprintf("Read SD Block fail\r\n");
+            uartprintf("Read SD Block fail\r\n");
             return STM32_FALSE;
         }
     }
@@ -156,7 +156,7 @@ static void ImageCopyEepToFlash()
     uint32_t flashAddr = APP_DEFAULT_ADD;
     uint32_t size;
 
-      uartprintf("\r\nCopying Image from EEPROM to Flash ...\r\n");
+    uartprintf("\r\nCopying Image from EEPROM to Flash ...\r\n");
     if (GetImageInfo(&iargs, "EEPROM") == STM32_SUCCESS) {
         size = iargs.size;
 
@@ -321,7 +321,7 @@ BootState_t GetBootargFromEEP()
 void bootm(uint8_t *command)
 {
     Imageargs_t iargs;
-      uartprintf("\r\nBooting Image from (%s) ...\r\n", (char *)Bootargs.confSrc);
+    uartprintf("\r\nBooting Image from (%s) ...\r\n", (char *)Bootargs.confSrc);
     memset(&iargs, 0, sizeof(Imageargs_t));
     if (strcmp((char *)Bootargs.confSrc, (char *)Bootargs.statSrc) == 0) {
         if ((strcmp((char *)Bootargs.confSrc, "EEPROM") == 0) ||

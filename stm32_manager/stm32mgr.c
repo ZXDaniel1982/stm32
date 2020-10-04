@@ -1,7 +1,7 @@
 #include "common.h"
 
 const char *portname = "/dev/ttyUSB0";
-const char *argsname = "build/ImageArgs";
+const char *argsname = "ImageArgs";
 
 uint8_t txBuf[20] = {0};
 uint8_t rxBuf[20] = {0};
@@ -21,6 +21,7 @@ int main(int argc, char **argv)
     if (argc < 2) {
         printf("Usage : stm32mgr install <file>\n");
         printf("      : stm32mgr sdimage <file>\n");
+        printf("      : stm32mgr getversion\n");
         printf("      : stm32mgr connect\n");
         printf("      : stm32mgr reboot\n");
         return -1;
@@ -46,6 +47,9 @@ int main(int argc, char **argv)
 
         fwrite(&iargs, sizeof(Imageargs_t), 1, file);
         fclose(file);
+        return 0;
+    } else if (strcmp(argv[1], "getversion") == 0) {
+        printf("%d\n", GetVersion());
         return 0;
     }
 

@@ -12,7 +12,7 @@ static uint32_t GetFileSize(char *filename)
     return (uint32_t)st.st_size;
 }
 
-static uint16_t GetVersion()
+static uint16_t IncrementVersion()
 {
     char buf[10] = {0};
     uint16_t version = 0;
@@ -47,11 +47,29 @@ static uint16_t GetVersion()
     return version;
 }
 
+uint16_t GetVersion()
+{
+    char buf[10] = {0};
+    uint16_t version = 0;
+
+    if( access( versionfn, F_OK ) != -1 ) {
+        FILE *file = fopen(versionfn, "r+");
+        if (file == NULL) {
+            printf("Fail to open file (%s)\n", versionfn);
+            return 0;
+        }
+        fread(buf, 10, 1, file);
+        version = atol(buf);
+        fclose(file);
+    }
+    return version;
+}
+
 void GetImageArgs(Imageargs_t *iargs, char *filename)
 {
     memset(iargs, 0, sizeof(Imageargs_t));
     iargs->header = IMAGEARGS_HEADER;
     iargs->tail = IMAGEARGS_TAIL;
-    iargs->version = GetVersion();
+    iargs->version = IncrementVersion();
     iargs->size = GetFileSize(filename);
 }

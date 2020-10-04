@@ -78,6 +78,7 @@ typedef struct
 int set_interface_attribs (int fd, int speed, int parity);
 void set_blocking (int fd, int should_block);
 
+uint16_t GetVersion(void);
 void GetImageArgs(Imageargs_t *iargs, char *filename);
 
 #ifdef __cplusplus

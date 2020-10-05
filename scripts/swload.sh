@@ -2,7 +2,6 @@
 
 ROOT=$(dirname "$0")
 BASE_DIR="$ROOT/../"
-ARG_FILE="$BASE_DIR/ImageArgs"
 MANAGER_DIR="$BASE_DIR/stm32_manager/"
 MANAGER_FILE="$MANAGER_DIR/stm32mgr"
 
@@ -42,7 +41,7 @@ fi
 # parse the device argument
 #
 DEVICE=$1 ; shift
-if [[ ! "$DEVICE" =~ /dev/mmcblk([0-9]) ]] && [[ ! "$DEVICE" =~ /dev/sd([a-z]) ]] ; then
+if [ ! "$DEVICE" =~ /dev/ttyUSB0 ] ; then
     echo "$ERROR \"$DEVICE\" is not a valid device"
     exit 1
 fi
@@ -87,44 +86,6 @@ if [ ! -f "$IMAGE" ] ; then
 fi
 
 #
-# warn the user if the device is over 100GB (i.e. it is probably the wrong device)
-#
-if (($(blockdev --getsize64 "$DEVICE") > 100*1024*1024*1024)) ; then
-    read -r -p "$WARNING $DEVICE is over 100GB! Are you sure this is the correct device? (yes/no) " ANSWER
-    if [[ ! "${ANSWER,,}" =~ ^yes$ ]] ; then
-        echo "$ABORTED"
-        exit 0
-    fi
-fi
-
-#
-# warn the user that this operation will overwrite all data on the device
-#
-if [ -z "${YES_OPTION-}" ] ; then
-    read -r -p " This will overwrite all data on $DEVICE. Do you want to continue? (yes/no) " ANSWER
-    if [[ ! "${ANSWER,,}" =~ ^yes$ ]] ; then
-        echo "$ABORTED"
-        exit 0
-    fi
-fi
-
-#
-# check the device is large enough
-#
-print_update "checking $DEVICE is large enough for $(basename "$IMAGE" .bin)"
-
-DEVICE_SIZE=$(blockdev --getsize64 "$DEVICE")
-printf " device size .. %d bytes (%0.3f GiB)\n" "$DEVICE_SIZE" "$(bc <<< "scale=3; $DEVICE_SIZE/1024/1024/1024")"
-
-IMAGE_SIZE=$(stat -c%s "$IMAGE")
-printf " image size ... %d bytes (%0.3f GiB)\n" "$IMAGE_SIZE" "$(bc <<< "scale=3; $IMAGE_SIZE/1024/1024/1024")"
-
-if ((DEVICE_SIZE < IMAGE_SIZE)) ; then
-    echo "$ERROR $DEVICE is not large enough for $(basename "$IMAGE" .gz)"
-    exit 1
-fi
-
-#
 # Generate arg file
 #
 MANAGER_FILE sdimage $IMAGE
@@ -138,19 +99,7 @@ if [ ! -f "$ARG_FILE" ] ; then
 fi
 
 #
-# Install arg file
-#
-print_update "writing $(basename "$ARG_FILE") to $DEVICE"
-if ! pv "$ARG_FILE" | dd if="$ARG_FILE" of="$DEVICE" && sync ; then
-    echo "$ERROR something went wrong while writing to $DEVICE"
-    exit 1
-fi
-
-#
 # Install image file
 #
-print_update "writing $(basename "$IMAGE") to $DEVICE"
-if ! pv "$IMAGE" | dd if="$IMAGE" of="$DEVICE" seek=1 && sync ; then
-    echo "$ERROR something went wrong while writing to $DEVICE"
-    exit 1
-fi
+MANAGER_FILE install $IMAGE
+

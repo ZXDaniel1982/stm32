@@ -1,2 +1,6 @@
 stm32_application/build/*
 stm32_cpp/build/*
+stm32_manager/stm32mgr
+stm32_application/Core/Inc/boardcfg.h
+.ImageArgs
+.version

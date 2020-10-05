@@ -1,7 +1,7 @@
 #include "common.h"
 
 const char *portname = "/dev/ttyUSB0";
-const char *argsname = "ImageArgs";
+const char *argsname = "../.ImageArgs";
 
 uint8_t txBuf[20] = {0};
 uint8_t rxBuf[20] = {0};

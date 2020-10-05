@@ -1,6 +1,6 @@
 #include "common.h"
 
-static const char versionfn[] = "version";
+static const char versionfn[] = "../.version";
 
 static uint32_t GetFileSize(char *filename)
 {

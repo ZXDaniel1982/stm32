@@ -25,7 +25,32 @@ STM32F103VET_SPI::STM32F103VET_SPI()
     SPI1->CR1 |= SPI_CR1_SPE;
 }
 
-uint16_t
+uint8_t
+STM32F103VET_SPI::Transmit(uint8_t *data, uint16_t size)
+{
+    uint16_t i;
+    __IO uint32_t tmpreg_ovr = 0x00U;
+    
+    if((data == NULL) || (size == 0U)) {
+        return 0;
+    }
+
+    for (i=0;i<size;i++) {
+        while (!(SPI1->SR & SPI_SR_TXE)) {}
+        *((__IO uint8_t*) &(SPI1->DR)) = data[i];
+    }
+
+    while (!(SPI1->SR & SPI_SR_TXE)) {}
+    while (SPI1->SR & SPI_SR_BSY) {}
+
+    tmpreg_ovr = SPI1->DR;
+    tmpreg_ovr = SPI1->SR;
+    UNUSED(tmpreg_ovr);
+
+    return 1;
+}
+
+uint8_t
 STM32F103VET_SPI::TransmitReceive(uint8_t *txData, uint8_t *rxData, uint16_t size)
 {
     if((txData == NULL) || (rxData == NULL ) || (size == 0U)) {

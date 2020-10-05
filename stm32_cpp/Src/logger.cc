@@ -5,7 +5,7 @@ STM32F103VET_LOGGER::Register(
     ODevice                         aDevice,
     std::shared_ptr<ILoggerHandle>  aLogger)
 {
-    iDeviceLogger.try_emplace(aDevice, aLogger);
+    iDeviceLogger.emplace(aDevice, aLogger);
 }
 
 void

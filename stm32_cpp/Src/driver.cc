@@ -206,9 +206,9 @@ STM32F103VET::STM32F103VET(std::shared_ptr<IDeviceLogger> aLogger)
 {
     iRCC.reset(new STM32F103VET_RCC());
     iIO.reset(new STM32F103VET_IO());
-    
-    auto AddTimer = [&] (TIM_TypeDef *TIMx,  uint32_t Periphs, IRQn_Type IRQn) {
-        iTimers.emplace_back(new Timer(TIMx,  Periphs, IRQn));
+
+    /*auto AddTimer = [&] (TIM_TypeDef *TIMx,  uint32_t Periphs, IRQn_Type IRQn) {
+        iTimers.emplace(new Timer(TIMx,  Periphs, IRQn));
     };
     
     AddTimer(TIM1, RCC_APB2ENR_TIM1EN, TIM1_UP_IRQn);
@@ -218,7 +218,9 @@ STM32F103VET::STM32F103VET(std::shared_ptr<IDeviceLogger> aLogger)
     AddTimer(TIM5, RCC_APB1ENR_TIM5EN, TIM5_IRQn);
     AddTimer(TIM6, RCC_APB1ENR_TIM6EN, TIM6_IRQn);
     AddTimer(TIM7, RCC_APB1ENR_TIM7EN, TIM7_IRQn);
-    AddTimer(TIM8, RCC_APB2ENR_TIM8EN, TIM8_UP_IRQn);
+    AddTimer(TIM8, RCC_APB2ENR_TIM8EN, TIM8_UP_IRQn);*/
+
+    SET_BIT(GPIOB->ODR, GPIO_BSRR_BS5);
     
     iUsart.reset(new STM32F103VET_USART());
     iSpi.reset(new STM32F103VET_SPI());

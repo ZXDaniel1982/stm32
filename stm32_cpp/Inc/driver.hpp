@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <list>
+#include <unordered_set>
 #include "lcd.hpp"
 #include "sd.hpp"
 #include "spi.hpp"
@@ -57,5 +58,5 @@ private:
     std::shared_ptr<HX8347D>               iLcd;
     std::unique_ptr<STM32F103VET_SD>       iSd;
     std::unique_ptr<SST25VF016B>           iEEPROM;
-    std::list<std::unique_ptr<Timer>>      iTimers;
+    std::unordered_set<std::shared_ptr<Timer>>      iTimers;
 };

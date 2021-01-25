@@ -7,6 +7,7 @@
 #include "lcd.hpp"
 #include "sd.hpp"
 #include "spi.hpp"
+#include "timer.hpp"
 #include "eeprom.hpp"
 #include "common.h"
 
@@ -35,11 +36,6 @@ public:
     STM32F103VET_FSMC();
 };
 
-class Timer {
-public:
-    Timer(TIM_TypeDef *, uint32_t, IRQn_Type);
-};
-
 class HardwareDriver {
 public:
     ~HardwareDriver() = default;
@@ -58,5 +54,5 @@ private:
     std::shared_ptr<HX8347D>               iLcd;
     std::unique_ptr<STM32F103VET_SD>       iSd;
     std::unique_ptr<SST25VF016B>           iEEPROM;
-    std::unordered_set<std::shared_ptr<Timer>>      iTimers;
+    std::unique_ptr<STM32F103VET_TIMER>    iTimer;
 };

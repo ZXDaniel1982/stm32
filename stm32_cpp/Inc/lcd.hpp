@@ -3,15 +3,15 @@
 #include <stdint.h>
 #include <logger.hpp>
 
-class ILCD {
+class IOUT {
 public:
-    ~ILCD() = default;
+    ~IOUT() = default;
     virtual void print(std::string) = 0;
     virtual std::shared_ptr<ILoggerHandle> CreateLogger() = 0;
 };
 
 class HX8347D
-    : public ILCD {
+    : public IOUT {
 private:
     class LcdLogger : public ILoggerHandle {
     public:

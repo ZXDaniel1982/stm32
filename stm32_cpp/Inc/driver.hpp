@@ -26,9 +26,25 @@ public:
     STM32F103VET_IO();
 };
 
-class STM32F103VET_USART {
+class STM32F103VET_USART
+    : public IOUT {
 public:
     STM32F103VET_USART();
+private:
+    class UartLogger : public ILoggerHandle {
+    public:
+        UartLogger(STM32F103VET_USART& aDevice)
+            : iDevice  (aDevice) {}
+
+        void Write(std::string aInfo) {
+            iDevice.print(aInfo);
+        }
+    private:
+        STM32F103VET_USART& iDevice;
+    };
+public:
+    void print(std::string) override;
+    std::shared_ptr<ILoggerHandle> CreateLogger() override;
 };
 
 class STM32F103VET_FSMC {

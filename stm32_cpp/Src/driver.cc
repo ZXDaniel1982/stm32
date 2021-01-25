@@ -144,6 +144,22 @@ STM32F103VET_USART::STM32F103VET_USART()
     NVIC_EnableIRQ(USART1_IRQn);
 }
 
+void
+STM32F103VET_USART::print(std::string aInfo)
+{
+    uint8_t *buf = (uint8_t *)aInfo.c_str();
+    while(*buf != '\0') {
+        while ((USART1->SR &USART_SR_TXE) == 0) {}
+        USART1->DR= *buf;
+    }
+}
+
+std::shared_ptr<ILoggerHandle>
+STM32F103VET_USART::CreateLogger()
+{
+    return std::make_shared<UartLogger>(*this);
+}
+
 STM32F103VET_FSMC::STM32F103VET_FSMC()
 {
     /* Initialize SRAM control Interface */
@@ -184,10 +200,10 @@ STM32F103VET::STM32F103VET(std::shared_ptr<IDeviceLogger> aLogger)
     iLcd.reset(new HX8347D());
     iSd.reset(new STM32F103VET_SD());
 
-    aLogger->Register(ODevice::LCD, iLcd->CreateLogger());
+    aLogger->Register(ODevice::USART, iUsart->CreateLogger());
     
     iEEPROM.reset(new SST25VF016B(iSpi, aLogger));
 
     for (int i=0;i<7200000;++i) {}
-    aLogger->WriteLine(ODevice::LCD, std::string("Start application"));
+    aLogger->WriteLine(ODevice::USART, std::string("Start application"));
 }

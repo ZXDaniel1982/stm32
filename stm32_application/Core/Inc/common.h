@@ -14,6 +14,7 @@ extern "C" {
     
 #include "FreeRTOS.h"
 #include "task.h"
+#include "timers.h"
 
 
 #define UNUSED(x) (void)x
@@ -171,6 +172,9 @@ void Error_Handle(void);
 
 void LedBlink(void);
 // void DMA_Init(void);
+
+// Measurement
+void Measure_VoltCurInit(void);
 
 #ifdef __cplusplus
 }

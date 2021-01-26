@@ -16,14 +16,6 @@
 TARGET = stm32app
 
 ######################################
-# board
-######################################
-BOARD ?= ADV1
-
-BOARD_BASE       :=BASE
-BOARD_ADV1       :=ADV1
-
-######################################
 # building variables
 ######################################
 # debug build?
@@ -67,7 +59,8 @@ FreeRTOS/Source/stream_buffer.c \
 FreeRTOS/Source/tasks.c \
 FreeRTOS/Source/timers.c \
 FreeRTOS/Source/portable/MemMang/heap_4.c \
-FreeRTOS/Source/portable/GCC/ARM_CM3/port.c
+FreeRTOS/Source/portable/GCC/ARM_CM3/port.c \
+Spc/measure.c
 
 # ASM sources
 ASM_SOURCES =  \
@@ -78,9 +71,9 @@ startup_stm32f103xe.s
 # binaries
 #######################################
 # PREFIX = arm-none-eabi-
-GCC_PATH = /opt/gcc-arm-none-eabi-6-2017-q1-update/bin
-# PREFIX = arm-atollic-eabi-
-PREFIX = arm-none-eabi-
+# GCC_PATH = /opt/gcc-arm-none-eabi-6-2017-q1-update/bin
+PREFIX = arm-atollic-eabi-
+# PREFIX = arm-none-eabi-
 # The gcc compiler bin path can be either defined in make command via GCC_PATH variable (> make GCC_PATH=xxx)
 # either it can be added to the PATH environment variable.
 ifdef GCC_PATH
@@ -194,7 +187,6 @@ $(BUILD_DIR):
 #######################################
 clean:
 	$(RM) -fR $(BUILD_DIR)
-	$(RM) $(ROOT)/Core/Inc/boardcfg.h
 
 #######################################
 # dependencies

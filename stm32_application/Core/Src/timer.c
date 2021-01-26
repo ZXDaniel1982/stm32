@@ -52,6 +52,7 @@ void TIMER_Init()
 void TIM1_UP_IRQHandler(void)
 {
     CLEAR_BIT(TIM1->SR, TIM_SR_UIF);
+    LedBlink();
 }
 
 void TIM2_IRQHandler(void)

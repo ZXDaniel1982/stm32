@@ -48,7 +48,7 @@ static void RCC_Init(void)
     SET_BIT(RCC->AHBENR,  RCC_AHBENR_SDIOEN);
     SET_BIT(RCC->AHBENR,  RCC_AHBENR_FSMCEN);
     SET_BIT(RCC->APB1ENR, RCC_APB1ENR_BKPEN);
-} 
+}
 
 int main()
 {
@@ -66,8 +66,8 @@ int main()
 
     for (i=0;i<7200000;++i) {}
     uartprintf("Start application\r\n");
-
-    LedBlink();
+    
+    Measure_VoltCurInit();
 
     vTaskStartScheduler();
     

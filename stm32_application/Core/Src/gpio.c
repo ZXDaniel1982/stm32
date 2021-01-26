@@ -90,22 +90,15 @@ void GPIO_Init()
 }
 
 
-static void LedBlinkTsk(void *arg)
+void LedBlink(void)
 {
     static uint8_t flag = 0;
-    while (1) {
-        vTaskDelay(1000);
-        if (flag) {
-            flag = 0;
-            SET_BIT(Led_GPIO_Port->ODR, Led_Pin);
-        } else {
-            flag = 1;
-            CLEAR_BIT(Led_GPIO_Port->ODR, Led_Pin);
-        }
+    
+    if (flag) {
+        flag = 0;
+        SET_BIT(Led_GPIO_Port->ODR, Led_Pin);
+    } else {
+        flag = 1;
+        CLEAR_BIT(Led_GPIO_Port->ODR, Led_Pin);
     }
-}
-
-void LedBlink()
-{
-    xTaskCreate(LedBlinkTsk, "Led Blink", 128, NULL, 0, NULL);
 }

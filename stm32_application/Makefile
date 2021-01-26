@@ -57,10 +57,7 @@ Core/Src/lcd.c \
 Core/Src/flash.c \
 Core/Src/stm32_sdio.c \
 Core/Src/sdio.c \
-Core/Src/system_stm32f1xx.c
-
-ifeq ($(BOARD), $(BOARD_ADV1))
-C_SOURCES +=  \
+Core/Src/system_stm32f1xx.c \
 Core/Src/dma.c \
 FreeRTOS/Source/croutine.c \
 FreeRTOS/Source/event_groups.c \
@@ -71,7 +68,6 @@ FreeRTOS/Source/tasks.c \
 FreeRTOS/Source/timers.c \
 FreeRTOS/Source/portable/MemMang/heap_4.c \
 FreeRTOS/Source/portable/GCC/ARM_CM3/port.c
-endif
 
 # ASM sources
 ASM_SOURCES =  \
@@ -129,13 +125,9 @@ AS_INCLUDES =
 
 # C includes
 C_INCLUDES =  \
--ICore/Inc
-
-ifeq ($(BOARD), $(BOARD_ADV1))
-C_INCLUDES +=  \
+-ICore/Inc \
 -IFreeRTOS/Source/include \
 -IFreeRTOS/Source/portable/GCC/ARM_CM3
-endif
 
 # compile gcc flags
 ASFLAGS = $(MCU) $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
@@ -163,7 +155,7 @@ LIBDIR =
 LDFLAGS = $(MCU) -specs=nano.specs -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--cref -Wl,--gc-sections
 
 # default action: build all
-all: $(ROOT)/Core/Inc/boardcfg.h $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(TARGET).bin
+all: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(TARGET).bin
 
 
 #######################################
@@ -175,14 +167,6 @@ vpath %.c $(sort $(dir $(C_SOURCES)))
 # list of ASM program objects
 OBJECTS += $(addprefix $(BUILD_DIR)/,$(notdir $(ASM_SOURCES:.s=.o)))
 vpath %.s $(sort $(dir $(ASM_SOURCES)))
-
-$(ROOT)/Core/Inc/boardcfg.h:
-ifeq ($(BOARD), $(BOARD_BASE))
-	cp $(ROOT)/boardcfg_base.h $@
-endif
-ifeq ($(BOARD), $(BOARD_ADV1))
-	cp $(ROOT)/boardcfg_adv1.h $@
-endif
 
 $(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR) 
 	$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.c=.lst)) $< -o $@

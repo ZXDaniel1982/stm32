@@ -90,7 +90,6 @@ void GPIO_Init()
 }
 
 
-#ifdef BOARD_ADV1
 static void LedBlinkTsk(void *arg)
 {
     static uint8_t flag = 0;
@@ -110,4 +109,3 @@ void LedBlink()
 {
     xTaskCreate(LedBlinkTsk, "Led Blink", 128, NULL, 0, NULL);
 }
-#endif

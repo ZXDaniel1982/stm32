@@ -196,9 +196,9 @@ void EEPROM_Init()
     uint8_t i;
     for (i=0;i<5;++i) {
         if (EEPROM_ID == SPI_Flash_ReadID()) {
-            tftprintf("EEPROM initaion success");
+            uartprintf("EEPROM initaion success\n");
             return;
         }
     }
-    tftprintf("EEPROM initaion failed");
+    uartprintf("EEPROM initaion failed\n");
 }

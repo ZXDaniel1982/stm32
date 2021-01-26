@@ -25,13 +25,6 @@ void SPI_Init()
 
     /* Enable SPI peripheral */
     SPI1->CR1 |= SPI_CR1_SPE;
-    
-#ifdef BOARD_ADV1
-/*    NVIC_SetPriority(DMA1_Channel2_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
-    NVIC_EnableIRQ(DMA1_Channel2_IRQn);
-    NVIC_SetPriority(DMA1_Channel3_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
-    NVIC_EnableIRQ(DMA1_Channel3_IRQn);*/
-#endif
 }
 
 uint8_t SPI_Transmit(uint8_t *data, uint16_t size)

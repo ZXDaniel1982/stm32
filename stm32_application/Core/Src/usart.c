@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stddef.h>
 #include <string.h>
+#include <stdarg.h>
 
 #include "stm32f1xx.h"
 #include "stm32f103xe.h"
@@ -239,4 +240,19 @@ void USART1_IRQHandler(void)
         buf = USART1->DR;
         USART_RxProcess(buf);
     }
+}
+
+//==============================================================================//
+// Public functions
+//==============================================================================//
+void uartprintf(const char* fmt, ...)
+{
+    uint8_t cmd[40] = {0};
+
+    va_list ap;
+    va_start(ap, fmt);
+    vsnprintf((char *)cmd, sizeof(cmd), fmt, ap);
+
+    USART_SendData(cmd, strlen((char *)cmd));
+    va_end(ap);
 }

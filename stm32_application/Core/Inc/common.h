@@ -12,12 +12,9 @@ extern "C" {
 #include "sdio.h"
 #include "stm32f103xe.h"
     
-#include "boardcfg.h"
+#include "FreeRTOS.h"
+#include "task.h"
 
-#ifdef BOARD_ADV1
-    #include "FreeRTOS.h"
-    #include "task.h"
-#endif
 
 #define UNUSED(x) (void)x
 #define NUM_ROWS(ARRAY) (sizeof(ARRAY) / sizeof(ARRAY[0]))
@@ -119,6 +116,7 @@ void TIMER_Init(void);
 // USART1
 void USART_Init(void);
 void USART_SendData(uint8_t *data, uint16_t len);
+void uartprintf(const char* fmt, ...);
 
 // FLASH
 void FLASH_Lock(void);
@@ -171,10 +169,8 @@ void USART1_IRQHandler(void);
 // error
 void Error_Handle(void);
 
-#ifdef BOARD_ADV1
 void LedBlink(void);
 // void DMA_Init(void);
-#endif
 
 #ifdef __cplusplus
 }

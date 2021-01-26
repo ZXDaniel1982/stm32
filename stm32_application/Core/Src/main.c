@@ -65,7 +65,7 @@ int main()
     EEPROM_Init();
 
     for (i=0;i<7200000;++i) {}
-    uartprintf("Start application\n");
+    uartprintf("Start application\r\n");
 
     LedBlink();
 

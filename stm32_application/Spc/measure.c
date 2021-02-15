@@ -2,21 +2,23 @@
 #include "stm32f103xe.h"
 #include "common.h"
 
-static xTimerHandle VoltCurrTimer = NULL;
+TaskHandle_t TaskMeasure = NULL;
 
-static void Measure_VoltCurTimer(xTimerHandle unused)
+/**
+ * Voltage and current sensor handler
+ */
+static void Measure_VoltCurTimer(void *pvParameters)
 {
-    uartprintf("Measure volt and current\r\n");
+    while (1) {
+        /* Block to wait for prvTask1() to notify this task. */
+        ulTaskNotifyTake( pdTRUE, portMAX_DELAY );
+        uartprintf("Measure volt and current\r\n");
+    }
 }
 
 void Measure_VoltCurInit(void)
 {
-    // Start a periodic request for connection
-    const char* name = (const char*)"Volt Current measure";
-    VoltCurrTimer = xTimerCreate(name,
-                                 5,
-                                 pdTRUE,
-                                 NULL,
-                                 Measure_VoltCurTimer);
-    xTimerStart(VoltCurrTimer, 0);
+    uartprintf("Init voltage and current sensor\r\n");
+    xTaskCreate(Measure_VoltCurTimer, (const char*) "Main", 128,
+                NULL, 0, &TaskMeasure);
 }

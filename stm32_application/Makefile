@@ -38,6 +38,7 @@ ROOT = $(PWD)/$(TARGET_DIR)
 # C sources
 C_SOURCES =  \
 Core/Src/main.c \
+Core/Src/rcc.c \
 Core/Src/gpio.c \
 Core/Src/timer.c \
 Core/Src/rtc.c \

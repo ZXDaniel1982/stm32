@@ -108,6 +108,9 @@ typedef struct
     uint16_t tail; 
 } Imageargs_t;
 
+// RCC
+void RCC_Init(void);
+
 // GPIO
 void GPIO_Init(void);
 

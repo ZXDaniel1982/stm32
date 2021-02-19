@@ -15,3 +15,9 @@ xTimerCreate  xTimerStart  xTimerStop
 
 vTaskNotifyGiveFromISR
 
+
+# FreeRTOS working APIs
+
+## Task normal notification
+
+xTaskNotifyGive()  --->  ulTaskNotifyTake()

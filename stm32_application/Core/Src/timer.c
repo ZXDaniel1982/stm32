@@ -65,11 +65,7 @@ void TIM2_IRQHandler(void)
 
 void TIM3_IRQHandler(void)
 {
-    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-
     CLEAR_BIT(TIM3->SR, TIM_SR_UIF);
-    vTaskNotifyGiveFromISR(TaskMeasure, &xHigherPriorityTaskWoken);
-    portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 }
 
 void TIM4_IRQHandler(void)

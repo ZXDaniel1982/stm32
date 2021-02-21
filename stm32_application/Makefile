@@ -61,7 +61,10 @@ FreeRTOS/Source/tasks.c \
 FreeRTOS/Source/timers.c \
 FreeRTOS/Source/portable/MemMang/heap_4.c \
 FreeRTOS/Source/portable/GCC/ARM_CM3/port.c \
-Spc/measure.c
+Spc/Measure/measure.c \
+Spc/Page/page.c \
+Spc/Page/actual.c \
+Spc/Page/program.c
 
 # ASM sources
 ASM_SOURCES =  \
@@ -120,6 +123,7 @@ AS_INCLUDES =
 # C includes
 C_INCLUDES =  \
 -ICore/Inc \
+-ISpc/Inc \
 -IFreeRTOS/Source/include \
 -IFreeRTOS/Source/portable/GCC/ARM_CM3
 

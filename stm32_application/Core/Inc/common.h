@@ -179,6 +179,9 @@ void LedBlink(void);
 // Measurement
 void Measure_VoltCurInit(void);
 
+// Page
+void Page_Init(void);
+
 #ifdef __cplusplus
 }
 #endif

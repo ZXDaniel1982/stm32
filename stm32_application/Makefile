@@ -63,6 +63,7 @@ FreeRTOS/Source/portable/MemMang/heap_4.c \
 FreeRTOS/Source/portable/GCC/ARM_CM3/port.c \
 Spc/Measure/measure.c \
 Spc/Page/page.c \
+Spc/Page/default.c \
 Spc/Page/actual.c \
 Spc/Page/program.c
 

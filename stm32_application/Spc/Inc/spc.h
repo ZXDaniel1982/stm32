@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 #define PAGE_INDEX(PAGE_OPT) \
+  PAGE_OPT(Default) \
   PAGE_OPT(Actual) \
   PAGE_OPT(Program)
 

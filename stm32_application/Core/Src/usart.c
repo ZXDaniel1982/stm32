@@ -10,6 +10,8 @@
 #define USART_MAX_LEN 255
 #define USART_PROTOCOL_LEN 20
 
+SemaphoreHandle_t UartMutex;
+
 static void IAP_SetArgs(uint8_t* Buf);
 static void IAP_Buffer(uint8_t* Buf);
 static void IAP_Clear(uint8_t* Buf);
@@ -221,6 +223,8 @@ void USART_Init()
     SET_BIT(USART1->CR1, (USART_CR1_RXNEIE | USART_CR1_PEIE));
 
     NVIC_EnableIRQ(USART1_IRQn);
+    
+    UartMutex = xSemaphoreCreateMutex();
 }
 
 void USART_SendData(uint8_t *data, uint16_t len)
@@ -248,6 +252,8 @@ void USART1_IRQHandler(void)
 void uartprintf(const char* fmt, ...)
 {
     uint8_t cmd[255] = {0};
+    
+    xSemaphoreTake(UartMutex, portMAX_DELAY);
 
     va_list ap;
     va_start(ap, fmt);
@@ -255,4 +261,6 @@ void uartprintf(const char* fmt, ...)
 
     USART_SendData(cmd, strlen((char *)cmd));
     va_end(ap);
+    
+    xSemaphoreGive(UartMutex);
 }

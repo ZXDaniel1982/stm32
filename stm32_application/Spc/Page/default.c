@@ -7,3 +7,8 @@ void Page_Init_Default(void)
 {
   uartprintf("Default\r\n");
 }
+
+PageEntity_t *Page_Func_Default(void)
+{
+  return Page_CreatePage(Actual);
+}

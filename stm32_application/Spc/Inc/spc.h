@@ -5,21 +5,55 @@
 extern "C" {
 #endif
 
-#define PAGE_INDEX(PAGE_OPT) \
-  PAGE_OPT(Default) \
-  PAGE_OPT(Actual) \
-  PAGE_OPT(Program)
+#define PAGE_INDEX(PAGE_OPT, type) \
+  PAGE_OPT(Default, type) \
+  PAGE_OPT(Actual, type) \
+  PAGE_OPT(Program, type)
 
-#define PAGE_ENUM(TYPE) TYPE,
-#define PAGE_INIT_DECLARE(TYPE) void Page_Init_##TYPE(void);
-#define PAGE_INIT(TYPE) Page_Init_##TYPE();
-#define PAGE_REG(TYPE)
+#define PAGE_ENUM(TYPE, type) TYPE,
+#define PAGE_INIT_DECLARE(TYPE, type) void Page_Init_##TYPE(void);
+#define PAGE_FUNC_DECLARE(TYPE, type) PageEntity_t *Page_Func_##TYPE(void);
+#define PAGE_INIT(TYPE, type) { \
+    if (TYPE == type) { \
+        return Page_Init_##TYPE; \
+    } \
+}
+#define PAGE_FUNC(TYPE, type) { \
+    if (TYPE == type) { \
+        return Page_Func_##TYPE; \
+    } \
+}
+  
+typedef void (*PageInit)(void);
 
 typedef enum PageEnum {
-  PAGE_INDEX(PAGE_ENUM)
-} PageEnum_t; 
+  PAGE_INDEX(PAGE_ENUM, NULL)
+} PageEnum_t;
 
-PAGE_INDEX(PAGE_INIT_DECLARE)
+typedef struct PageEntity {
+  PageEnum_t type;
+  struct PageEntity *(*func)(void);
+} PageEntity_t;
+
+typedef PageEntity_t *(*PageFunc)(void);
+
+
+PAGE_INDEX(PAGE_INIT_DECLARE, NULL)
+PAGE_INDEX(PAGE_FUNC_DECLARE, NULL)
+
+static inline PageInit GetPageInit(PageEnum_t type)
+{
+    PAGE_INDEX(PAGE_INIT, type)
+    return NULL;
+}
+
+static inline PageFunc GetPageFunc(PageEnum_t type)
+{
+    PAGE_INDEX(PAGE_FUNC, type)
+    return NULL;
+}
+
+PageEntity_t *Page_CreatePage(PageEnum_t type);
 
 #ifdef __cplusplus
 }

@@ -32,159 +32,165 @@ static void EEPRom_SendByte(uint8_t byte);
 /*----------------------------------------------------------------------------*/
 static void EEPRom_SendByte(uint8_t byte)
 {
-    uint8_t val = byte;
-    SPI_Transmit(&val, 1);
+	uint8_t val = byte;
+
+	SPI_Transmit(&val, 1);
 }
 
 static uint16_t SPI_Flash_ReadID(void)
 {
-    uint8_t Temp = 0;
-    uint8_t Ret = 0;
-    uint16_t id = 0;
-    Select_Flash();
+	uint8_t Temp = 0;
+	uint8_t Ret = 0;
+	uint16_t id = 0;
 
-    //????ID??    
-    Temp = 0xAB;
-    SPI_TransmitReceive(&Temp, &Ret, 1);
+	Select_Flash();
 
-    Temp = 0x00;
-    SPI_TransmitReceive(&Temp, &Ret, 1);
+	//????ID??    
+	Temp = 0xAB;
+	SPI_TransmitReceive(&Temp, &Ret, 1);
 
-    Temp = 0x00;
-    SPI_TransmitReceive(&Temp, &Ret, 1);
+	Temp = 0x00;
+	SPI_TransmitReceive(&Temp, &Ret, 1);
 
-    Temp = 0x00;
-    SPI_TransmitReceive(&Temp, &Ret, 1);
+	Temp = 0x00;
+	SPI_TransmitReceive(&Temp, &Ret, 1);
 
-    //?????16??    
-    Temp = 0xFF;
-    SPI_TransmitReceive(&Temp, &Ret, 1);
-    id = ((uint16_t) Ret) << 8;
+	Temp = 0x00;
+	SPI_TransmitReceive(&Temp, &Ret, 1);
 
-    Temp = 0xFF;
-    SPI_TransmitReceive(&Temp, &Ret, 1);
-    id += (uint16_t) Ret;
+	//?????16??    
+	Temp = 0xFF;
+	SPI_TransmitReceive(&Temp, &Ret, 1);
+	id = ((uint16_t) Ret) << 8;
 
-    NotSelect_Flash();
+	Temp = 0xFF;
+	SPI_TransmitReceive(&Temp, &Ret, 1);
+	id += (uint16_t) Ret;
 
-    return id;
+	NotSelect_Flash();
+
+	return id;
 }
 
 static uint8_t rdsr(void)
 {
-    uint8_t busy;
+	uint8_t busy;
 
-    Select_Flash();
-    EEPRom_SendByte(0x05);
-    SPI_TransmitReceive(&busy, &busy, 1);
-    NotSelect_Flash();
-    return (busy);
+	Select_Flash();
+	EEPRom_SendByte(0x05);
+	SPI_TransmitReceive(&busy, &busy, 1);
+	NotSelect_Flash();
+	return (busy);
 }
 
 static void wip(void)
 {
-    uint8_t a = 1;
-    while ((a & 0x01) == 1) a = rdsr();
+	uint8_t a = 1;
+
+	while ((a & 0x01) == 1)
+		a = rdsr();
 }
 
 static void wsr(void)
 {
-    Select_Flash();
-    EEPRom_SendByte(0x50);
-    NotSelect_Flash();
+	Select_Flash();
+	EEPRom_SendByte(0x50);
+	NotSelect_Flash();
 
-    Select_Flash();
-    EEPRom_SendByte(0x01);
-    EEPRom_SendByte(0x00);
-    NotSelect_Flash();
+	Select_Flash();
+	EEPRom_SendByte(0x01);
+	EEPRom_SendByte(0x00);
+	NotSelect_Flash();
 
-    wip();
+	wip();
 }
 
 static void wen(void)
 {
-    Select_Flash();
-    EEPRom_SendByte(0x06);
-    NotSelect_Flash();
+	Select_Flash();
+	EEPRom_SendByte(0x06);
+	NotSelect_Flash();
 }
 
 static void wdis(void)
 {
-    Select_Flash();
-    EEPRom_SendByte(0x04);
-    NotSelect_Flash();
+	Select_Flash();
+	EEPRom_SendByte(0x04);
+	NotSelect_Flash();
 
-    wip();
+	wip();
 }
 
 void EEProm_SectorErrase(uint32_t addr)
 {
-    wsr();
-    wen();
+	wsr();
+	wen();
 
-    Select_Flash();
-    EEPRom_SendByte(0x20);
-    EEPRom_SendByte((uint8_t) ((addr & 0xffffff) >> 16)); //addh
-    EEPRom_SendByte((uint8_t) ((addr & 0xffff) >> 8));    //addl 
-    EEPRom_SendByte((uint8_t) (addr & 0xff)); //wtt
-    NotSelect_Flash();
+	Select_Flash();
+	EEPRom_SendByte(0x20);
+	EEPRom_SendByte((uint8_t) ((addr & 0xffffff) >> 16));	//addh
+	EEPRom_SendByte((uint8_t) ((addr & 0xffff) >> 8));	//addl 
+	EEPRom_SendByte((uint8_t) (addr & 0xff));	//wtt
+	NotSelect_Flash();
 
-    wip();
+	wip();
 }
 
 void EEPROM_Write(uint32_t addr, uint8_t * buf, uint16_t len)
 {
-    uint16_t i = 0, a2;
+	uint16_t i = 0, a2;
 
-    wsr();
-    wen();
-    Select_Flash();
-    EEPRom_SendByte(0xad);
-    EEPRom_SendByte((uint8_t) ((addr & 0xffffff) >> 16));
-    EEPRom_SendByte((uint8_t) ((addr & 0xffff) >> 8));
-    EEPRom_SendByte((uint8_t) (addr & 0xff));
-    EEPRom_SendByte(buf[0]);
-    EEPRom_SendByte(buf[1]);
-    NotSelect_Flash();
+	wsr();
+	wen();
+	Select_Flash();
+	EEPRom_SendByte(0xad);
+	EEPRom_SendByte((uint8_t) ((addr & 0xffffff) >> 16));
+	EEPRom_SendByte((uint8_t) ((addr & 0xffff) >> 8));
+	EEPRom_SendByte((uint8_t) (addr & 0xff));
+	EEPRom_SendByte(buf[0]);
+	EEPRom_SendByte(buf[1]);
+	NotSelect_Flash();
 
-    i = 2;
-    while (i < len) {
-        a2 = 120;
-        while (a2 > 0) a2--;
+	i = 2;
+	while (i < len) {
+		a2 = 120;
+		while (a2 > 0)
+			a2--;
 
-        Select_Flash();
-        EEPRom_SendByte(0xad);
-        EEPRom_SendByte(buf[i]);
-        i++;
-        EEPRom_SendByte(buf[i]);
-        i++;
-        NotSelect_Flash();
-    }
+		Select_Flash();
+		EEPRom_SendByte(0xad);
+		EEPRom_SendByte(buf[i]);
+		i++;
+		EEPRom_SendByte(buf[i]);
+		i++;
+		NotSelect_Flash();
+	}
 
-    a2 = 100;
-    while (a2 > 0) a2--;
+	a2 = 100;
+	while (a2 > 0)
+		a2--;
 
-    wdis();
-    Select_Flash();
-    wip();
+	wdis();
+	Select_Flash();
+	wip();
 }
 
-void EEPROM_Read(uint32_t addr, uint8_t *buf, uint16_t len)
+void EEPROM_Read(uint32_t addr, uint8_t * buf, uint16_t len)
 {
-    uint16_t i = 0;
+	uint16_t i = 0;
 
-    Select_Flash();
-    EEPRom_SendByte(0x0b);
-    EEPRom_SendByte((uint8_t) ((addr & 0xffffff) >> 16));
-    EEPRom_SendByte((uint8_t) ((addr & 0xffff) >> 8));
-    EEPRom_SendByte((uint8_t) (addr & 0xff));
-    EEPRom_SendByte(0);
+	Select_Flash();
+	EEPRom_SendByte(0x0b);
+	EEPRom_SendByte((uint8_t) ((addr & 0xffffff) >> 16));
+	EEPRom_SendByte((uint8_t) ((addr & 0xffff) >> 8));
+	EEPRom_SendByte((uint8_t) (addr & 0xff));
+	EEPRom_SendByte(0);
 
-    while (i < len) {
-        SPI_TransmitReceive(&(buf[i]), &(buf[i]), 1);
-        i++;
-    }
-    NotSelect_Flash();
+	while (i < len) {
+		SPI_TransmitReceive(&(buf[i]), &(buf[i]), 1);
+		i++;
+	}
+	NotSelect_Flash();
 }
 
 /*----------------------------------------------------------------------------*/
@@ -193,12 +199,13 @@ void EEPROM_Read(uint32_t addr, uint8_t *buf, uint16_t len)
 #define EEPROM_ID 0xbf41
 void EEPROM_Init()
 {
-    uint8_t i;
-    for (i=0;i<5;++i) {
-        if (EEPROM_ID == SPI_Flash_ReadID()) {
-            uartprintf("EEPROM initaion success\r\n");
-            return;
-        }
-    }
-    uartprintf("EEPROM initaion failed\r\n");
+	uint8_t i;
+
+	for (i = 0; i < 5; ++i) {
+		if (EEPROM_ID == SPI_Flash_ReadID()) {
+			uartprintf("EEPROM initaion success\r\n");
+			return;
+		}
+	}
+	uartprintf("EEPROM initaion failed\r\n");
 }

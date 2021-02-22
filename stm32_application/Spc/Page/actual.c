@@ -5,10 +5,10 @@
 
 void Page_Init_Actual(void)
 {
-  uartprintf("Actual\r\n");
+	uartprintf("Actual\r\n");
 }
 
 PageEntity_t *Page_Func_Actual(void)
 {
-  return Page_CreatePage(Program);
+	return Page_CreatePage(Program);
 }

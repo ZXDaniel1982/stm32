@@ -1,7 +1,7 @@
- 
+
 #include "test.h"
 
 void test()
 {
-    printf("hello world\n");
+	printf("hello world\n");
 }

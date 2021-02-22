@@ -21,3 +21,7 @@ vTaskNotifyGiveFromISR
 ## Task normal notification
 
 xTaskNotifyGive()  --->  ulTaskNotifyTake()
+
+# Use indent to format C files
+
+indent -bad -kr -br -ce -i4 -sob -ts4 -l80 *

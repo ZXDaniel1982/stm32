@@ -5,10 +5,10 @@
 
 void Page_Init_Program(void)
 {
-  uartprintf("Program\r\n");
+	uartprintf("Program\r\n");
 }
 
 PageEntity_t *Page_Func_Program(void)
 {
-  return Page_CreatePage(Default);
+	return Page_CreatePage(Default);
 }

@@ -23,43 +23,37 @@ extern "C" {
         return Page_Func_##TYPE; \
     } \
 }
-  
-typedef void (*PageInit)(void);
 
-typedef enum PageEnum {
-  PAGE_INDEX(PAGE_ENUM, NULL)
-} PageEnum_t;
+	typedef void (*PageInit) (void);
 
-typedef struct PageEntity {
-  PageEnum_t type;
-  struct PageEntity *(*func)(void);
-} PageEntity_t;
+	typedef enum PageEnum {
+		PAGE_INDEX(PAGE_ENUM, NULL)
+	} PageEnum_t;
 
-typedef PageEntity_t *(*PageFunc)(void);
+	typedef struct PageEntity {
+		PageEnum_t type;
+		struct PageEntity *(*func) (void);
+	} PageEntity_t;
 
+	typedef PageEntity_t *(*PageFunc) (void);
 
-PAGE_INDEX(PAGE_INIT_DECLARE, NULL)
-PAGE_INDEX(PAGE_FUNC_DECLARE, NULL)
+	 PAGE_INDEX(PAGE_INIT_DECLARE, NULL)
+	 PAGE_INDEX(PAGE_FUNC_DECLARE, NULL)
 
-static inline PageInit GetPageInit(PageEnum_t type)
-{
-    PAGE_INDEX(PAGE_INIT, type)
-    return NULL;
-}
+	static inline PageInit GetPageInit(PageEnum_t type) {
+		PAGE_INDEX(PAGE_INIT, type)
+        return NULL;
+	} static inline PageFunc GetPageFunc(PageEnum_t type) {
+		PAGE_INDEX(PAGE_FUNC, type)
+        return NULL;
+	}
 
-static inline PageFunc GetPageFunc(PageEnum_t type)
-{
-    PAGE_INDEX(PAGE_FUNC, type)
-    return NULL;
-}
-
-PageEntity_t *Page_CreatePage(PageEnum_t type);
+	PageEntity_t *Page_CreatePage(PageEnum_t type);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __SPC_H */
+#endif							/* __SPC_H */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-

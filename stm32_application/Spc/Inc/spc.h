@@ -5,6 +5,11 @@
 extern "C" {
 #endif
 
+#include <stdio.h>
+#include <string.h>
+
+#define ToString(x) #x
+
 #define PAGE_INDEX(PAGE_OPT, type) \
   PAGE_OPT(Default, type) \
   PAGE_OPT(Actual, type) \
@@ -23,32 +28,42 @@ extern "C" {
         return Page_Func_##TYPE; \
     } \
 }
+#define PAGE_GET_TYPE(TYPE, key) { \
+    if (strncmp(ToString(TYPE), key, sizeof(ToString(TYPE))) == 0) { \
+        return TYPE; \
+    } \
+}
 
-	typedef void (*PageInit) (void);
+typedef void (*PageInit) (void);
 
-	typedef enum PageEnum {
+typedef enum PageEnum {
 		PAGE_INDEX(PAGE_ENUM, NULL)
-	} PageEnum_t;
+} PageEnum_t;
 
-	typedef struct PageEntity {
+typedef struct PageEntity {
 		PageEnum_t type;
 		struct PageEntity *(*func) (void);
-	} PageEntity_t;
+} PageEntity_t;
 
-	typedef PageEntity_t *(*PageFunc) (void);
+typedef PageEntity_t *(*PageFunc) (void);
 
-	 PAGE_INDEX(PAGE_INIT_DECLARE, NULL)
-	 PAGE_INDEX(PAGE_FUNC_DECLARE, NULL)
+PAGE_INDEX(PAGE_INIT_DECLARE, NULL)
+PAGE_INDEX(PAGE_FUNC_DECLARE, NULL)
 
-	static inline PageInit GetPageInit(PageEnum_t type) {
+static inline PageInit GetPageInit(PageEnum_t type) {
 		PAGE_INDEX(PAGE_INIT, type)
-        return NULL;
-	} static inline PageFunc GetPageFunc(PageEnum_t type) {
+    return NULL;
+} 
+static inline PageFunc GetPageFunc(PageEnum_t type) {
 		PAGE_INDEX(PAGE_FUNC, type)
-        return NULL;
-	}
+    return NULL;
+}
+static inline PageEnum_t GetPageType(char *key)
+{
+    PAGE_INDEX(PAGE_GET_TYPE, key);
+}
 
-	PageEntity_t *Page_CreatePage(PageEnum_t type);
+PageEntity_t *Page_CreatePage(PageEnum_t type);
 
 #ifdef __cplusplus
 }

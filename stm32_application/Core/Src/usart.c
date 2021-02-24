@@ -256,7 +256,7 @@ void USART1_IRQHandler(void)
 //==============================================================================//
 // Public functions
 //==============================================================================//
-void uartprintf(const char *fmt, ...)
+int uartprintf(const char *fmt, ...)
 {
 	uint8_t cmd[255] = { 0 };
 
@@ -271,4 +271,6 @@ void uartprintf(const char *fmt, ...)
 	va_end(ap);
 
 	xSemaphoreGive(UartMutex);
+
+	return 0;
 }

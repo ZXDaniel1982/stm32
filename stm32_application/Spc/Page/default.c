@@ -1,14 +1,11 @@
-#include "stm32f1xx.h"
-#include "stm32f103xe.h"
-#include "common.h"
 #include "spc.h"
 
-void Page_Init_Default(void)
+void Page_Init_Default(Logger logger)
 {
-	uartprintf("Default\r\n");
+	logger("Default\r\n");
 }
 
-PageEntity_t *Page_Func_Default(void)
+PageEntity_t *Page_Func_Default(Logger logger)
 {
-	return Page_CreatePage(Actual);
+	return Page_CreatePage(Actual, logger);
 }

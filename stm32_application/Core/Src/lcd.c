@@ -336,7 +336,7 @@ static void LCD_WR_REG(unsigned int index)
 //==============================================================================//
 // Public functions
 //==============================================================================//
-void tftprintf(const char *fmt, ...)
+int tftprintf(const char *fmt, ...)
 {
 	uint8_t cmd[40] = { 0 };
 
@@ -352,6 +352,8 @@ void tftprintf(const char *fmt, ...)
 	TFT_ShowString(2, (strIndex * 14 + 2), cmd);
 	strIndex++;
 	va_end(ap);
+
+	return 0;
 }
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

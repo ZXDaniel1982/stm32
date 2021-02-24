@@ -121,7 +121,7 @@ void TIMER_Init(void);
 // USART1
 void USART_Init(void);
 void USART_SendData(uint8_t *data, uint16_t len);
-void uartprintf(const char* fmt, ...);
+int uartprintf(const char* fmt, ...);
 
 // FLASH
 void FLASH_Lock(void);
@@ -146,7 +146,7 @@ void FSMC_Init(void);
 
 // LCD
 void LCD_Init(void);
-void tftprintf(const char* fmt, ...);
+int tftprintf(const char* fmt, ...);
 
 // RTC
 // void RTC_Init(void);

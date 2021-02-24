@@ -62,6 +62,7 @@ FreeRTOS/Source/timers.c \
 FreeRTOS/Source/portable/MemMang/heap_4.c \
 FreeRTOS/Source/portable/GCC/ARM_CM3/port.c \
 Spc/Measure/measure.c \
+Spc/Page/pagetask.c \
 Spc/Page/page.c \
 Spc/Page/default.c \
 Spc/Page/actual.c \
@@ -70,6 +71,14 @@ Spc/Page/program.c
 # ASM sources
 ASM_SOURCES =  \
 startup_stm32f103xe.s
+
+# Test sources
+TEST_SOURCES = \
+Test/test.c \
+Spc/Page/page.c \
+Spc/Page/default.c \
+Spc/Page/actual.c \
+Spc/Page/program.c
 
 
 #######################################
@@ -94,6 +103,8 @@ SZ = $(PREFIX)size
 endif
 HEX = $(CP) -O ihex
 BIN = $(CP) -O binary -S
+
+TESTCC = gcc
  
 #######################################
 # CFLAGS
@@ -128,10 +139,17 @@ C_INCLUDES =  \
 -IFreeRTOS/Source/include \
 -IFreeRTOS/Source/portable/GCC/ARM_CM3
 
+# Test includes
+TEST_INCLUDES = \
+-ISpc/Inc \
+-ITest
+
 # compile gcc flags
 ASFLAGS = $(MCU) $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
 
 CFLAGS = $(MCU) $(C_DEFS) $(C_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
+
+TESTFLAGS = $(TEST_INCLUDES)
 
 ifeq ($(DEBUG), 1)
 CFLAGS += -g -gdwarf-2
@@ -154,7 +172,7 @@ LIBDIR =
 LDFLAGS = $(MCU) -specs=nano.specs -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--cref -Wl,--gc-sections
 
 # default action: build all
-all: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(TARGET).bin
+all: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(TARGET).bin $(BUILD_DIR)/$(TARGET)
 
 
 #######################################
@@ -184,6 +202,9 @@ $(BUILD_DIR)/%.bin: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
 	$(BIN) $< $@
 	$(RM) $(BUILD_DIR)/*.d
 	$(RM) $(BUILD_DIR)/*.lst
+
+$(BUILD_DIR)/$(TARGET): $(TEST_SOURCES)
+	$(TESTCC) -o $@ $^ $(TESTFLAGS)
 	
 $(BUILD_DIR):
 	mkdir $@	

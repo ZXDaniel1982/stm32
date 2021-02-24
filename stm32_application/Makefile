@@ -80,6 +80,14 @@ Spc/Page/default.c \
 Spc/Page/actual.c \
 Spc/Page/program.c
 
+UTEST_SOURCES = \
+Utest/Src/utest.c \
+Utest/Unity/unity.c \
+Spc/Page/page.c \
+Spc/Page/default.c \
+Spc/Page/actual.c \
+Spc/Page/program.c
+
 
 #######################################
 # binaries
@@ -143,12 +151,19 @@ C_INCLUDES =  \
 TEST_INCLUDES = \
 -ISpc/Inc
 
+# UTest includes
+UTEST_INCLUDES = \
+-ISpc/Inc \
+-IUtest/Unity
+
 # compile gcc flags
 ASFLAGS = $(MCU) $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
 
 CFLAGS = $(MCU) $(C_DEFS) $(C_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
 
 TESTFLAGS = $(TEST_INCLUDES)
+
+UTESTFLAGS = $(UTEST_INCLUDES)
 
 ifeq ($(DEBUG), 1)
 CFLAGS += -g -gdwarf-2
@@ -171,7 +186,7 @@ LIBDIR =
 LDFLAGS = $(MCU) -specs=nano.specs -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--cref -Wl,--gc-sections
 
 # default action: build all
-all: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(TARGET).bin $(BUILD_DIR)/$(TARGET)
+all: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(TARGET).bin $(BUILD_DIR)/$(TARGET) $(BUILD_DIR)/utest
 
 
 #######################################
@@ -204,6 +219,9 @@ $(BUILD_DIR)/%.bin: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
 
 $(BUILD_DIR)/$(TARGET): $(TEST_SOURCES)
 	$(TESTCC) -o $@ $^ $(TESTFLAGS)
+
+$(BUILD_DIR)/utest: $(UTEST_SOURCES)
+	$(TESTCC) -o $@ $^ $(UTESTFLAGS)
 	
 $(BUILD_DIR):
 	mkdir $@	

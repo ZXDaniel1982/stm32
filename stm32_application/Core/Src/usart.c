@@ -224,12 +224,12 @@ static void USART_SpcCmd(uint8_t val)
         rxCnt--;
 		uartprintf("\b \b");
     } else if (val == 0x0d) {
-		uartprintf("\r\n");
+		//uartprintf("\r\n");
         memcpy(KeyString, rxBuf, 20);
         KeyRecved = 1;
         memset(rxBuf, 0, USART_MAX_LEN);
         rxCnt = 0;
-		uartprintf("\r\nSpc > ");
+		//uartprintf("\r\nSpc > ");
     } else {
         rxBuf[rxCnt] = val;
         rxCnt++;

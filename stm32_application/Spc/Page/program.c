@@ -2,7 +2,7 @@
 
 void Page_Init_Program(Logger logger)
 {
-	logger("Program\r\n");
+	logger("\r\nProgram\r\n");
 }
 
 PageEntity_t *Page_Func_Program(KeyEnum_t key, Logger logger)

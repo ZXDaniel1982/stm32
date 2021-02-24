@@ -2,7 +2,7 @@
 
 void Page_Init_Default(Logger logger)
 {
-	logger("Default\r\n");
+	logger("\r\nDefault\r\n");
 }
 
 PageEntity_t *Page_Func_Default(KeyEnum_t key, Logger logger)

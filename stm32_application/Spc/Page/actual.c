@@ -2,7 +2,7 @@
 
 void Page_Init_Actual(Logger logger)
 {
-	logger("Actual\r\n");
+	logger("\r\nActual\r\n");
 }
 
 PageEntity_t *Page_Func_Actual(KeyEnum_t key, Logger logger)

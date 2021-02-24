@@ -7,6 +7,8 @@
 
 TaskHandle_t TaskPageMainloop = NULL;
 
+static KeyEnum_t KeyType = Act;
+
 /**
  * Voltage and current sensor handler
  */
@@ -24,7 +26,7 @@ static void Spc_Mainloop(void *pvParameters)
 		/* Block to wait for prvTask1() to notify this task. */
 		vTaskDelay(5000);
 		if (Page->func != NULL) {
-			PageNext = Page->func(uartprintf);
+			PageNext = Page->func(KeyType, uartprintf);
 			if (PageNext != NULL) {
 				free(Page);
 				Page = PageNext;

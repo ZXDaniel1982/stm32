@@ -5,7 +5,14 @@ void Page_Init_Default(Logger logger)
 	logger("Default\r\n");
 }
 
-PageEntity_t *Page_Func_Default(Logger logger)
+PageEntity_t *Page_Func_Default(KeyEnum_t key, Logger logger)
 {
-	return Page_CreatePage(Actual, logger);
+	switch (key) {
+	case Prog:
+		return Page_CreatePage(Program, logger);
+	case Act:
+		return Page_CreatePage(Actual, logger);
+	default:
+		return NULL;
+	}
 }

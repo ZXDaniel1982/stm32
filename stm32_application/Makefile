@@ -141,8 +141,7 @@ C_INCLUDES =  \
 
 # Test includes
 TEST_INCLUDES = \
--ISpc/Inc \
--ITest
+-ISpc/Inc
 
 # compile gcc flags
 ASFLAGS = $(MCU) $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections

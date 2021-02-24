@@ -6,13 +6,15 @@
 #include "spc.h"
 
 TaskHandle_t TaskPageMainloop = NULL;
+uint8_t KeyRecved = 0;
+uint8_t KeyString[20] = {0};
 
 static KeyEnum_t KeyType = Act;
 
 /**
  * Voltage and current sensor handler
  */
-static void Spc_Mainloop(void *pvParameters)
+static void Spc_PageMainloop(void *pvParameters)
 {
 	PageEntity_t *Page = NULL;
 	PageEntity_t *PageNext = NULL;
@@ -24,7 +26,11 @@ static void Spc_Mainloop(void *pvParameters)
 	}
 	while (1) {
 		/* Block to wait for prvTask1() to notify this task. */
-		vTaskDelay(5000);
+		vTaskDelay(50);
+		if (KeyRecved == 0) continue;
+		KeyRecved = 0;
+		KeyType = GetKeyType(KeyString);
+		memset(KeyString, 0, 20);
 		if (Page->func != NULL) {
 			PageNext = Page->func(KeyType, uartprintf);
 			if (PageNext != NULL) {
@@ -39,6 +45,6 @@ static void Spc_Mainloop(void *pvParameters)
 void Page_Init(void)
 {
 	uartprintf("Spc page init\r\n");
-	xTaskCreate(Spc_Mainloop, (const char *) "Page", 1024,
+	xTaskCreate(Spc_PageMainloop, (const char *) "Page", 1024,
 				NULL, 0, &TaskPageMainloop);
 }

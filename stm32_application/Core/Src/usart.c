@@ -41,6 +41,9 @@ uint8_t rxBuf[USART_MAX_LEN] = { 0 };
 
 uint8_t rxCnt = 0;
 
+extern uint8_t KeyRecved;
+extern uint8_t KeyString[20];
+
 //======================================================================//
 // Private functions
 //======================================================================//
@@ -207,6 +210,33 @@ static void USART_RxProcess(uint8_t val)
 	}
 }
 
+static void USART_SpcCmd(uint8_t val)
+{
+	UNUSED(USART_RxProcess);
+	if (rxCnt >= USART_MAX_LEN) {
+		memset(rxBuf, 0, USART_MAX_LEN);
+		rxCnt = 0;
+	}
+
+	if ((val == 0x7f) || (val == 0x08)) {
+        if (rxCnt == 0) return;
+        rxBuf[rxCnt-1] = '\0';
+        rxCnt--;
+		uartprintf("\b \b");
+    } else if (val == 0x0d) {
+		uartprintf("\r\n");
+        memcpy(KeyString, rxBuf, 20);
+        KeyRecved = 1;
+        memset(rxBuf, 0, USART_MAX_LEN);
+        rxCnt = 0;
+		uartprintf("\r\nSpc > ");
+    } else {
+        rxBuf[rxCnt] = val;
+        rxCnt++;
+		USART_SendData(&val, 1);
+    }
+}
+
 void USART_Init()
 {
 	if (READ_BIT(USART1->CR1, USART_CR1_UE) != (USART_CR1_UE)) {
@@ -249,7 +279,7 @@ void USART1_IRQHandler(void)
 
 	if ((USART1->SR & USART_CR1_RXNEIE) != 0) {
 		buf = USART1->DR;
-		USART_RxProcess(buf);
+		USART_SpcCmd(buf);
 	}
 }
 

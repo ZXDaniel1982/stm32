@@ -26,7 +26,8 @@ typedef int (*Logger)(const char* fmt, ...);
   KEY_OPT(Up, key) \
   KEY_OPT(Down, key) \
   KEY_OPT(Left, key) \
-  KEY_OPT(Right, key)
+  KEY_OPT(Right, key) \
+  KEY_OPT(Invalid, key)
 
 #define OBJ_ENUM(TYPE, type) TYPE,
 #define PAGE_INIT_DECLARE(TYPE, type) void Page_Init_##TYPE(Logger);
@@ -42,7 +43,7 @@ typedef int (*Logger)(const char* fmt, ...);
     } \
 }
 #define KEY_GET_TYPE(TYPE, key) { \
-    if (strncmp(ToString(TYPE), key, sizeof(ToString(TYPE))) == 0) { \
+    if (strncmp(ToString(TYPE), (char *)key, sizeof(ToString(TYPE))) == 0) { \
         return TYPE; \
     } \
 }
@@ -75,8 +76,9 @@ static inline PageFunc GetPageFunc(PageEnum_t type) {
 	PAGE_INDEX(PAGE_FUNC, type)
     return NULL;
 }
-static inline KeyEnum_t GetKeyType(char *key) {
-    KEY_INDEX(KEY_GET_TYPE, key);
+static inline KeyEnum_t GetKeyType(uint8_t *key) {
+    KEY_INDEX(KEY_GET_TYPE, key)
+    return Invalid;
 }
 
 PageEntity_t *Page_CreatePage(PageEnum_t, Logger);

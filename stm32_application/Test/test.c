@@ -16,7 +16,6 @@ void main()
 	}
 	while (1) {
 		/* Block to wait for prvTask1() to notify this task. */
-		//sleep(2);
 		printf("Please input key: ");
 		scanf ("%79s",KeyString);
 		KeyType = GetKeyType(KeyString);

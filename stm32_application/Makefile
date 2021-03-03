@@ -92,9 +92,9 @@ Spc/Page/program.c
 #######################################
 # binaries
 #######################################
-PREFIX = arm-none-eabi-
+# PREFIX = arm-none-eabi-
 # GCC_PATH = /opt/gcc-arm-none-eabi-6-2017-q1-update/bin
-# PREFIX = arm-atollic-eabi-
+PREFIX = arm-atollic-eabi-
 # The gcc compiler bin path can be either defined in make command via GCC_PATH variable (> make GCC_PATH=xxx)
 # either it can be added to the PATH environment variable.
 ifdef GCC_PATH

@@ -1,7 +1,6 @@
 #include "stm32f1xx.h"
 #include "stm32f103xe.h"
 #include "common.h"
-#include "lvgl.h"
 
 volatile uint32_t ulHighFrequencyTimerTicks = 0;
 
@@ -57,7 +56,6 @@ void TIMER_Init()
 void TIM1_UP_IRQHandler(void)
 {
 	CLEAR_BIT(TIM1->SR, TIM_SR_UIF);
-    lv_tick_inc(1);
 }
 
 void TIM2_IRQHandler(void)

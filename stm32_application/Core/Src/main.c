@@ -22,8 +22,7 @@ int main()
 	for (i = 0; i < 7200000; ++i) {
 	}
 	uartprintf("Start application\r\n");
-    
-    Gui_init();
+
 	Measure_VoltCurInit();
 	Page_Init();
 

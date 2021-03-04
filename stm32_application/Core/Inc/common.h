@@ -183,9 +183,6 @@ void Measure_VoltCurInit(void);
 // Page
 void Page_Init(void);
 
-// Gui
-void Gui_init(void);
-
 #ifdef __cplusplus
 }
 #endif

@@ -66,7 +66,13 @@ Spc/Page/pagetask.c \
 Spc/Page/page.c \
 Spc/Page/default.c \
 Spc/Page/actual.c \
-Spc/Page/program.c
+Spc/Page/program.c \
+Gui/gui.c \
+STemWin/Config/GUIConf.c \
+STemWin/Config/GUIDRV.c \
+STemWin/Config/LCDConf.c \
+STemWin/Config/SIMConf.c \
+STemWin/OS/GUI_X.c
 
 # ASM sources
 ASM_SOURCES =  \
@@ -144,7 +150,9 @@ C_INCLUDES =  \
 -ICore/Inc \
 -ISpc/Inc \
 -IFreeRTOS/Source/include \
--IFreeRTOS/Source/portable/GCC/ARM_CM3
+-IFreeRTOS/Source/portable/GCC/ARM_CM3 \
+-ISTemWin/Config \
+-ISTemWin/inc
 
 # Test includes
 TEST_INCLUDES = \
@@ -188,7 +196,7 @@ LDFLAGS = $(MCU) -specs=nano.specs -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(BU
 all: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(TARGET).bin $(BUILD_DIR)/$(TARGET) $(BUILD_DIR)/utest
 
 # STemWin libraries
-STEMWINLIB = STemWin/STemWin532_CM3_OS_GCC.a
+STEMWINLIB = STemWin/Lib/STemWin532_CM3_GCC.a
 #######################################
 # build the application
 #######################################

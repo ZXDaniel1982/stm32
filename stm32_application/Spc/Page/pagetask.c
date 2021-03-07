@@ -46,5 +46,5 @@ void Page_Init(void)
 {
 	uartprintf("Spc page init\r\n");
 	xTaskCreate(Spc_PageMainloop, (const char *) "Page", 1024,
-				NULL, 0, &TaskPageMainloop);
+				NULL, 2, &TaskPageMainloop);
 }

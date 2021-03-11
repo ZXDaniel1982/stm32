@@ -24,7 +24,7 @@ int main()
 	uartprintf("Start application\r\n");
 
 	Measure_VoltCurInit();
-  Gui_Init();
+	Gui_Init();
 	Page_Init();
 
 	vTaskStartScheduler();

@@ -10,6 +10,7 @@ extern "C" {
 #include <stdbool.h>
 
 #include "sdio.h"
+#include "lcd.h"
 #include "stm32f103xe.h"
 
 #include "FreeRTOS.h"
@@ -147,10 +148,6 @@ void EEPROM_Read(uint32_t addr, uint8_t *buf, uint16_t len);
 
 // FSMC
 void FSMC_Init(void);
-
-// LCD
-void LCD_Init(void);
-void LCD_Clear(void);
 
 // RTC
 // void RTC_Init(void);

@@ -53,6 +53,7 @@ Purpose     : Display controller configuration (single layer)
 
 #include "GUI.h"
 #include "GUIDRV_FlexColor.h"
+#include "lcd.h"
 
 /*********************************************************************
 *
@@ -106,7 +107,7 @@ Purpose     : Display controller configuration (single layer)
 *   Sets display register
 */
 static void LcdWriteReg(U16 Data) {
-  // ... TBD by user
+  LCD_WR_REG(Data);
 }
 
 /********************************************************************
@@ -117,7 +118,7 @@ static void LcdWriteReg(U16 Data) {
 *   Writes a value to a display register
 */
 static void LcdWriteData(U16 Data) {
-  // ... TBD by user
+  LCD_WR_Data(Data);
 }
 
 /********************************************************************
@@ -129,7 +130,8 @@ static void LcdWriteData(U16 Data) {
 */
 static void LcdWriteDataMultiple(U16 * pData, int NumItems) {
   while (NumItems--) {
-    // ... TBD by user
+    LCD_WR_Data(*pData);
+    pData++;
   }
 }
 

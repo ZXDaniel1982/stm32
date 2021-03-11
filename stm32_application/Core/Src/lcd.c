@@ -34,18 +34,6 @@ static void LCD_WR_CMD(uint16_t index, uint16_t val)
 	*(__IO uint16_t *) (Bank1_LCD_D) = val;
 }
 
-//?16???????
-static void LCD_WR_Data(uint16_t val)
-{
-	*(__IO uint16_t *) (Bank1_LCD_D) = val;
-}
-
-//????????
-static void LCD_WR_REG(uint16_t index)
-{
-	*(__IO uint16_t *) (Bank1_LCD_C) = index;
-}
-
 static void lcd_rst(void)
 {
 	MODIFY_REG(LCD_Rst_GPIO_Port->ODR, LCD_Rst_Pin, 0);
@@ -54,6 +42,16 @@ static void lcd_rst(void)
 	Delay1s();
 
 	MODIFY_REG(LCD_Light_GPIO_Port->ODR, LCD_Light_Pin, LCD_Light_Pin);
+}
+
+void LCD_WR_Data(uint16_t val)
+{
+	*(__IO uint16_t *) (Bank1_LCD_D) = val;
+}
+
+void LCD_WR_REG(uint16_t index)
+{
+	*(__IO uint16_t *) (Bank1_LCD_C) = index;
 }
 
 void LCD_Clear(void)

@@ -4,23 +4,20 @@
 
 TaskHandle_t TaskGui = NULL;
 
-static uint32_t count = 0;
 /**
  * Voltage and current sensor handler
  */
 static void task_GuiMainloop(void *pvParameters)
 {
-	tftprintf("Gui task main loop");
 	while (1) {
 		/* Block to wait for prvTask1() to notify this task. */
-		vTaskDelay(1000);
-    tftprintf("Measue count %d", count++);
+		vTaskDelay(5000);
 	}
 }
 
 void Gui_Init(void)
 {
 	uartprintf("Init Gui\r\n");
-	xTaskCreate(task_GuiMainloop, (const char *) "Gui", 128, NULL, 1,
+	xTaskCreate(task_GuiMainloop, (const char *) "Gui", 512, NULL, 1,
 				&TaskGui);
 }

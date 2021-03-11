@@ -5,18 +5,22 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-    
+
 #include <stdint.h>
 #include <stdbool.h>
 
 #include "sdio.h"
 #include "stm32f103xe.h"
-    
+
 #include "FreeRTOS.h"
 #include "task.h"
 #include "timers.h"
-#include "semphr.h" 
+#include "semphr.h"
 
+#define Delay1s() do { \
+    uint32_t i; \
+    for (i = 0; i < 72000; ++i) {} \
+} while(0)
 
 #define UNUSED(x) (void)x
 #define NUM_ROWS(ARRAY) (sizeof(ARRAY) / sizeof(ARRAY[0]))
@@ -32,7 +36,7 @@ extern "C" {
 #define Led_GPIO_Port GPIOB
 #define LCD_Rst_Pin GPIO_BSRR_BS1
 #define LCD_Rst_GPIO_Port GPIOE
-    
+
 #define NVIC_PRIORITYGROUP_0         ((uint32_t)0x00000007) /*!< 0 bit  for pre-emption priority,
                                                                  4 bits for subpriority */
 #define NVIC_PRIORITYGROUP_1         ((uint32_t)0x00000006) /*!< 1 bit  for pre-emption priority,
@@ -43,7 +47,7 @@ extern "C" {
                                                                  1 bit  for subpriority */
 #define NVIC_PRIORITYGROUP_4         ((uint32_t)0x00000003) /*!< 4 bits for pre-emption priority,
                                                                  0 bit  for subpriority */
-    
+
 #define FLASH_PAGE_SIZE          ( 0x800U )   // 2048B
 #define EEPROM_PAGE_SIZE         ( 0x1000U )  // 4096B
 #define SDCARD_PAGE_SIZE         ( 0x200U )   // 512B
@@ -54,7 +58,7 @@ extern "C" {
 
 #define APP_DEFAULT_ADD 0x8005000
 typedef  void (*pFunction)(void);
-    
+
 typedef enum
 {
     IAP_ERROR = 0,
@@ -63,12 +67,12 @@ typedef enum
     IAP_ERROR_HEAD_INVALID,
     IAP_ERROR_FRAME_INVALID,
     IAP_ERROR_CHKSUM_INVALID,
-    
+
     // common
     IAP_CMD_CONNECT,
     IAP_CONNECT_SUCCESS,
     IAP_CONNECT_FAIL,
-    
+
     // SD card programming
     IAP_CMD_SETARGS,
     IAP_SETARGS_SUCCESS,
@@ -89,7 +93,7 @@ typedef enum
     IAP_CMD_REBOOT,
     IAP_REBOOT_SUCCESS,
     IAP_REBOOT_FAIL,
-    
+
     IAP_MAX_COMMAND = 100,
 } IAP_COMMANDS;
 
@@ -146,7 +150,7 @@ void FSMC_Init(void);
 
 // LCD
 void LCD_Init(void);
-int tftprintf(const char* fmt, ...);
+void LCD_Clear(void);
 
 // RTC
 // void RTC_Init(void);

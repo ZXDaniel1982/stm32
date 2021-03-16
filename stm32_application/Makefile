@@ -69,9 +69,9 @@ Spc/Page/actual.c \
 Spc/Page/program.c \
 Gui/gui.c \
 STemWin/Config/GUIConf.c \
-STemWin/Config/GUIDRV.c \
 STemWin/Config/LCDConf.c \
 STemWin/Config/SIMConf.c \
+STemWin/Config/GUIDRV.c \
 STemWin/OS/GUI_X.c
 
 # ASM sources

@@ -54,6 +54,20 @@ void LCD_WR_REG(uint16_t index)
 	*(__IO uint16_t *) (Bank1_LCD_C) = index;
 }
 
+uint16_t LCD_RD_Data(void)
+{
+  uint16_t color = 0, a1 = 0, a2 = 0, a3 = 0;
+
+  color = *(__IO uint16_t *) (Bank1_LCD_D);
+  a1 = *(__IO uint16_t *) (Bank1_LCD_D);
+  a2 = *(__IO uint16_t *) (Bank1_LCD_D);
+  a3 = *(__IO uint16_t *) (Bank1_LCD_D);
+  color = (uint16_t)((((a1>>11)&0x1f)<<11) |
+                     (((a1>>2)&0x3f)<<5)  |
+                     ((a2>>11)&0x1f));
+  return color;
+}
+
 void LCD_Clear(void)
 {
 	uint32_t n;
@@ -158,6 +172,37 @@ void LCD_Init(void)
 		LCD_WR_Data(WHITE);		//????? 
 
 	//LCD_WR_CMD(0x16, 0x18|0x80|0x40);
+}
+
+void LCD_SetPixel(int x, int y, int color)
+{
+  uartprintf("%s : x(%d) y(%d) color(%x)\r\n", __func__, x, y, color);
+	LCD_WR_CMD(0x02, (uint8_t)(x >> 8));
+	LCD_WR_CMD(0x03, (uint8_t)x);		//Column Start
+
+	LCD_WR_CMD(0x06, (uint8_t)(y >> 8));
+	LCD_WR_CMD(0x07, (uint8_t)y);		//Row Start
+	
+  LCD_WR_REG(34);
+  LCD_WR_Data(color);
+}
+
+int LCD_GetPixel(int x, int y)
+{
+  uint16_t color = 0;
+
+  uartprintf("%s : x(%d) y(%d)\r\n", __func__, x, y);
+
+	LCD_WR_CMD(0x02, (uint8_t)(x >> 8));
+	LCD_WR_CMD(0x03, (uint8_t)x);		//Column Start
+
+	LCD_WR_CMD(0x06, (uint8_t)(y >> 8));
+	LCD_WR_CMD(0x07, (uint8_t)y);		//Row Start
+
+  LCD_WR_REG(22);
+  color = LCD_RD_Data();
+
+  return color;
 }
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

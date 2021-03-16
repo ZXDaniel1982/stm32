@@ -13,6 +13,8 @@ void LCD_Init(void);
 void LCD_Clear(void);
 void LCD_WR_Data(uint16_t);
 void LCD_WR_REG(uint16_t);
+void LCD_SetPixel(int, int, int);
+int LCD_GetPixel(int, int);
 
 #ifdef __cplusplus
 }

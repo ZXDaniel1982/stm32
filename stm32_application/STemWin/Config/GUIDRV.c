@@ -57,7 +57,7 @@ Purpose     : Template driver, could be used as starting point for new
 #include "LCD_Private.h"
 #include "GUI_Private.h"
 #include "LCD_ConfDefaults.h"
-
+#include "lcd.h"
 /*********************************************************************
 *
 *       Defines
@@ -137,33 +137,7 @@ typedef struct {
 *   that no check on the parameters needs to be performed.
 */
 static void _SetPixelIndex(GUI_DEVICE * pDevice, int x, int y, int PixelIndex) {
-    //
-    // Convert logical into physical coordinates (Dep. on LCDConf.h)
-    //
-    #if (LCD_MIRROR_X == 1) || (LCD_MIRROR_Y == 1) || (LCD_SWAP_XY == 1)
-      int xPhys, yPhys;
-
-      xPhys = LOG2PHYS_X(x, y);
-      yPhys = LOG2PHYS_Y(x, y);
-    #else
-      #define xPhys x
-      #define yPhys y
-    #endif
-    GUI_USE_PARA(pDevice);
-    GUI_USE_PARA(x);
-    GUI_USE_PARA(y);
-    GUI_USE_PARA(PixelIndex);
-    {
-      //
-      // Write into hardware ... Adapt to your system
-      //
-      // TBD by customer...
-      //
-    }
-    #if (LCD_MIRROR_X == 0) && (LCD_MIRROR_Y == 0) && (LCD_SWAP_XY == 0)
-      #undef xPhys
-      #undef yPhys
-    #endif
+  LCD_SetPixel(x, y, PixelIndex);
 }
 
 /*********************************************************************
@@ -177,33 +151,7 @@ static void _SetPixelIndex(GUI_DEVICE * pDevice, int x, int y, int PixelIndex) {
 */
 static unsigned int _GetPixelIndex(GUI_DEVICE * pDevice, int x, int y) {
   unsigned int PixelIndex;
-    //
-    // Convert logical into physical coordinates (Dep. on LCDConf.h)
-    //
-    #if (LCD_MIRROR_X == 1) || (LCD_MIRROR_Y == 1) || (LCD_SWAP_XY == 1)
-      int xPhys, yPhys;
-
-      xPhys = LOG2PHYS_X(x, y);
-      yPhys = LOG2PHYS_Y(x, y);
-    #else
-      #define xPhys x
-      #define yPhys y
-    #endif
-    GUI_USE_PARA(pDevice);
-    GUI_USE_PARA(x);
-    GUI_USE_PARA(y);
-    {
-      //
-      // Write into hardware ... Adapt to your system
-      //
-      // TBD by customer...
-      //
-      PixelIndex = 0;
-    }
-    #if (LCD_MIRROR_X == 0) && (LCD_MIRROR_Y == 0) && (LCD_SWAP_XY == 0)
-      #undef xPhys
-      #undef yPhys
-    #endif
+  PixelIndex = LCD_GetPixel(x, y);
   return PixelIndex;
 }
 

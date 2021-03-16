@@ -18,6 +18,6 @@ static void Gui_Mainloop(void *pvParameters)
 void Gui_init(void)
 {
 	uartprintf("Gui init\r\n");
-	xTaskCreate(Gui_Mainloop, (const char *) "Gui", 1024,
+	xTaskCreate(Gui_Mainloop, (const char *) "Gui", 128,
 				NULL, 0, &TaskGuiMainloop);
 }

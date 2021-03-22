@@ -68,6 +68,8 @@ Spc/Page/default.c \
 Spc/Page/actual.c \
 Spc/Page/program.c \
 Gui/gui.c \
+lvgl/src/lv_driver/lv_port_disp.c \
+lvgl/src/lv_driver/lv_port_indev.c \
 lvgl/src/lv_core/lv_disp.c \
 lvgl/src/lv_core/lv_group.c \
 lvgl/src/lv_core/lv_indev.c \
@@ -260,6 +262,7 @@ C_INCLUDES =  \
 -I./ \
 -Ilvgl \
 -Ilvgl/src \
+-Ilvgl/src/lv_driver \
 -Ilvgl/src/lv_core \
 -Ilvgl/src/lv_draw \
 -Ilvgl/src/lv_font \

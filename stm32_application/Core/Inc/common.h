@@ -15,7 +15,11 @@ extern "C" {
 #include "FreeRTOS.h"
 #include "task.h"
 #include "timers.h"
-#include "semphr.h" 
+#include "semphr.h"
+
+#define Delay1s() do { \
+  for (uint32_t i=0;i<72000;i++) {} \
+} while(0)
 
 
 #define UNUSED(x) (void)x

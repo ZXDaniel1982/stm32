@@ -114,7 +114,7 @@ static void disp_flush(lv_disp_drv_t * disp_drv, const lv_area_t * area, lv_colo
 {
     /*The most simple case (but also the slowest) to put all pixels to the screen one-by-one*/
 
-    LCD_Fill(area->x1,area->y1,area->x2,area->y2,(uint16_t *)color_p);
+    LCD_Fill(area->x1, area->y1, area->x2, area->y2, color_p);
 
     /* IMPORTANT!!!
      * Inform the graphics library that you are ready with the flushing*/

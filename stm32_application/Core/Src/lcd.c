@@ -56,7 +56,7 @@ static void lcd_rst(void)
 //==============================================================================//
 void LCD_Clear(void)
 {
-	uint16_t n;
+	uint32_t n;
 
 	LCD_WR_CMD(0x02, 0x00);
 	LCD_WR_CMD(0x03, 0x00);		//Column Start
@@ -76,7 +76,7 @@ void LCD_Clear(void)
 
 void LCD_Init(void)
 {
-	uint16_t n;
+	uint32_t n;
 
 	lcd_rst();
 
@@ -160,24 +160,36 @@ void LCD_Init(void)
 	//LCD_WR_CMD(0x16, 0x18|0x80|0x40);
 }
 
-void LCD_Fill(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint16_t *color)
+void LCD_Fill(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, lv_color_t *color)
 {
 	uint16_t n;
 
+	if ((x1 > LCD_LEN) || (x2 > LCD_LEN) ||
+		(y1 > LCD_WID) || (y2 > LCD_WID)) {
+		uartprintf("Coordinate out of range\r\n");
+		return;
+	}
+
 	LCD_WR_CMD(0x02, (uint8_t) (x1 >> 8));
 	LCD_WR_CMD(0x03, (uint8_t) x1);
-	LCD_WR_CMD(0x04, (uint8_t) (x2 >> 8));
-	LCD_WR_CMD(0x05, (uint8_t) x2);
+
+	if (x2 != x1) {
+		LCD_WR_CMD(0x04, (uint8_t) (x2 >> 8));
+		LCD_WR_CMD(0x05, (uint8_t) x2);
+	}
 
 	LCD_WR_CMD(0x06, (uint8_t) (y1 >> 8));
 	LCD_WR_CMD(0x07, (uint8_t) y1);		//Row Start
-	LCD_WR_CMD(0x08, (uint8_t) (y2 >> 8));
-	LCD_WR_CMD(0x09, (uint8_t) y2);	//Row End
+
+	if (y2 != y1) {
+		LCD_WR_CMD(0x08, (uint8_t) (y2 >> 8));
+		LCD_WR_CMD(0x09, (uint8_t) y2);	//Row End
+	}
 
 	LCD_WR_REG(34);
 
 	for (n = 0; n < LCD_TOTAL; n++) {
-		LCD_WR_Data(*(uint16_t *)color);
+		LCD_WR_Data((*color).full);
 		color++;
 	}
 }

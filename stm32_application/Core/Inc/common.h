@@ -10,6 +10,7 @@ extern "C" {
 #include <stdbool.h>
 
 #include "sdio.h"
+#include "lcd.h"
 #include "stm32f103xe.h"
     
 #include "FreeRTOS.h"
@@ -17,6 +18,10 @@ extern "C" {
 #include "timers.h"
 #include "semphr.h" 
 
+#define Delay1s() do { \
+    uint32_t i; \
+    for (i = 0; i < 72000; ++i) {} \
+} while(0)
 
 #define UNUSED(x) (void)x
 #define NUM_ROWS(ARRAY) (sizeof(ARRAY) / sizeof(ARRAY[0]))
@@ -143,10 +148,6 @@ void EEPROM_Read(uint32_t addr, uint8_t *buf, uint16_t len);
 
 // FSMC
 void FSMC_Init(void);
-
-// LCD
-void LCD_Init(void);
-int tftprintf(const char* fmt, ...);
 
 // RTC
 // void RTC_Init(void);

@@ -56,7 +56,7 @@ static void lcd_rst(void)
 //==============================================================================//
 void LCD_Clear(void)
 {
-	uint16_t n;
+	uint32_t n;
 
 	LCD_WR_CMD(0x02, 0x00);
 	LCD_WR_CMD(0x03, 0x00);		//Column Start
@@ -76,7 +76,7 @@ void LCD_Clear(void)
 
 void LCD_Init(void)
 {
-	uint16_t n;
+	uint32_t n;
 
 	lcd_rst();
 

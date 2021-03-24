@@ -162,7 +162,7 @@ void LCD_Init(void)
 
 void LCD_Fill(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, lv_color_t *color)
 {
-	uint16_t n;
+	uint32_t n, total;
 
 	if ((x1 > LCD_LEN) || (x2 > LCD_LEN) ||
 		(y1 > LCD_WID) || (y2 > LCD_WID)) {
@@ -173,22 +173,20 @@ void LCD_Fill(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, lv_color_t *color)
 	LCD_WR_CMD(0x02, (uint8_t) (x1 >> 8));
 	LCD_WR_CMD(0x03, (uint8_t) x1);
 
-	if (x2 != x1) {
-		LCD_WR_CMD(0x04, (uint8_t) (x2 >> 8));
-		LCD_WR_CMD(0x05, (uint8_t) x2);
-	}
+	LCD_WR_CMD(0x04, (uint8_t) (x2 >> 8));
+	LCD_WR_CMD(0x05, (uint8_t) x2);
 
 	LCD_WR_CMD(0x06, (uint8_t) (y1 >> 8));
 	LCD_WR_CMD(0x07, (uint8_t) y1);		//Row Start
 
-	if (y2 != y1) {
-		LCD_WR_CMD(0x08, (uint8_t) (y2 >> 8));
-		LCD_WR_CMD(0x09, (uint8_t) y2);	//Row End
-	}
+	LCD_WR_CMD(0x08, (uint8_t) (y2 >> 8));
+	LCD_WR_CMD(0x09, (uint8_t) y2);	//Row End
 
 	LCD_WR_REG(34);
 
-	for (n = 0; n < LCD_TOTAL; n++) {
+  total = (uint32_t) (x2-x1+1) * (y2-y1+1);
+
+	for (n = 0; n < total; n++) {
 		LCD_WR_Data((*color).full);
 		color++;
 	}

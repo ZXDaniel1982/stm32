@@ -15,6 +15,7 @@ static void btn_event_cb(lv_obj_t * btn, lv_event_t event)
 
 static void Gui_Mainloop(void *pvParameters)
 {
+    uartprintf("Gui Main loop\r\n");
     lv_init();
     lv_port_disp_init();
 
@@ -40,6 +41,6 @@ static void Gui_Mainloop(void *pvParameters)
 void Gui_init(void)
 {
 	uartprintf("Gui init\r\n");
-	xTaskCreate(Gui_Mainloop, (const char *) "Gui", 128,
+	xTaskCreate(Gui_Mainloop, (const char *) "Gui", 1024,
 				NULL, 0, &TaskGuiMainloop);
 }

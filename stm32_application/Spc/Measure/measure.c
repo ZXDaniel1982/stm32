@@ -7,7 +7,7 @@ TaskHandle_t TaskMeasure = NULL;
 /**
  * Voltage and current sensor handler
  */
-static void Measure_VoltCurTimer(void *pvParameters)
+static void Task_MeasureVoltCur(void *pvParameters)
 {
 	//uartprintf("Measure volt and current\r\n");
 	while (1) {
@@ -19,6 +19,6 @@ static void Measure_VoltCurTimer(void *pvParameters)
 void Measure_VoltCurInit(void)
 {
 	uartprintf("Init voltage and current sensor\r\n");
-	xTaskCreate(Measure_VoltCurTimer, (const char *) "Measure", 512, NULL, 0,
+	xTaskCreate(Task_MeasureVoltCur, (const char *) "Measure", 128, NULL, 0,
 				&TaskMeasure);
 }

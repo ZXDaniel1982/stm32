@@ -25,6 +25,7 @@ int main()
 
 	Measure_VoltCurInit();
 	Page_Init();
+	Gui_Init();
 
 	vTaskStartScheduler();
 

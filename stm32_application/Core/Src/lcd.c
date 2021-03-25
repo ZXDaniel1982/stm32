@@ -21,6 +21,7 @@
 #define GBLUE 0X07FF
 #define WHITE 0XFFFF
 #define BLACK 0
+#define BACKGROUND 0xef7e
 
 //==============================================================================//
 // Private functions
@@ -155,14 +156,14 @@ void LCD_Init(void)
 
 	LCD_WR_REG(34);
 	for (n = 0; n < LCD_TOTAL; n++)
-		LCD_WR_Data(WHITE);		//????? 
+		LCD_WR_Data(BACKGROUND);		//????? 
 
 	//LCD_WR_CMD(0x16, 0x18|0x80|0x40);
 }
 
-void LCD_Fill(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint16_t *color)
+void LCD_Fill(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, const uint16_t *color)
 {
-	uint16_t n;
+	uint32_t n, area = 0;
 
 	LCD_WR_CMD(0x02, (uint8_t) (x1 >> 8));
 	LCD_WR_CMD(0x03, (uint8_t) x1);
@@ -176,7 +177,9 @@ void LCD_Fill(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint16_t *color)
 
 	LCD_WR_REG(34);
 
-	for (n = 0; n < LCD_TOTAL; n++) {
+	area = (uint32_t) (x2 - x1 + 1) * (y2 - y1 + 1);
+
+	for (n = 0; n < area; n++) {
 		LCD_WR_Data(*(uint16_t *)color);
 		color++;
 	}

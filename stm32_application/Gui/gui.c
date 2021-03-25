@@ -12,7 +12,7 @@ static void Task_GuiMainloop(void *pvParameters)
 {
 	uartprintf("Gui main loop\r\n");
 
-	Gui_CreateButton(Act, 0, 0);
+	Gui_CreateButton(Act, 10, 10);
 	while (1) {
 		/* Block to wait for prvTask1() to notify this task. */
 		Gui_UpdateButton();

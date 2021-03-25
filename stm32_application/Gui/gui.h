@@ -9,6 +9,7 @@ extern "C" {
 #include <string.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include "lcd.h"
 
 #define ToString(x) #x
 

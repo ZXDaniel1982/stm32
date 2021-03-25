@@ -316,6 +316,18 @@ static inline const uint16_t *GetButtonPixel(ButtonEnum_t type) {
 buttonObj_t *buttonHead = NULL;
 buttonObj_t *buttonEnd = NULL;
 
+static void Gui_DrawButton(buttonObj_t *button)
+{
+  uint16_t x1, x2, y1, y2;
+
+  x1 = button->x;
+  y1 = button->y;
+  x2 = x1 + button->size_x - 1;
+  y2 = y1 + button->size_y - 1;
+
+  LCD_Fill(x1, y1, x2, y2, button->pixel_origin);
+}
+
 void Gui_CreateButton(ButtonEnum_t type, uint16_t x, uint16_t y)
 {
 	buttonObj_t *NewButton = (buttonObj_t *) malloc(sizeof(buttonObj_t));
@@ -352,7 +364,8 @@ void Gui_UpdateButton(void)
 
 	while (buttonObj != NULL) {
 		if (!buttonObj->updated) {
-			//Gui_DrawButton(buttonObj);
+			Gui_DrawButton(buttonObj);
+      buttonObj->updated = true;
 		}
 		buttonObj = buttonObj->next;
 	}

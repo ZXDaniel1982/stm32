@@ -1,6 +1,7 @@
 #include "stm32f1xx.h"
 #include "stm32f103xe.h"
 #include "common.h"
+#include "gui_button.h"
 
 TaskHandle_t TaskGui = NULL;
 
@@ -9,12 +10,13 @@ TaskHandle_t TaskGui = NULL;
  */
 static void Task_GuiMainloop(void *pvParameters)
 {
-	uartprintf("Measure volt and current\r\n");
+	uartprintf("Gui main loop\r\n");
 
-	Gui_CreateButton();
+	Gui_CreateButton(Act, 0, 0);
 	while (1) {
 		/* Block to wait for prvTask1() to notify this task. */
-		vTaskDelay(5000);
+		Gui_UpdateButton();
+		vTaskDelay(300);
 	}
 }
 

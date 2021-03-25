@@ -66,7 +66,9 @@ Spc/Page/pagetask.c \
 Spc/Page/page.c \
 Spc/Page/default.c \
 Spc/Page/actual.c \
-Spc/Page/program.c
+Spc/Page/program.c \
+Gui/gui.c \
+Gui/gui_button.c
 
 # ASM sources
 ASM_SOURCES =  \
@@ -143,6 +145,7 @@ AS_INCLUDES =
 C_INCLUDES =  \
 -ICore/Inc \
 -ISpc/Inc \
+-IGui \
 -IFreeRTOS/Source/include \
 -IFreeRTOS/Source/portable/GCC/ARM_CM3
 

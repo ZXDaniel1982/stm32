@@ -5,6 +5,8 @@
 #include "lv_port_indev.h"
 
 #define PIC 0
+#define STR "="
+#define LEN 9
 
 void LCD_Fill(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, lv_color_t *color)
 {
@@ -18,7 +20,7 @@ void LCD_Fill(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, lv_color_t *color)
 			else
 				printf("*");
 #else
-            if ((i < 16) && (j<11))
+            if ((i < 16) && (j<LEN))
                 printf("0x%04x, ", color->full);
 #endif
 			color++;
@@ -43,7 +45,7 @@ void main()
     
     lv_obj_t * label1 = lv_label_create(lv_scr_act(), NULL);
     lv_label_set_long_mode(label1, LV_LABEL_LONG_BREAK);
-    lv_label_set_text(label1, "N");
+    lv_label_set_text(label1, STR);
     
     lv_label_set_text(shadow_label, lv_label_get_text(label1));
     

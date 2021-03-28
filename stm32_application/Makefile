@@ -68,7 +68,8 @@ Spc/Page/default.c \
 Spc/Page/actual.c \
 Spc/Page/program.c \
 Gui/gui.c \
-Gui/gui_button.c
+Gui/gui_button.c \
+Gui/gui_label.c
 
 # ASM sources
 ASM_SOURCES =  \

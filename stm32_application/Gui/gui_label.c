@@ -32,6 +32,11 @@ static void Gui_DrawLabel(labelObj_t *label)
   y1 = label->y;
 
   for (uint8_t i=0;i<strlen((char *)label->info);i++) {
+    if (' ' == label->info[i]) {
+      x1 += 6;
+      continue;
+    }
+
     const GuiFont_t *font = Gui_GetFont(label->info[i]);
     if (font == NULL)
       return;

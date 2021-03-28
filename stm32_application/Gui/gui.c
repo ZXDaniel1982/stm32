@@ -14,7 +14,7 @@ static void Task_GuiMainloop(void *pvParameters)
 	uartprintf("Gui main loop\r\n");
 
 	Gui_CreateButton(Act, 10, 10);
-  Gui_CreateLabel(Title, 10, 100, (uint8_t *)"AaBb");
+  Gui_CreateLabel(Title, 10, 100, (uint8_t *)"AaBb bBaA");
 	while (1) {
 		/* Block to wait for prvTask1() to notify this task. */
 		Gui_UpdateButton();

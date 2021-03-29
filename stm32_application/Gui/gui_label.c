@@ -1,6 +1,3 @@
-#include "stm32f1xx.h"
-#include "stm32f103xe.h"
-#include "common.h"
 #include "font.h"
 #include "gui_label.h"
 
@@ -105,7 +102,7 @@ static void Gui_DrawLabel(labelObj_t * label)
 
 	for (uint8_t i = 0; i < strlen((char *) label->info); i++) {
 		if (' ' == label->info[i]) {
-			x1 += 6;
+			x1 += 8;
 			continue;
 		}
 
@@ -116,17 +113,17 @@ static void Gui_DrawLabel(labelObj_t * label)
 		x2 = x1 + font->size_x - 1;
 		y2 = y1 + font->size_y - 1;
 
-		LCD_Fill(x1, y1, x2, y2, font->bitmap);
+		label->drawer(x1, y1, x2, y2, font->bitmap);
 		x1 = x2 + 1;
 	}
 }
 
-void Gui_CreateLabel(LabelEnum_t type, uint16_t x, uint16_t y, uint8_t * info)
+void Gui_CreateLabel(LabelEnum_t type, uint16_t x, uint16_t y, uint8_t * info, Drawer drawer)
 {
 	labelObj_t *NewLabel = (labelObj_t *) malloc(sizeof(labelObj_t));
 
 	if (NewLabel == NULL) {
-		uartprintf("Failed to create label\r\n");
+		//uartprintf("Failed to create label\r\n");
 	}
 
 	NewLabel->updated = false;
@@ -140,6 +137,7 @@ void Gui_CreateLabel(LabelEnum_t type, uint16_t x, uint16_t y, uint8_t * info)
 	//NewLabel->size_total = (uint32_t) NewButton->size_x * NewButton->size_y;
 	memset(NewLabel->info, 0, 16);
 	strncpy((char *) NewLabel->info, (char *) info, 16);
+	NewLabel->drawer = drawer;
 
 	if (labelHead == NULL) {
 		labelHead = NewLabel;

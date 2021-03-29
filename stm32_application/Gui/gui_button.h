@@ -21,23 +21,23 @@ typedef enum ButtonEnum {
 }
 
 typedef struct tButtonObj {
-	bool               updated;
-	ButtonEnum_t       type;
-	const uint16_t     *pixel_origin;
-	const uint16_t     *pixel_push;
-	uint16_t     	   x;
-	uint16_t     	   y;
-	uint16_t     	   size_x;
-	uint16_t     	   size_y;
-	uint32_t           size_total;
-	struct tButtonObj  *next;
+    bool updated;
+    ButtonEnum_t type;
+    const uint16_t *pixel_origin;
+    const uint16_t *pixel_push;
+    uint16_t x;
+    uint16_t y;
+    uint16_t size_x;
+    uint16_t size_y;
+    uint32_t size_total;
+    Drawer drawer;
+    struct tButtonObj *next;
 } buttonObj_t;
 
-void Gui_CreateButton(ButtonEnum_t type, uint16_t x, uint16_t y);
+void Gui_CreateButton(ButtonEnum_t, uint16_t, uint16_t, Drawer);
 void Gui_UpdateButton(void);
 
 #ifdef __cplusplus
 }
 #endif
-
-#endif /* __GUI_BUTTON_H */
+#endif							/* __GUI_BUTTON_H */

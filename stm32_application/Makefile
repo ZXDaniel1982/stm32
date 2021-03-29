@@ -76,12 +76,17 @@ ASM_SOURCES =  \
 startup_stm32f103xe.s
 
 # Test sources
-TEST_SOURCES = \
-Test/test.c \
+TEST_SPC_SOURCES = \
+Test/test_spc.c \
 Spc/Page/page.c \
 Spc/Page/default.c \
 Spc/Page/actual.c \
 Spc/Page/program.c
+
+TEST_GUI_SOURCES = \
+Test/test_gui.c \
+Gui/gui_label.c \
+Gui/gui_button.c
 
 UTEST_SOURCES = \
 Utest/Src/utest.c \
@@ -152,7 +157,8 @@ C_INCLUDES =  \
 
 # Test includes
 TEST_INCLUDES = \
--ISpc/Inc
+-ISpc/Inc \
+-IGui
 
 # UTest includes
 UTEST_INCLUDES = \
@@ -189,7 +195,7 @@ LIBDIR =
 LDFLAGS = $(MCU) -specs=nano.specs -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--cref -Wl,--gc-sections
 
 # default action: build all
-all: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(TARGET).bin $(BUILD_DIR)/$(TARGET) $(BUILD_DIR)/utest
+all: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(TARGET).bin $(BUILD_DIR)/testSpc $(BUILD_DIR)/testGui $(BUILD_DIR)/utest
 
 
 #######################################
@@ -220,7 +226,10 @@ $(BUILD_DIR)/%.bin: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
 	$(RM) $(BUILD_DIR)/*.d
 	$(RM) $(BUILD_DIR)/*.lst
 
-$(BUILD_DIR)/$(TARGET): $(TEST_SOURCES)
+$(BUILD_DIR)/testSpc: $(TEST_SPC_SOURCES)
+	$(TESTCC) -o $@ $^ $(TESTFLAGS)
+
+$(BUILD_DIR)/testGui: $(TEST_GUI_SOURCES)
 	$(TESTCC) -o $@ $^ $(TESTFLAGS)
 
 $(BUILD_DIR)/utest: $(UTEST_SOURCES)

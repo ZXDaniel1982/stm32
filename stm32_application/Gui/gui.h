@@ -9,7 +9,7 @@ extern "C" {
 #include <string.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include "lcd.h"
+#include <stdbool.h>
 
 #define ToString(x) #x
 
@@ -21,12 +21,14 @@ extern "C" {
   GUI_OPT(Left, key) \
   GUI_OPT(Right, key) \
   GUI_OPT(Reset, key) \
+  GUI_OPT(Enter, key) \
   GUI_OPT(Alarm, key)
 
 #define OBJ_ENUM(TYPE, type) TYPE,
 
+typedef void (*Drawer)(uint8_t, uint8_t, uint8_t, uint8_t, const uint16_t *);
+
 #ifdef __cplusplus
 }
 #endif
-
-#endif /* __GUI_H */
+#endif							/* __GUI_H */

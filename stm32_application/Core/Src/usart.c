@@ -13,8 +13,10 @@ SemaphoreHandle_t UartMutex;
 //======================================================================//
 // Private functions
 //======================================================================//
+extern xQueueHandle pageQueue;
 static void USART_SpcCmd(uint8_t val)
 {
+	xQueueSendFromISR(pageQueue, &val, pdFALSE);
 }
 
 void USART_Init()

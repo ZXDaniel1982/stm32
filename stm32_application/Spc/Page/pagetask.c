@@ -37,8 +37,9 @@ static void Spc_PageMainloop(void *pvParameters)
 		//if (KeyRecved == 0) continue;
 		//KeyRecved = 0;
 		if (xQueueReceive(pageQueue, &keyInputForPage, portMAX_DELAY)) {
+      uartprintf("Got key input\r\n");
 			KeyType = GetKeyType(&keyInputForPage);
-			xQueueSend(buttonQueue, &keyInputForPage, portMAX_DELAY);
+			//xQueueSend(buttonQueue, &keyInputForPage, portMAX_DELAY);
 			//memset(KeyString, 0, 20);
 			if (Page->func != NULL) {
 				PageNext = Page->func(KeyType, uartprintf);
@@ -55,6 +56,7 @@ static void Spc_PageMainloop(void *pvParameters)
 void Page_Init(void)
 {
 	uartprintf("Spc page init\r\n");
+	pageQueue = xQueueCreate(1, sizeof(uint8_t));
 	xTaskCreate(Spc_PageMainloop, (const char *) "Page", 1024,
 				NULL, 0, &TaskPageMainloop);
 }

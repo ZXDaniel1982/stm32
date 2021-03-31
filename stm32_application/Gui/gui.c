@@ -5,8 +5,9 @@
 #include "gui_label.h"
 #include "lcd.h"
 
-TaskHandle_t TaskGui = NULL;
+TaskHandle_t TaskButton = NULL;
 xQueueHandle buttonQueue = NULL;
+TaskHandle_t TaskLabel = NULL;
 xQueueHandle labelQueue = NULL;
 
 uint8_t keyInput = 0;
@@ -57,6 +58,6 @@ void Gui_Init(void)
 	uartprintf("Init Gui\r\n");
 	buttonQueue = xQueueCreate(1, sizeof(uint8_t));
 	labelQueue = xQueueCreate(32, sizeof(uint8_t));
-	xTaskCreate(Task_ButtonHandle, (const char *) "Button", 256, NULL, 0, &TaskGui);
-	xTaskCreate(Task_LabelHandle, (const char *) "Label", 256, NULL, 0, &TaskGui);
+	xTaskCreate(Task_ButtonHandle, (const char *) "Button", 256, NULL, 0, &TaskButton);
+	xTaskCreate(Task_LabelHandle, (const char *) "Label", 256, NULL, 0, &TaskLabel);
 }

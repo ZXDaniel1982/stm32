@@ -23,6 +23,7 @@
 #define BLACK 0
 #define BACKGROUND 0xef7e
 
+static SemaphoreHandle_t LcdMutex;
 //==============================================================================//
 // Private functions
 //==============================================================================//
@@ -159,11 +160,15 @@ void LCD_Init(void)
 		LCD_WR_Data(BACKGROUND);		//????? 
 
 	//LCD_WR_CMD(0x16, 0x18|0x80|0x40);
+	
+	LcdMutex = xSemaphoreCreateMutex();
 }
 
 void LCD_Fill(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, const uint16_t *color)
 {
 	uint32_t n, area = 0;
+
+	xSemaphoreTake(LcdMutex, portMAX_DELAY);
 
 	LCD_WR_CMD(0x02, (uint8_t) (x1 >> 8));
 	LCD_WR_CMD(0x03, (uint8_t) x1);
@@ -183,6 +188,8 @@ void LCD_Fill(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, const uint16_t *co
 		LCD_WR_Data(*(uint16_t *)color);
 		color++;
 	}
+
+	xSemaphoreGive(LcdMutex);
 }
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

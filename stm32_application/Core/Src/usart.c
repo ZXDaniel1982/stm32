@@ -16,6 +16,7 @@ SemaphoreHandle_t UartMutex;
 extern xQueueHandle pageQueue;
 static void USART_SpcCmd(uint8_t val)
 {
+  LedBlink();
 	xQueueSendFromISR(pageQueue, &val, pdFALSE);
 }
 

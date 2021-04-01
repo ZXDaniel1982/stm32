@@ -34,6 +34,7 @@ static void TIMERx_Init(TIM_TypeDef * TIMx, uint32_t Periphs, IRQn_Type IRQn)
 
 	/*使能基本定时器中断 */
 	NVIC_EnableIRQ(IRQn);
+  NVIC_SetPriority(IRQn, 5);
 
 	/*开启计数器使能 */
 	SET_BIT(TIMx->CR1, TIM_CR1_CEN);

@@ -41,6 +41,7 @@ void USART_Init()
 	SET_BIT(USART1->CR1, (USART_CR1_RXNEIE | USART_CR1_PEIE));
 
 	NVIC_EnableIRQ(USART1_IRQn);
+  NVIC_SetPriority(USART1_IRQn, 5);
 
 	UartMutex = xSemaphoreCreateMutex();
 }

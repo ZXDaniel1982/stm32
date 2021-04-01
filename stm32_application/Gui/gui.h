@@ -10,8 +10,7 @@ extern "C" {
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
-
-#define ToString(x) #x
+#include "key.h"
 
 #define GUI_INDEX(GUI_OPT, key) \
   GUI_OPT(Act, key) \
@@ -23,8 +22,6 @@ extern "C" {
   GUI_OPT(Reset, key) \
   GUI_OPT(Enter, key) \
   GUI_OPT(Alarm, key)
-
-#define OBJ_ENUM(TYPE, type) TYPE,
 
 typedef void (*Drawer)(uint8_t, uint8_t, uint8_t, uint8_t, const uint16_t *);
 

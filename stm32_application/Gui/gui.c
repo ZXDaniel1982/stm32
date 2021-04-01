@@ -34,7 +34,6 @@ static void Task_ButtonHandle(void *pvParameters)
 		/* Block to wait for prvTask1() to notify this task. */
     uint8_t KeyIn;
 		if (xQueueReceive(UartQueue, &KeyIn, portMAX_DELAY)) {
-      uartprintf("Got button input\r\n");
     }
 	}
 }

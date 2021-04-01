@@ -9,25 +9,15 @@ extern "C" {
 #include <string.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include "key.h"
 
 typedef int (*Logger)(const char* fmt, ...);
 
-#define ToString(x) #x
 
 #define PAGE_INDEX(PAGE_OPT, type) \
   PAGE_OPT(Default, type) \
   PAGE_OPT(Actual, type) \
   PAGE_OPT(Program, type)
-
-#define KEY_INDEX(KEY_OPT, key) \
-  KEY_OPT(Def, key) \
-  KEY_OPT(Act, key) \
-  KEY_OPT(Prog, key) \
-  KEY_OPT(Up, key) \
-  KEY_OPT(Down, key) \
-  KEY_OPT(Left, key) \
-  KEY_OPT(Right, key) \
-  KEY_OPT(Invalid, key)
 
 #define OBJ_ENUM(TYPE, type) TYPE,
 #define PAGE_INIT_DECLARE(TYPE, type) void Page_Init_##TYPE(Logger);
@@ -42,15 +32,6 @@ typedef int (*Logger)(const char* fmt, ...);
         return Page_Func_##TYPE; \
     } \
 }
-#define KEY_GET_TYPE(TYPE, key) { \
-    if (strncmp(ToString(TYPE), (char *)key, sizeof(ToString(TYPE))) == 0) { \
-        return TYPE; \
-    } \
-}
-
-typedef enum KeyEnum {
-    KEY_INDEX(OBJ_ENUM, NULL)
-} KeyEnum_t;
 
 typedef void (*PageInit) (Logger);
 
@@ -75,10 +56,6 @@ static inline PageInit GetPageInit(PageEnum_t type) {
 static inline PageFunc GetPageFunc(PageEnum_t type) {
 	PAGE_INDEX(PAGE_FUNC, type)
     return NULL;
-}
-static inline KeyEnum_t GetKeyType(uint8_t *key) {
-    KEY_INDEX(KEY_GET_TYPE, key)
-    return Invalid;
 }
 
 PageEntity_t *Page_CreatePage(PageEnum_t, Logger);

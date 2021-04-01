@@ -1680,7 +1680,7 @@ const uint16_t buttonBitmap_Push[] = {
 		0xef7e,
 };
 
-static inline const uint16_t *GetButtonPixel(ButtonEnum_t type)
+static inline const uint16_t *GetButtonPixel(KeyEnum_t type)
 {
 	GUI_INDEX(BUTTON_PIXEL, type)
     return NULL;
@@ -1701,7 +1701,7 @@ static void Gui_DrawButton(buttonObj_t * button)
 	button->drawer(x1, y1, x2, y2, button->pixel_origin);
 }
 
-void Gui_CreateButton(ButtonEnum_t type, uint16_t x, uint16_t y, Drawer drawer)
+void Gui_CreateButton(KeyEnum_t type, uint16_t x, uint16_t y, Drawer drawer)
 {
 	buttonObj_t *NewButton = (buttonObj_t *) malloc(sizeof(buttonObj_t));
 

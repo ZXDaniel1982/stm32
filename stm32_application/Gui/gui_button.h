@@ -10,10 +10,6 @@ extern "C" {
 #define BUTTON_SIZE_X (48)
 #define BUTTON_SIZE_Y (28)
 
-typedef enum ButtonEnum {
-    GUI_INDEX(OBJ_ENUM, NULL)
-} ButtonEnum_t;
-
 #define BUTTON_PIXEL(TYPE, type) { \
     if (TYPE == type) { \
         return buttonBitmap_##TYPE; \
@@ -22,7 +18,7 @@ typedef enum ButtonEnum {
 
 typedef struct tButtonObj {
     bool updated;
-    ButtonEnum_t type;
+    KeyEnum_t type;
     const uint16_t *pixel_origin;
     const uint16_t *pixel_push;
     uint16_t x;
@@ -34,7 +30,7 @@ typedef struct tButtonObj {
     struct tButtonObj *next;
 } buttonObj_t;
 
-void Gui_CreateButton(ButtonEnum_t, uint16_t, uint16_t, Drawer);
+void Gui_CreateButton(KeyEnum_t, uint16_t, uint16_t, Drawer);
 void Gui_UpdateButton(void);
 
 #ifdef __cplusplus

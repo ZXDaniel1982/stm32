@@ -13,7 +13,7 @@ void tearDown(void)
 
 void test_func(void)
 {
-	TEST_ASSERT_EQUAL(Default, GetKeyType("Def"));
+	TEST_ASSERT_EQUAL(Actual, 0x07);
 }
 
 /*=======MAIN=====*/

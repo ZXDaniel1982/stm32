@@ -26,13 +26,9 @@ static void Spc_PageMainloop(void *pvParameters)
 		/* Block to wait for prvTask1() to notify this task. */
     uint8_t KeyIn;
 		if (xQueuePeek(UartQueue, &KeyIn, portMAX_DELAY)) {
-      uartprintf("Got page input\r\n");
       vTaskDelay(100);
-      KeyEnum_t KeyType;
-			KeyType = GetKeyType(&KeyIn);
-			//xQueueSend(buttonQueue, &keyInputForPage, portMAX_DELAY);
 			if (Page->func != NULL) {
-				PageNext = Page->func(KeyType, uartprintf);
+				PageNext = Page->func(KeyIn, uartprintf);
 				if (PageNext != NULL) {
 					free(Page);
 					Page = PageNext;

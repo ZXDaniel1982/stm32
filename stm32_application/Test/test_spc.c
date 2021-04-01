@@ -1,8 +1,7 @@
 #include <unistd.h>
 #include "spc.h"
 
-static uint8_t KeyString[80];
-static KeyEnum_t KeyType;
+static uint8_t KeyIn;
 
 void main()
 {
@@ -17,10 +16,9 @@ void main()
 	while (1) {
 		/* Block to wait for prvTask1() to notify this task. */
 		printf("Please input key: ");
-		scanf ("%79s",KeyString);
-		KeyType = GetKeyType(KeyString);
+		scanf ("%d", &KeyIn);
 		if (Page->func != NULL) {
-			PageNext = Page->func(KeyType, printf);
+			PageNext = Page->func(KeyIn, printf);
 			if (PageNext != NULL) {
 				free(Page);
 				Page = PageNext;

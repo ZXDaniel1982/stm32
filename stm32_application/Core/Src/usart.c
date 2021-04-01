@@ -9,15 +9,15 @@
 
 
 SemaphoreHandle_t UartMutex;
+xQueueHandle UartQueue;
 
 //======================================================================//
 // Private functions
 //======================================================================//
-extern xQueueHandle pageQueue;
 static void USART_SpcCmd(uint8_t val)
 {
   LedBlink();
-	xQueueSendFromISR(pageQueue, &val, pdFALSE);
+	xQueueSendFromISR(UartQueue, &val, pdFALSE);
 }
 
 void USART_Init()
@@ -43,6 +43,7 @@ void USART_Init()
 	NVIC_EnableIRQ(USART1_IRQn);
   NVIC_SetPriority(USART1_IRQn, 5);
 
+  UartQueue = xQueueCreate(1, sizeof(uint8_t));
 	UartMutex = xSemaphoreCreateMutex();
 }
 

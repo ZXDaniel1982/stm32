@@ -6,16 +6,8 @@
 #include "spc.h"
 
 TaskHandle_t TaskPageMainloop = NULL;
-//uint8_t KeyRecved = 0;
-//uint8_t KeyString[20] = {0};
 
-xQueueHandle pageQueue = NULL;
-uint8_t keyInputForPage = 0;
-
-static KeyEnum_t KeyType = Act;
-
-extern xQueueHandle buttonQueue;
-extern xQueueHandle labelQueue;
+extern xQueueHandle UartQueue;
 
 /**
  * Voltage and current sensor handler
@@ -30,17 +22,15 @@ static void Spc_PageMainloop(void *pvParameters)
 	if (Page == NULL) {
 		uartprintf("Failed to create page\r\n");
 	}
-	pageQueue = xQueueCreate(1, sizeof(uint8_t));
 	while (1) {
 		/* Block to wait for prvTask1() to notify this task. */
-		//vTaskDelay(50);
-		//if (KeyRecved == 0) continue;
-		//KeyRecved = 0;
-		if (xQueueReceive(pageQueue, &keyInputForPage, portMAX_DELAY)) {
-      uartprintf("Got key input\r\n");
-			KeyType = GetKeyType(&keyInputForPage);
+    uint8_t KeyIn;
+		if (xQueuePeek(UartQueue, &KeyIn, portMAX_DELAY)) {
+      uartprintf("Got page input\r\n");
+      vTaskDelay(100);
+      KeyEnum_t KeyType;
+			KeyType = GetKeyType(&KeyIn);
 			//xQueueSend(buttonQueue, &keyInputForPage, portMAX_DELAY);
-			//memset(KeyString, 0, 20);
 			if (Page->func != NULL) {
 				PageNext = Page->func(KeyType, uartprintf);
 				if (PageNext != NULL) {
@@ -56,7 +46,6 @@ static void Spc_PageMainloop(void *pvParameters)
 void Page_Init(void)
 {
 	uartprintf("Spc page init\r\n");
-	pageQueue = xQueueCreate(1, sizeof(uint8_t));
 	xTaskCreate(Spc_PageMainloop, (const char *) "Page", 1024,
-				NULL, 0, &TaskPageMainloop);
+				NULL, 1, &TaskPageMainloop);
 }

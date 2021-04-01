@@ -6,11 +6,11 @@
 #include "lcd.h"
 
 TaskHandle_t TaskButton = NULL;
-xQueueHandle buttonQueue = NULL;
 TaskHandle_t TaskLabel = NULL;
-xQueueHandle labelQueue = NULL;
+xQueueHandle LabelQueue = NULL;
 
-uint8_t keyInput = 0;
+extern xQueueHandle UartQueue;
+
 uint8_t labelInfo[32] = {0};
 
 /**
@@ -32,9 +32,10 @@ static void Task_ButtonHandle(void *pvParameters)
 	Gui_UpdateButton();
 	while (1) {
 		/* Block to wait for prvTask1() to notify this task. */
-		if (xQueueReceive(buttonQueue, &keyInput, portMAX_DELAY)) {
-            ;
-        }
+    uint8_t KeyIn;
+		if (xQueueReceive(UartQueue, &KeyIn, portMAX_DELAY)) {
+      uartprintf("Got button input\r\n");
+    }
 	}
 }
 
@@ -47,17 +48,16 @@ static void Task_LabelHandle(void *pvParameters)
 	Gui_UpdateLabel();
 	while (1) {
 		/* Block to wait for prvTask1() to notify this task. */
-		if (xQueueReceive(labelQueue, labelInfo, portMAX_DELAY)) {
-            ;
-        }
+		if (xQueueReceive(LabelQueue, labelInfo, portMAX_DELAY)) {
+      ;
+    }
 	}
 }
 
 void Gui_Init(void)
 {
 	uartprintf("Init Gui\r\n");
-	buttonQueue = xQueueCreate(1, sizeof(uint8_t));
-	labelQueue = xQueueCreate(32, sizeof(uint8_t));
+	LabelQueue = xQueueCreate(32, sizeof(uint8_t));
 	xTaskCreate(Task_ButtonHandle, (const char *) "Button", 256, NULL, 0, &TaskButton);
 	xTaskCreate(Task_LabelHandle, (const char *) "Label", 256, NULL, 0, &TaskLabel);
 }

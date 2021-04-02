@@ -13,15 +13,14 @@ extern "C" {
 
 typedef int (*Logger)(const char* fmt, ...);
 
-
 #define PAGE_INDEX(PAGE_OPT, type) \
   PAGE_OPT(Default, type) \
   PAGE_OPT(Actual, type) \
   PAGE_OPT(Program, type)
 
 #define OBJ_ENUM(TYPE, type) TYPE,
-#define PAGE_INIT_DECLARE(TYPE, type) void Page_Init_##TYPE(Logger);
-#define PAGE_FUNC_DECLARE(TYPE, type) PageEntity_t *Page_Func_##TYPE(KeyEnum_t, Logger);
+#define PAGE_INIT_DECLARE(TYPE, type) void Page_Init_##TYPE(Logger, PageEntity_t *);
+#define PAGE_FUNC_DECLARE(TYPE, type) PageEntity_t *Page_Func_##TYPE(KeyEnum_t, Logger, PageEntity_t *);
 #define PAGE_INIT(TYPE, type) { \
     if (TYPE == type) { \
         return Page_Init_##TYPE; \
@@ -33,7 +32,13 @@ typedef int (*Logger)(const char* fmt, ...);
     } \
 }
 
-typedef void (*PageInit) (Logger);
+#define MAX_INFO_LEN (16)
+typedef struct {
+  uint8_t Title[MAX_INFO_LEN];
+  uint8_t Content[MAX_INFO_LEN];
+} PageInfo_t;
+
+typedef void (*Publisher)(PageInfo_t *);
 
 typedef enum PageEnum {
 	PAGE_INDEX(OBJ_ENUM, NULL)
@@ -41,10 +46,13 @@ typedef enum PageEnum {
 
 typedef struct PageEntity {
 	PageEnum_t type;
-	struct PageEntity *(*func) (KeyEnum_t, Logger);
+  PageInfo_t info;
+  Publisher publisher;
+	struct PageEntity *(*func) (KeyEnum_t, Logger, struct PageEntity *);
 } PageEntity_t;
 
-typedef PageEntity_t *(*PageFunc) (KeyEnum_t, Logger);
+typedef void (*PageInit) (Logger, PageEntity_t *);
+typedef PageEntity_t *(*PageFunc) (KeyEnum_t, Logger, PageEntity_t *);
 
 PAGE_INDEX(PAGE_INIT_DECLARE, NULL)
 PAGE_INDEX(PAGE_FUNC_DECLARE, NULL)
@@ -58,7 +66,7 @@ static inline PageFunc GetPageFunc(PageEnum_t type) {
     return NULL;
 }
 
-PageEntity_t *Page_CreatePage(PageEnum_t, Logger);
+PageEntity_t *Page_CreatePage(PageEnum_t, Logger, Publisher);
 
 #ifdef __cplusplus
 }

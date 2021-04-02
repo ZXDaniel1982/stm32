@@ -3,13 +3,17 @@
 
 static uint8_t KeyIn;
 
+static void Demo_Publish(PageInfo_t * info)
+{
+}
+
 void main()
 {
 	PageEntity_t *Page = NULL;
 	PageEntity_t *PageNext = NULL;
 
 	printf("Spc mainloop task\r\n");
-	Page = Page_CreatePage(Default, printf);
+	Page = Page_CreatePage(Default, printf, Demo_Publish);
 	if (Page == NULL) {
 		printf("Failed to create page\r\n");
 	}
@@ -18,7 +22,7 @@ void main()
 		printf("Please input key: ");
 		scanf ("%d", &KeyIn);
 		if (Page->func != NULL) {
-			PageNext = Page->func(KeyIn, printf);
+			PageNext = Page->func(KeyIn, printf, Page);
 			if (PageNext != NULL) {
 				free(Page);
 				Page = PageNext;

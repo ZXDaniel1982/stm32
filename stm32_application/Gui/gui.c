@@ -45,8 +45,8 @@ static void Task_LabelHandle(void *pvParameters)
 {
 	uartprintf("Label task handler\r\n");
 
-	Gui_CreateLabel(Title, 		10, 	30, 	(uint8_t *) "wwwwwwwwwwwwwwww", LCD_Fill);
-	Gui_CreateLabel(Content, 	10, 	50, 	(uint8_t *) "wwwwwwwwwwwwwwww", LCD_Fill);
+	Gui_CreateLabel(Title, 		10, 	30, 	(uint8_t *) "", LCD_Fill);
+	Gui_CreateLabel(Content, 	10, 	50, 	(uint8_t *) "", LCD_Fill);
 	Gui_UpdateLabel();
 	while (1) {
 		/* Block to wait for prvTask1() to notify this task. */

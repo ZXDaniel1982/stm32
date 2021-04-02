@@ -8,6 +8,12 @@
 TaskHandle_t TaskPageMainloop = NULL;
 
 extern xQueueHandle UartQueue;
+extern xQueueHandle LabelQueue;
+
+static void Spc_Publish(PageInfo_t *info)
+{
+  xQueueSend(LabelQueue, info, portMAX_DELAY);
+}
 
 /**
  * Voltage and current sensor handler
@@ -18,7 +24,7 @@ static void Spc_PageMainloop(void *pvParameters)
 	PageEntity_t *PageNext = NULL;
 
 	uartprintf("Spc mainloop task\r\n");
-	Page = Page_CreatePage(Default, uartprintf);
+	Page = Page_CreatePage(Default, uartprintf, Spc_Publish);
 	if (Page == NULL) {
 		uartprintf("Failed to create page\r\n");
 	}
@@ -28,7 +34,7 @@ static void Spc_PageMainloop(void *pvParameters)
 		if (xQueuePeek(UartQueue, &KeyIn, portMAX_DELAY)) {
       vTaskDelay(100);
 			if (Page->func != NULL) {
-				PageNext = Page->func(KeyIn, uartprintf);
+				PageNext = Page->func(KeyIn, uartprintf, Page);
 				if (PageNext != NULL) {
 					free(Page);
 					Page = PageNext;

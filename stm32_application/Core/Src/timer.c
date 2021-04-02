@@ -42,9 +42,9 @@ static void TIMERx_Init(TIM_TypeDef * TIMx, uint32_t Periphs, IRQn_Type IRQn)
 
 void Timer_TickInc()
 {
-	xSemaphoreTake(TimerMutex, portMAX_DELAY);
+	xSemaphoreTakeFromISR(TimerMutex, NULL);
   ulHighFrequencyTimerTicks++;
-	xSemaphoreGive(TimerMutex);
+	xSemaphoreGiveFromISR(TimerMutex, NULL);
 }
 
 uint32_t Timer_GetTick()

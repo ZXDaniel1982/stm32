@@ -1747,6 +1747,7 @@ void Gui_PushButton(KeyEnum_t type)
 
   while (buttonObj) {
     if (buttonObj->type == type) {
+      if (buttonObj->pushed) return;
       buttonObj->pushed = true;
       buttonObj->toUpdate = true;
       buttonObj->push_timer_start = buttonObj->tick();

@@ -3,7 +3,6 @@
 #include "common.h"
 
 volatile uint32_t ulHighFrequencyTimerTicks = 0;
-static SemaphoreHandle_t TimerMutex;
 extern TaskHandle_t TaskMeasure;
 
 static void TIMERx_Init(TIM_TypeDef * TIMx, uint32_t Periphs, IRQn_Type IRQn)
@@ -42,26 +41,16 @@ static void TIMERx_Init(TIM_TypeDef * TIMx, uint32_t Periphs, IRQn_Type IRQn)
 
 void Timer_TickInc()
 {
-	xSemaphoreTakeFromISR(TimerMutex, NULL);
   ulHighFrequencyTimerTicks++;
-	xSemaphoreGiveFromISR(TimerMutex, NULL);
 }
 
 uint32_t Timer_GetTick()
 {
-  uint32_t value;
-
-	xSemaphoreTake(TimerMutex, portMAX_DELAY);
-  value = ulHighFrequencyTimerTicks;
-	xSemaphoreGive(TimerMutex);
-
-  return value;
+  return ulHighFrequencyTimerTicks;
 }
 
 void TIMER_Init()
 {
-	TimerMutex = xSemaphoreCreateMutex();
-
   TIMERx_Init(TIM1, RCC_APB2ENR_TIM1EN, TIM1_UP_IRQn);
 	TIMERx_Init(TIM2, RCC_APB1ENR_TIM2EN, TIM2_IRQn);
 #if 0

@@ -17,6 +17,11 @@ static void Term_Fill(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, const uint
 	}
 }
 
+static uint32_t Sim_Tick(void)
+{
+  return 1;
+}
+
 static void Gui_Flush()
 {
 	for (uint16_t i=0;i<320;i++) {
@@ -38,15 +43,15 @@ void main(void)
 	memset(screen, 0xef7e, 76800);
 	Gui_CreateLabel(Title, 10, 30, (uint8_t *) "wwwwwwwwwwwwwwww", Term_Fill);
 	Gui_CreateLabel(Content, 10, 50, (uint8_t *) "wwwwwwwwwwwwwwww", Term_Fill);
-	Gui_CreateButton(Act, 30, 120, Term_Fill);
-	Gui_CreateButton(Up, 90, 120, Term_Fill);
-	Gui_CreateButton(Prog, 150, 120, Term_Fill);
-	Gui_CreateButton(Left, 30, 170, Term_Fill);
-	Gui_CreateButton(Enter, 90, 170, Term_Fill);
-	Gui_CreateButton(Right, 150, 170, Term_Fill);
-	Gui_CreateButton(Reset, 30, 220, Term_Fill);
-	Gui_CreateButton(Down, 90, 220, Term_Fill);
-	Gui_CreateButton(Alarm, 150, 220, Term_Fill);
+	Gui_CreateButton(Act, 30, 120, Term_Fill, Sim_Tick);
+	Gui_CreateButton(Up, 90, 120, Term_Fill, Sim_Tick);
+	Gui_CreateButton(Prog, 150, 120, Term_Fill, Sim_Tick);
+	Gui_CreateButton(Left, 30, 170, Term_Fill, Sim_Tick);
+	Gui_CreateButton(Enter, 90, 170, Term_Fill, Sim_Tick);
+	Gui_CreateButton(Right, 150, 170, Term_Fill, Sim_Tick);
+	Gui_CreateButton(Reset, 30, 220, Term_Fill, Sim_Tick);
+	Gui_CreateButton(Down, 90, 220, Term_Fill, Sim_Tick);
+	Gui_CreateButton(Alarm, 150, 220, Term_Fill, Sim_Tick);
 
 	Gui_UpdateButton();
 	Gui_UpdateLabel();

@@ -1686,10 +1686,12 @@ static inline const uint16_t *GetButtonPixel(KeyEnum_t type)
     return NULL;
 }
 
+extern uint32_t ulHighFrequencyTimerTicks;
+
 buttonObj_t *buttonHead = NULL;
 buttonObj_t *buttonEnd = NULL;
 
-static void Gui_DrawButton(buttonObj_t * button)
+static void Gui_DrawButton(buttonObj_t * button, bool push)
 {
 	uint16_t x1, x2, y1, y2;
 
@@ -1698,10 +1700,11 @@ static void Gui_DrawButton(buttonObj_t * button)
 	x2 = x1 + button->size_x - 1;
 	y2 = y1 + button->size_y - 1;
 
-	button->drawer(x1, y1, x2, y2, button->pixel_origin);
+	button->drawer(x1, y1, x2, y2, push ? button->pixel_push : button->pixel_origin);
 }
 
-void Gui_CreateButton(KeyEnum_t type, uint16_t x, uint16_t y, Drawer drawer)
+#define PUSH_TIMEOUT (600)
+void Gui_CreateButton(KeyEnum_t type, uint16_t x, uint16_t y, Drawer drawer, Tick tick)
 {
 	buttonObj_t *NewButton = (buttonObj_t *) malloc(sizeof(buttonObj_t));
 
@@ -1709,7 +1712,7 @@ void Gui_CreateButton(KeyEnum_t type, uint16_t x, uint16_t y, Drawer drawer)
 		//uartprintf("Failed to create button\r\n");
 	}
 
-	NewButton->updated = false;
+	NewButton->toUpdate = true;
 	NewButton->type = type;
 	NewButton->pixel_origin = GetButtonPixel(type);
 	NewButton->pixel_push = buttonBitmap_Push;
@@ -1719,6 +1722,11 @@ void Gui_CreateButton(KeyEnum_t type, uint16_t x, uint16_t y, Drawer drawer)
 	NewButton->size_y = BUTTON_SIZE_Y;
 	NewButton->size_total = (uint32_t) NewButton->size_x * NewButton->size_y;
 	NewButton->drawer = drawer;
+  NewButton->pushed = false;
+  NewButton->push_timer_start = 0;
+  NewButton->push_timer = 0;
+  NewButton->push_timeout = PUSH_TIMEOUT;
+  NewButton->tick = tick;
 
 	if (buttonHead == NULL) {
 		buttonHead = NewButton;
@@ -1733,15 +1741,37 @@ void Gui_CreateButton(KeyEnum_t type, uint16_t x, uint16_t y, Drawer drawer)
 	}
 }
 
+void Gui_PushButton(KeyEnum_t type)
+{
+  buttonObj_t *buttonObj = buttonHead;
+
+  while (buttonObj) {
+    if (buttonObj->type == type) {
+      buttonObj->pushed = true;
+      buttonObj->toUpdate = true;
+      buttonObj->push_timer_start = buttonObj->tick();
+      buttonObj->push_timer = buttonObj->push_timer_start;
+    }
+    buttonObj = buttonObj->next;
+  }
+}
+
 void Gui_UpdateButton(void)
 {
 	buttonObj_t *buttonObj = buttonHead;
 
 	while (buttonObj != NULL) {
-		if (!buttonObj->updated) {
-			Gui_DrawButton(buttonObj);
-			buttonObj->updated = true;
+		if (buttonObj->toUpdate) {
+			Gui_DrawButton(buttonObj, buttonObj->pushed);
+			buttonObj->toUpdate = false;
 		}
+    if (buttonObj->pushed) {
+      buttonObj->push_timer = buttonObj->tick();
+      if ((buttonObj->push_timer - buttonObj->push_timer_start) >= buttonObj->push_timeout) {
+        buttonObj->pushed = false;
+        buttonObj->toUpdate = true;
+      }
+    }
 		buttonObj = buttonObj->next;
 	}
 }

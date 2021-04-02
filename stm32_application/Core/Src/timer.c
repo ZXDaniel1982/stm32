@@ -3,7 +3,7 @@
 #include "common.h"
 
 volatile uint32_t ulHighFrequencyTimerTicks = 0;
-
+static SemaphoreHandle_t TimerMutex;
 extern TaskHandle_t TaskMeasure;
 
 static void TIMERx_Init(TIM_TypeDef * TIMx, uint32_t Periphs, IRQn_Type IRQn)
@@ -40,9 +40,29 @@ static void TIMERx_Init(TIM_TypeDef * TIMx, uint32_t Periphs, IRQn_Type IRQn)
 	SET_BIT(TIMx->CR1, TIM_CR1_CEN);
 }
 
+void Timer_TickInc()
+{
+	xSemaphoreTake(TimerMutex, portMAX_DELAY);
+  ulHighFrequencyTimerTicks++;
+	xSemaphoreGive(TimerMutex);
+}
+
+uint32_t Timer_GetTick()
+{
+  uint32_t value;
+
+	xSemaphoreTake(TimerMutex, portMAX_DELAY);
+  value = ulHighFrequencyTimerTicks;
+	xSemaphoreGive(TimerMutex);
+
+  return value;
+}
+
 void TIMER_Init()
 {
-	TIMERx_Init(TIM1, RCC_APB2ENR_TIM1EN, TIM1_UP_IRQn);
+	TimerMutex = xSemaphoreCreateMutex();
+
+  TIMERx_Init(TIM1, RCC_APB2ENR_TIM1EN, TIM1_UP_IRQn);
 	TIMERx_Init(TIM2, RCC_APB1ENR_TIM2EN, TIM2_IRQn);
 #if 0
   TIMERx_Init(TIM3, RCC_APB1ENR_TIM3EN, TIM3_IRQn);
@@ -62,7 +82,7 @@ void TIM1_UP_IRQHandler(void)
 void TIM2_IRQHandler(void)
 {
 	CLEAR_BIT(TIM2->SR, TIM_SR_UIF);
-	ulHighFrequencyTimerTicks++;
+	Timer_TickInc();
 }
 
 void TIM3_IRQHandler(void)

@@ -17,7 +17,8 @@ extern "C" {
 }
 
 typedef struct tButtonObj {
-    bool updated;
+    bool toUpdate;
+    bool pushed;
     KeyEnum_t type;
     const uint16_t *pixel_origin;
     const uint16_t *pixel_push;
@@ -26,12 +27,17 @@ typedef struct tButtonObj {
     uint16_t size_x;
     uint16_t size_y;
     uint32_t size_total;
+    uint32_t push_timeout;
+    uint32_t push_timer;
+    uint32_t push_timer_start;
     Drawer drawer;
+    Tick tick;
     struct tButtonObj *next;
 } buttonObj_t;
 
-void Gui_CreateButton(KeyEnum_t, uint16_t, uint16_t, Drawer);
+void Gui_CreateButton(KeyEnum_t, uint16_t, uint16_t, Drawer, Tick);
 void Gui_UpdateButton(void);
+void Gui_PushButton(KeyEnum_t);
 
 #ifdef __cplusplus
 }

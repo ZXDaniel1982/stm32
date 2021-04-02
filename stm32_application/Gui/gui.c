@@ -4,6 +4,7 @@
 #include "gui_button.h"
 #include "gui_label.h"
 #include "lcd.h"
+#include "timer.h"
 
 TaskHandle_t TaskButton = NULL;
 TaskHandle_t TaskLabel = NULL;
@@ -20,21 +21,23 @@ static void Task_ButtonHandle(void *pvParameters)
 {
 	uartprintf("Button task handler\r\n");
 
-	Gui_CreateButton(Act, 		30, 	120, 	LCD_Fill);
-	Gui_CreateButton(Up, 		90, 	120, 	LCD_Fill);
-	Gui_CreateButton(Prog, 		150, 	120, 	LCD_Fill);
-	Gui_CreateButton(Left, 		30, 	170, 	LCD_Fill);
-	Gui_CreateButton(Enter, 	90, 	170, 	LCD_Fill);
-	Gui_CreateButton(Right, 	150, 	170, 	LCD_Fill);
-	Gui_CreateButton(Reset, 	30, 	220, 	LCD_Fill);
-	Gui_CreateButton(Down, 		90, 	220, 	LCD_Fill);
-	Gui_CreateButton(Alarm, 	150, 	220, 	LCD_Fill);
+	Gui_CreateButton(Act, 		30, 	120, 	LCD_Fill,   Timer_GetTick);
+	Gui_CreateButton(Up, 		  90, 	120, 	LCD_Fill,   Timer_GetTick);
+	Gui_CreateButton(Prog, 		150, 	120, 	LCD_Fill,   Timer_GetTick);
+	Gui_CreateButton(Left, 		30, 	170, 	LCD_Fill,   Timer_GetTick);
+	Gui_CreateButton(Enter, 	90, 	170, 	LCD_Fill,   Timer_GetTick);
+	Gui_CreateButton(Right, 	150, 	170, 	LCD_Fill,   Timer_GetTick);
+	Gui_CreateButton(Reset, 	30, 	220, 	LCD_Fill,   Timer_GetTick);
+	Gui_CreateButton(Down, 		90, 	220, 	LCD_Fill,   Timer_GetTick);
+	Gui_CreateButton(Alarm, 	150, 	220, 	LCD_Fill,   Timer_GetTick);
 	Gui_UpdateButton();
 	while (1) {
 		/* Block to wait for prvTask1() to notify this task. */
     uint8_t KeyIn;
-		if (xQueueReceive(UartQueue, &KeyIn, portMAX_DELAY)) {
+		if (xQueueReceive(UartQueue, &KeyIn, 50)) {
+      Gui_PushButton(KeyIn);
     }
+    Gui_UpdateButton();
 	}
 }
 

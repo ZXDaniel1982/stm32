@@ -24,6 +24,7 @@ extern "C" {
   GUI_OPT(Alarm, key)
 
 typedef void (*Drawer)(uint8_t, uint8_t, uint8_t, uint8_t, const uint16_t *);
+typedef uint32_t (*Tick)(void);
 
 #ifdef __cplusplus
 }

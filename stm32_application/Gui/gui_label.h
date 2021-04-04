@@ -22,17 +22,19 @@ typedef struct {
 } GuiFont_t;
 
 typedef struct tLabelObj {
-	bool updated;
+	bool toUpdate;
 	LabelEnum_t type;
 	uint16_t x;
 	uint16_t y;
 	uint8_t info[16];
 	Drawer drawer;
+  Cleaner cleaner;
 	struct tLabelObj *next;
 } labelObj_t;
 
-void Gui_CreateLabel(LabelEnum_t, uint16_t, uint16_t, uint8_t *, Drawer);
+labelObj_t *Gui_CreateLabel(LabelEnum_t, uint16_t, uint16_t, uint8_t *, Drawer, Cleaner);
 void Gui_UpdateLabel(void);
+void Gui_InputLabel(labelObj_t *, uint8_t *);
 
 #ifdef __cplusplus
 }

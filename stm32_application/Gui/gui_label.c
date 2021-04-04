@@ -100,6 +100,8 @@ static void Gui_DrawLabel(labelObj_t * label)
 	x1 = label->x;
 	y1 = label->y;
 
+  label->cleaner(0, y1, 239, y1 + 15);
+
 	for (uint8_t i = 0; i < strlen((char *) label->info); i++) {
 		if (' ' == label->info[i]) {
 			x1 += 8;
@@ -118,7 +120,7 @@ static void Gui_DrawLabel(labelObj_t * label)
 	}
 }
 
-void Gui_CreateLabel(LabelEnum_t type, uint16_t x, uint16_t y, uint8_t * info, Drawer drawer)
+labelObj_t *Gui_CreateLabel(LabelEnum_t type, uint16_t x, uint16_t y, uint8_t * info, Drawer drawer, Cleaner cleaner)
 {
 	labelObj_t *NewLabel = (labelObj_t *) malloc(sizeof(labelObj_t));
 
@@ -126,30 +128,32 @@ void Gui_CreateLabel(LabelEnum_t type, uint16_t x, uint16_t y, uint8_t * info, D
 		//uartprintf("Failed to create label\r\n");
 	}
 
-	NewLabel->updated = false;
+	NewLabel->toUpdate = true;
 	NewLabel->type = type;
-	//NewLabel->pixel_origin = GetButtonPixel(type);
-	//NewLabel->pixel_push = buttonBitmap_Push;
 	NewLabel->x = x;
 	NewLabel->y = y;
-	//NewLabel->size_x = BUTTON_SIZE_X;
-	//NewLabel->size_y = BUTTON_SIZE_Y;
-	//NewLabel->size_total = (uint32_t) NewButton->size_x * NewButton->size_y;
 	memset(NewLabel->info, 0, 16);
 	strncpy((char *) NewLabel->info, (char *) info, 16);
 	NewLabel->drawer = drawer;
+  NewLabel->cleaner = cleaner;
 
 	if (labelHead == NULL) {
 		labelHead = NewLabel;
 		labelEnd = labelHead;
 		labelEnd->next = NULL;
-		NewLabel = NULL;
 	} else {
 		labelEnd->next = NewLabel;
 		labelEnd = NewLabel;
 		labelEnd->next = NULL;
-		NewLabel = NULL;
 	}
+  return NewLabel;
+}
+
+void Gui_InputLabel(labelObj_t * label, uint8_t * info)
+{
+  memset(label->info, 0, 16);
+  strncpy((char *)label->info, (char *)info, 16);
+  label->toUpdate = true;
 }
 
 void Gui_UpdateLabel(void)
@@ -157,9 +161,9 @@ void Gui_UpdateLabel(void)
 	labelObj_t *labelObj = labelHead;
 
 	while (labelObj != NULL) {
-		if (!labelObj->updated) {
+		if (labelObj->toUpdate) {
 			Gui_DrawLabel(labelObj);
-			labelObj->updated = true;
+			labelObj->toUpdate = false;
 		}
 		labelObj = labelObj->next;
 	}

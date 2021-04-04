@@ -192,4 +192,31 @@ void LCD_Fill(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, const uint16_t *co
 	xSemaphoreGive(LcdMutex);
 }
 
+void LCD_Clean(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2)
+{
+  uint32_t n, area = 0;
+
+  xSemaphoreTake(LcdMutex, portMAX_DELAY);
+
+	LCD_WR_CMD(0x02, (uint8_t) (x1 >> 8));
+	LCD_WR_CMD(0x03, (uint8_t) x1);
+	LCD_WR_CMD(0x04, (uint8_t) (x2 >> 8));
+	LCD_WR_CMD(0x05, (uint8_t) x2);
+
+	LCD_WR_CMD(0x06, (uint8_t) (y1 >> 8));
+	LCD_WR_CMD(0x07, (uint8_t) y1);		//Row Start
+	LCD_WR_CMD(0x08, (uint8_t) (y2 >> 8));
+	LCD_WR_CMD(0x09, (uint8_t) y2);	//Row End
+
+	LCD_WR_REG(34);
+
+	area = (uint32_t) (x2 - x1 + 1) * (y2 - y1 + 1);
+
+	for (n = 0; n < area; n++) {
+		LCD_WR_Data(BACKGROUND);
+	}
+
+	xSemaphoreGive(LcdMutex);
+}
+
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

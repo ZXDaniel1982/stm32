@@ -12,8 +12,6 @@ xQueueHandle LabelQueue = NULL;
 
 extern xQueueHandle UartQueue;
 
-uint8_t labelInfo[32] = {0};
-
 /**
  * Voltage and current sensor handler
  */
@@ -45,13 +43,16 @@ static void Task_LabelHandle(void *pvParameters)
 {
 	uartprintf("Label task handler\r\n");
 
-	Gui_CreateLabel(Title, 		10, 	30, 	(uint8_t *) "", LCD_Fill);
-	Gui_CreateLabel(Content, 	10, 	50, 	(uint8_t *) "", LCD_Fill);
+	labelObj_t *labelTitle = Gui_CreateLabel(Title, 		10, 	30, 	(uint8_t *) "", LCD_Fill, LCD_Clean);
+	labelObj_t *labelContent = Gui_CreateLabel(Content, 	10, 	50, 	(uint8_t *) "", LCD_Fill, LCD_Clean);
 	Gui_UpdateLabel();
 	while (1) {
 		/* Block to wait for prvTask1() to notify this task. */
-		if (xQueueReceive(LabelQueue, labelInfo, portMAX_DELAY)) {
-      ;
+    PageInfo_t pageInfo;
+		if (xQueueReceive(LabelQueue, &pageInfo, portMAX_DELAY)) {
+      Gui_InputLabel(labelTitle, pageInfo.Title);
+      Gui_InputLabel(labelContent, pageInfo.Content);
+      Gui_UpdateLabel();
     }
 	}
 }
@@ -59,7 +60,7 @@ static void Task_LabelHandle(void *pvParameters)
 void Gui_Init(void)
 {
 	uartprintf("Init Gui\r\n");
-	LabelQueue = xQueueCreate(32, sizeof(uint8_t));
+	LabelQueue = xQueueCreate(1, sizeof(PageInfo_t));
 	xTaskCreate(Task_ButtonHandle, (const char *) "Button", 256, NULL, 0, &TaskButton);
 	xTaskCreate(Task_LabelHandle, (const char *) "Label", 256, NULL, 0, &TaskLabel);
 }

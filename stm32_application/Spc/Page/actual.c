@@ -3,7 +3,7 @@
 void Page_Init_Actual(Logger logger, PageEntity_t *page)
 {
 	//logger("\r\nActual\r\n");
-  if ((page == NULL) || (page->publisher)) return;
+  if ((page == NULL) || (page->publisher == NULL)) return;
 
   strncpy((char *)(page->info.Title), "Actual", MAX_INFO_LEN);
   page->publisher(&(page->info));

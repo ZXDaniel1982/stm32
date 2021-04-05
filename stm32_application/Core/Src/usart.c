@@ -16,7 +16,6 @@ xQueueHandle UartQueue;
 //======================================================================//
 static void USART_SpcCmd(uint8_t val)
 {
-  LedBlink();
 	xQueueSendFromISR(UartQueue, &val, pdFALSE);
 }
 

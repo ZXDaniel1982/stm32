@@ -20,7 +20,7 @@ void main()
 	while (1) {
 		/* Block to wait for prvTask1() to notify this task. */
 		printf("Please input key: ");
-		scanf ("%d", &KeyIn);
+		scanf ("%d", (int *)(&KeyIn));
 		if (Page->func != NULL) {
 			PageNext = Page->func(KeyIn, printf, Page);
 			if (PageNext != NULL) {

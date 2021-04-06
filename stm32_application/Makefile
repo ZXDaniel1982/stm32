@@ -64,9 +64,9 @@ FreeRTOS/Source/portable/GCC/ARM_CM3/port.c \
 Spc/Measure/measure.c \
 Spc/Page/pagetask.c \
 Spc/Page/page.c \
-Spc/Page/default.c \
-Spc/Page/actual.c \
-Spc/Page/program.c \
+Spc/Page/Obj/default.c \
+Spc/Page/Obj/actual.c \
+Spc/Page/Obj/program.c \
 Gui/gui.c \
 Gui/gui_button.c \
 Gui/gui_label.c
@@ -79,9 +79,9 @@ startup_stm32f103xe.s
 TEST_SPC_SOURCES = \
 Test/test_spc.c \
 Spc/Page/page.c \
-Spc/Page/default.c \
-Spc/Page/actual.c \
-Spc/Page/program.c
+Spc/Page/Obj/default.c \
+Spc/Page/Obj/actual.c \
+Spc/Page/Obj/program.c
 
 TEST_GUI_SOURCES = \
 Test/test_gui.c \
@@ -92,9 +92,9 @@ UTEST_SOURCES = \
 Utest/Src/utest.c \
 Utest/Unity/unity.c \
 Spc/Page/page.c \
-Spc/Page/default.c \
-Spc/Page/actual.c \
-Spc/Page/program.c
+Spc/Page/Obj/default.c \
+Spc/Page/Obj/actual.c \
+Spc/Page/Obj/program.c
 
 
 #######################################

@@ -40,9 +40,9 @@ void USART_Init()
 	SET_BIT(USART1->CR1, (USART_CR1_RXNEIE | USART_CR1_PEIE));
 
 	NVIC_EnableIRQ(USART1_IRQn);
-  NVIC_SetPriority(USART1_IRQn, 5);
+	NVIC_SetPriority(USART1_IRQn, 5);
 
-  UartQueue = xQueueCreate(1, sizeof(uint8_t));
+	UartQueue = xQueueCreate(1, sizeof(uint8_t));
 	UartMutex = xSemaphoreCreateMutex();
 }
 

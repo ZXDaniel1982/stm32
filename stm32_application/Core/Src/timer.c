@@ -3,7 +3,6 @@
 #include "common.h"
 
 volatile uint32_t ulHighFrequencyTimerTicks = 0;
-extern TaskHandle_t TaskMeasure;
 
 static void TIMERx_Init(TIM_TypeDef * TIMx, uint32_t Periphs, IRQn_Type IRQn, bool High)
 {
@@ -81,12 +80,7 @@ void TIM2_IRQHandler(void)
 
 void TIM3_IRQHandler(void)
 {
-	BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-
 	CLEAR_BIT(TIM3->SR, TIM_SR_UIF);
-	
-	vTaskNotifyGiveFromISR(TaskMeasure, &xHigherPriorityTaskWoken);
-    portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 }
 
 void TIM4_IRQHandler(void)

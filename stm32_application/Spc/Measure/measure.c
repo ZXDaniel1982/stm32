@@ -12,7 +12,8 @@ static void Task_MeasureVoltCur(void *pvParameters)
 	//uartprintf("Measure volt and current\r\n");
 	while (1) {
 		/* Block to wait for prvTask1() to notify this task. */
-		vTaskDelay(5000);
+		ulTaskNotifyTake( pdTRUE, portMAX_DELAY );
+        uartprintf("Measure volt and current\r\n");
 	}
 }
 

@@ -2,13 +2,6 @@
 #include "stm32f103xe.h"
 #include "common.h"
 
-TimerHandle_t demoTimer;
-
-void vTimerCallback( TimerHandle_t xTimer )
-{
-  LedBlink();  
-}
-
 /**
  * Entry point for the application.
  */
@@ -33,9 +26,6 @@ int main()
 	Measure_VoltCurInit();
 	Gui_Init();
 	Page_Init();
-
-  demoTimer = xTimerCreate("Timer", 1000, pdTRUE, (void *)0, vTimerCallback);
-  xTimerStart(demoTimer, 0);
 
 	vTaskStartScheduler();
 

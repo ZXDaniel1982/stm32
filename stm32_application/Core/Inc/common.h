@@ -140,7 +140,6 @@ void USART1_IRQHandler(void);
 // error
 void Error_Handle(void);
 
-void LedBlink(void);
 // void DMA_Init(void);
 
 // Measurement

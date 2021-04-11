@@ -1,6 +1,7 @@
 #include "stm32f1xx.h"
 #include "stm32f103xe.h"
 #include "common.h"
+#include "gpio.h"
 
 static const GPIO_PINS_t GPIO_PINS_L[] = {
 	{Led_GPIO_Port, Led_Pin, (GPIO_CRL_CNF5 | GPIO_CRL_MODE5),

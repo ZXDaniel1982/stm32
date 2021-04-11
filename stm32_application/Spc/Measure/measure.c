@@ -5,17 +5,24 @@
 TaskHandle_t TaskMeasure = NULL;
 TimerHandle_t TimerMeasure = NULL;
 
+extern xQueueHandle TimerQueue;
+
 /**
  * Voltage and current sensor handler
  */
-static void Task_MeasureVoltCur(TimerHandle_t xTimer)
+static void Task_MeasureVoltCur(void *pvParameters)
 {
-	uartprintf("Measure volt and current\r\n");
+    while (1) {
+        uint8_t KeyIn;
+        if (xQueueReceive(TimerQueue, &KeyIn, portMAX_DELAY)) {
+            ;
+        }
+    }
 }
 
 void Measure_VoltCurInit(void)
 {
-	uartprintf("Init voltage and current sensor\r\n");
-	TimerMeasure = xTimerCreate("Measure", 1000, pdTRUE, (void *)0, Task_MeasureVoltCur);
-	xTimerStart(TimerMeasure, 5000);
+    uartprintf("Init voltage and current sensor\r\n");
+    xTaskCreate(Task_MeasureVoltCur, (const char *) "Measure", 256,
+                NULL, 0, &TaskMeasure);
 }

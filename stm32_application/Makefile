@@ -175,7 +175,7 @@ TESTFLAGS = $(TEST_INCLUDES)
 UTESTFLAGS = $(UTEST_INCLUDES)
 
 ifeq ($(DEBUG), 1)
-CFLAGS += -g -gdwarf-2
+CFLAGS += -g3 -gdwarf-2
 endif
 
 

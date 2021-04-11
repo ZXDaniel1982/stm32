@@ -4,6 +4,8 @@
 
 volatile uint32_t ulHighFrequencyTimerTicks = 0;
 
+xQueueHandle TimerQueue;
+
 static void TIMERx_Init(TIM_TypeDef * TIMx, uint32_t Periphs, IRQn_Type IRQn, bool High)
 {
   uint16_t ARR_Perem = 0, PSC_Perem = 0;
@@ -57,6 +59,8 @@ uint32_t Timer_GetTick()
 
 void TIMER_Init()
 {
+	TimerQueue = xQueueCreate(1, sizeof(uint8_t));
+
   TIMERx_Init(TIM1, RCC_APB2ENR_TIM1EN, TIM1_UP_IRQn, true);
 	TIMERx_Init(TIM2, RCC_APB1ENR_TIM2EN, TIM2_IRQn, true);
   TIMERx_Init(TIM3, RCC_APB1ENR_TIM3EN, TIM3_IRQn, false);
@@ -80,7 +84,9 @@ void TIM2_IRQHandler(void)
 
 void TIM3_IRQHandler(void)
 {
+	uint8_t val = 0;
 	CLEAR_BIT(TIM3->SR, TIM_SR_UIF);
+	xQueueSendFromISR(TimerQueue, &val, pdFALSE);
 }
 
 void TIM4_IRQHandler(void)

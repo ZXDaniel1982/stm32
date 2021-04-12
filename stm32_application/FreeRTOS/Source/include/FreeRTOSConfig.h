@@ -94,6 +94,8 @@
     extern uint32_t SystemCoreClock;
 #endif
 
+#include "usart.h"
+
 #define configUSE_PREEMPTION                     1
 #define configSUPPORT_STATIC_ALLOCATION          0
 #define configSUPPORT_DYNAMIC_ALLOCATION         1
@@ -162,7 +164,7 @@ See http://www.FreeRTOS.org/RTOS-Cortex-M3-M4.html. */
 /* Normal assert() semantics without relying on the provision of an assert.h
 header file. */
 /* USER CODE BEGIN 1 */
-#define configASSERT( x ) if ((x) == 0) {taskDISABLE_INTERRUPTS(); for( ;; );} 
+#define configASSERT( x ) if ((x) == 0) {taskDISABLE_INTERRUPTS(); uartAssert(__LINE__, __FILE__); for( ;; );} 
 /* USER CODE END 1 */
 
 /* Definitions that map the FreeRTOS port interrupt handlers to their CMSIS

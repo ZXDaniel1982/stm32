@@ -1,11 +1,9 @@
 #include "stm32f1xx.h"
 #include "stm32f103xe.h"
 #include "common.h"
+#include "gpio.h"
 
 TaskHandle_t TaskMeasure = NULL;
-TimerHandle_t TimerMeasure = NULL;
-
-extern xQueueHandle TimerQueue;
 
 /**
  * Voltage and current sensor handler
@@ -13,10 +11,8 @@ extern xQueueHandle TimerQueue;
 static void Task_MeasureVoltCur(void *pvParameters)
 {
     while (1) {
-        uint8_t KeyIn;
-        if (xQueueReceive(TimerQueue, &KeyIn, portMAX_DELAY)) {
-            ;
-        }
+        ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+        LedBlink();
     }
 }
 

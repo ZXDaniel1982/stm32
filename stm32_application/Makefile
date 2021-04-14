@@ -67,6 +67,7 @@ Spc/Page/page.c \
 Spc/Page/Obj/default.c \
 Spc/Page/Obj/actual.c \
 Spc/Page/Obj/program.c \
+Spc/Data/data.c \
 Gui/gui.c \
 Gui/gui_button.c \
 Gui/gui_label.c

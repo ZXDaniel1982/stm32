@@ -1,6 +1,7 @@
 #include "stm32f1xx.h"
 #include "stm32f103xe.h"
 #include "common.h"
+#include "data.h"
 
 /**
  * Entry point for the application.
@@ -9,6 +10,7 @@ int main()
 {
 	uint32_t i;
 
+  SpcDataInit();
 	RCC_Init();
 	GPIO_Init();
 	TIMER_Init();

@@ -10,12 +10,14 @@ extern "C" {
 #include <stdlib.h>
 #include <stdint.h>
 #include "key.h"
+#include "data.h"
 
 typedef int (*Logger)(const char* fmt, ...);
 
 #define PAGE_INDEX(PAGE_OPT, type) \
   PAGE_OPT(Default, type) \
   PAGE_OPT(Actual, type) \
+  PAGE_OPT(HeatSt, type) \
   PAGE_OPT(Program, type)
 
 #define OBJ_ENUM(TYPE, type) TYPE,
@@ -67,6 +69,9 @@ static inline PageFunc GetPageFunc(PageEnum_t type) {
 }
 
 PageEntity_t *Page_CreatePage(PageEnum_t, Logger, Publisher);
+
+/* From page heater status*/
+void HeatStProcess(PageEntity_t *page);
 
 #ifdef __cplusplus
 }

@@ -66,6 +66,7 @@ Spc/Page/pagetask.c \
 Spc/Page/page.c \
 Spc/Page/Obj/default.c \
 Spc/Page/Obj/actual.c \
+Spc/Page/Obj/heatst.c \
 Spc/Page/Obj/program.c \
 Spc/Data/data.c \
 Gui/gui.c \
@@ -82,6 +83,7 @@ Test/test_spc.c \
 Spc/Page/page.c \
 Spc/Page/Obj/default.c \
 Spc/Page/Obj/actual.c \
+Spc/Page/Obj/heatst.c \
 Spc/Page/Obj/program.c
 
 TEST_GUI_SOURCES = \

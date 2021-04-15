@@ -91,12 +91,7 @@ Gui/gui_button.c
 
 UTEST_SOURCES = \
 Utest/Src/utest.c \
-Utest/Unity/unity.c \
-Spc/Page/page.c \
-Spc/Page/Obj/default.c \
-Spc/Page/Obj/actual.c \
-Spc/Page/Obj/program.c
-
+Utest/Unity/unity.c
 
 #######################################
 # binaries

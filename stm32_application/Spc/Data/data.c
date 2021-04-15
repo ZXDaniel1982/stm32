@@ -61,3 +61,4 @@ bool SpcData_GetTemperature(SpcTemp_t *temp)
 
     return true;
 }
+

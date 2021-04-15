@@ -64,6 +64,8 @@ void Page_Init_Default(Logger logger, PageEntity_t *page)
         const char * info = (const char *)Def_GetHeatStatus(heatStatus);
         if (NULL != info)
           strncpy((char *)(page->info.Content), info, MAX_INFO_LEN);
+      } else {
+        strncpy((char *)(page->info.Content), "No Heat St", MAX_INFO_LEN);
       }
     }
     break;

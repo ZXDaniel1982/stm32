@@ -49,11 +49,14 @@ PageEntity_t *Page_Func_HeatSt(KeyEnum_t key, Logger logger, PageEntity_t *page)
 {
     switch (key) {
     case Act:
+    case Left:
         return Page_CreatePage(Actual, logger, page->publisher);
     case Prog:
         return Page_CreatePage(Program, logger, page->publisher);
     case Def:
         return Page_CreatePage(Default, logger, page->publisher);
+    case Right:
+        return Page_CreatePage(Temperature, logger, page->publisher);
     default:
         return NULL;
     }

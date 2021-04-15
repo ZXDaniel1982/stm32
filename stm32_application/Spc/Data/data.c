@@ -62,3 +62,28 @@ bool SpcData_GetTemperature(SpcTemp_t *temp)
     return true;
 }
 
+bool SpcData_GetTempRTDA(SpcTemp_t *temp)
+{
+    if (temp == NULL) return false;
+
+    memset(temp, 0, sizeof(SpcTemp_t));
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    memcpy(temp, &(SpcDataRam.SpcTempRTDA), sizeof(SpcTemp_t));
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
+bool SpcData_GetTempRTDB(SpcTemp_t *temp)
+{
+    if (temp == NULL) return false;
+
+    memset(temp, 0, sizeof(SpcTemp_t));
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    memcpy(temp, &(SpcDataRam.SpcTempRTDB), sizeof(SpcTemp_t));
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}

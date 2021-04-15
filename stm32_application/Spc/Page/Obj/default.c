@@ -22,15 +22,7 @@ void Page_Init_Default(Logger logger, PageEntity_t *page)
 
       SpcTemp_t temperature;
       if (SpcData_GetTemperature(&temperature)) {
-        if (temperature.hasValue) {
-          uint8_t content[MAX_INFO_LEN] = {0};
-          const uint8_t unit = SpcData_GetTempUint();
-          snprintf((char *)content, MAX_INFO_LEN, "%d %s", temperature.temperature[unit],
-            unit ? "F" : "C");
-          strncpy((char *)(page->info.Content), (char *)content, MAX_INFO_LEN);
-        } else {
-          strncpy((char *)(page->info.Content), "No Value", MAX_INFO_LEN);
-        }
+        TemperatureProcess(page, &temperature);
       } else {
         strncpy((char *)(page->info.Content), "Cant read temp", MAX_INFO_LEN);
       }

@@ -18,6 +18,9 @@ typedef int (*Logger)(const char* fmt, ...);
   PAGE_OPT(Default, type) \
   PAGE_OPT(Actual, type) \
   PAGE_OPT(HeatSt, type) \
+  PAGE_OPT(Temperature, type) \
+  PAGE_OPT(TempRTDA, type) \
+  PAGE_OPT(TempRTDB, type) \
   PAGE_OPT(Program, type)
 
 #define OBJ_ENUM(TYPE, type) TYPE,
@@ -72,6 +75,9 @@ PageEntity_t *Page_CreatePage(PageEnum_t, Logger, Publisher);
 
 /* From page heater status*/
 void HeatStProcess(PageEntity_t *page);
+
+/* From page temperature*/
+void TemperatureProcess(PageEntity_t *page, SpcTemp_t *temperature);
 
 #ifdef __cplusplus
 }

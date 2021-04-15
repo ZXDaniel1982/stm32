@@ -39,7 +39,14 @@ typedef struct {
 } HeatStatus_t;
 
 /* For temperature */
+typedef enum {
+  Normal = 0,
+  RTD_OPEN,
+  RTD_SHORT
+} SpcTempStatus_Enum_t;
+
 typedef struct {
+    SpcTempStatus_Enum_t status;
     uint8_t hasValue;
     int16_t temperature[2];
 } SpcTemp_t;
@@ -66,8 +73,8 @@ typedef struct {
         uint64_t SpcMaskRam;
     };
     SpcTemp_t SpcTemp;
-    SpcTemp_t SpcTempChan1;
-    SpcTemp_t SpcTempChan2;
+    SpcTemp_t SpcTempRTDA;
+    SpcTemp_t SpcTempRTDB;
 } SpcDataRam_t;
 
 /* From data.c */
@@ -76,6 +83,8 @@ uint8_t SpcData_GetLcdDef(void);
 uint8_t SpcData_GetTempUint(void);
 uint64_t SpcData_GetMaskRam(void);
 bool SpcData_GetTemperature(SpcTemp_t *temp);
+bool SpcData_GetTempRTDA(SpcTemp_t *temp);
+bool SpcData_GetTempRTDB(SpcTemp_t *temp);
 
 #ifdef __cplusplus
 }

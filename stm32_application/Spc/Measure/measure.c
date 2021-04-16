@@ -2,6 +2,7 @@
 #include "stm32f103xe.h"
 #include "common.h"
 #include "gpio.h"
+#include "spc.h"
 
 TaskHandle_t TaskMeasure = NULL;
 
@@ -10,9 +11,13 @@ TaskHandle_t TaskMeasure = NULL;
  */
 static void Task_MeasureVoltCur(void *pvParameters)
 {
+    int16_t val = -50;
     while (1) {
         ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
         LedBlink();
+        SpcData_SetTemperature(Normal, val++, 0);
+        SpcData_SetTempRTDA(Normal, val++, 0);
+        SpcData_SetTempRTDB(Normal, val++, 0);
     }
 }
 

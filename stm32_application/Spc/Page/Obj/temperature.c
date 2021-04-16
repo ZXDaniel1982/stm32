@@ -1,5 +1,10 @@
 #include "spc.h"
 
+#define Refresh_TempRTDA_Pos (2)
+#define Refresh_TempRTDA_Msk (1 << Refresh_TempRTDA_Pos)
+#define Refresh_TempRTDB_Pos (3)
+#define Refresh_TempRTDB_Msk (1 << Refresh_TempRTDB_Pos)
+
 void TemperatureProcess(PageEntity_t *page, SpcTemp_t *temperature)
 {
   if (temperature->hasValue) {
@@ -24,6 +29,7 @@ void Page_Init_Temperature(Logger logger, PageEntity_t *page)
     //logger("\r\nActual\r\n");
   if ((page == NULL) || (page->publisher == NULL)) return;
 
+  SpcData_SetRefreshMask(Refresh_Temperature_Msk);
   strncpy((char *)(page->info.Title), "Temperature", MAX_INFO_LEN);
 
   SpcTemp_t temperature;
@@ -40,6 +46,7 @@ void Page_Init_TempRTDA(Logger logger, PageEntity_t *page)
     //logger("\r\nActual\r\n");
   if ((page == NULL) || (page->publisher == NULL)) return;
 
+  SpcData_SetRefreshMask(Refresh_TempRTDA_Msk);
   strncpy((char *)(page->info.Title), "RTD-A Actual", MAX_INFO_LEN);
 
   SpcTemp_t temperature;
@@ -56,6 +63,7 @@ void Page_Init_TempRTDB(Logger logger, PageEntity_t *page)
     //logger("\r\nActual\r\n");
   if ((page == NULL) || (page->publisher == NULL)) return;
 
+  SpcData_SetRefreshMask(Refresh_TempRTDB_Msk);
   strncpy((char *)(page->info.Title), "RTD-B Actual", MAX_INFO_LEN);
 
   SpcTemp_t temperature;
@@ -80,6 +88,9 @@ PageEntity_t *Page_Func_Temperature(KeyEnum_t key, Logger logger, PageEntity_t *
         return Page_CreatePage(TempRTDA, logger, page->publisher);
     case Left:
         return Page_CreatePage(HeatSt, logger, page->publisher);
+    case Update:
+        Page_Init_Temperature(logger, page);
+        return NULL;
     default:
         return NULL;
     }
@@ -98,6 +109,9 @@ PageEntity_t *Page_Func_TempRTDA(KeyEnum_t key, Logger logger, PageEntity_t *pag
         return Page_CreatePage(TempRTDB, logger, page->publisher);
     case Left:
         return Page_CreatePage(Temperature, logger, page->publisher);
+    case Update:
+        Page_Init_TempRTDA(logger, page);
+        return NULL;
     default:
         return NULL;
     }
@@ -114,6 +128,9 @@ PageEntity_t *Page_Func_TempRTDB(KeyEnum_t key, Logger logger, PageEntity_t *pag
         return Page_CreatePage(Default, logger, page->publisher);
     case Left:
         return Page_CreatePage(TempRTDA, logger, page->publisher);
+    case Update:
+        Page_Init_TempRTDB(logger, page);
+        return NULL;
     default:
         return NULL;
     }

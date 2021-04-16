@@ -2,11 +2,20 @@
 #include "FreeRTOS.h"
 #include "semphr.h"
 #include "data.h"
+#include "key.h"
+
+extern xQueueHandle UartQueue;
 
 static SemaphoreHandle_t DataMutex;
 
 static SpcDataRom_t SpcDataRom;
 static SpcDataRam_t SpcDataRam;
+
+static void SpcData_Refresh(void)
+{
+    uint8_t val = Update;
+    xQueueSend(UartQueue, &val, portMAX_DELAY);
+}
 
 void SpcDataInit(void)
 {
@@ -62,6 +71,23 @@ bool SpcData_GetTemperature(SpcTemp_t *temp)
     return true;
 }
 
+void SpcData_SetTemperature(SpcTempStatus_Enum_t status, int16_t tempA, int16_t tempB)
+{
+    bool update = false;
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    SpcDataRam.SpcTemp.hasValue = 1;
+    SpcDataRam.SpcTemp.status = status;
+    SpcDataRam.SpcTemp.temperature[0] = tempA;
+    SpcDataRam.SpcTemp.temperature[1] = tempB;
+
+    update = SpcDataRam.SpcRefreshBits.temperature;
+    xSemaphoreGive(DataMutex);
+
+    if (update)
+      SpcData_Refresh();
+}
+
 bool SpcData_GetTempRTDA(SpcTemp_t *temp)
 {
     if (temp == NULL) return false;
@@ -73,6 +99,23 @@ bool SpcData_GetTempRTDA(SpcTemp_t *temp)
     xSemaphoreGive(DataMutex);
 
     return true;
+}
+
+void SpcData_SetTempRTDA(SpcTempStatus_Enum_t status, int16_t tempA, int16_t tempB)
+{
+    bool update = false;
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    SpcDataRam.SpcTempRTDA.hasValue = 1;
+    SpcDataRam.SpcTempRTDA.status = status;
+    SpcDataRam.SpcTempRTDA.temperature[0] = tempA;
+    SpcDataRam.SpcTempRTDA.temperature[1] = tempB;
+
+    update = SpcDataRam.SpcRefreshBits.tempRTDA;
+    xSemaphoreGive(DataMutex);
+
+    if (update)
+      SpcData_Refresh();
 }
 
 bool SpcData_GetTempRTDB(SpcTemp_t *temp)
@@ -87,3 +130,39 @@ bool SpcData_GetTempRTDB(SpcTemp_t *temp)
 
     return true;
 }
+
+void SpcData_SetTempRTDB(SpcTempStatus_Enum_t status, int16_t tempA, int16_t tempB)
+{
+    bool update = false;
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    SpcDataRam.SpcTempRTDB.hasValue = 1;
+    SpcDataRam.SpcTempRTDB.status = status;
+    SpcDataRam.SpcTempRTDB.temperature[0] = tempA;
+    SpcDataRam.SpcTempRTDB.temperature[1] = tempB;
+
+    update = SpcDataRam.SpcRefreshBits.tempRTDB;
+    xSemaphoreGive(DataMutex);
+
+    if (update)
+      SpcData_Refresh();
+}
+
+void SpcData_SetRefreshMask(uint64_t val)
+{
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    SpcDataRam.SpcRefreshMask = val; 
+    xSemaphoreGive(DataMutex);
+}
+
+uint64_t SpcData_GetRefreshMask(void)
+{
+    uint64_t val;
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    val = SpcDataRam.SpcRefreshMask; 
+    xSemaphoreGive(DataMutex);
+
+    return val;
+}
+

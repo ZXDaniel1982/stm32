@@ -13,10 +13,20 @@ extern "C" {
 
 #define MAX_INFO_LEN (16)
 
+#define DISABLE_REFRESH (0)
+
+/* Operational mask */
 #define HEATER_STATUS_POS (0)
 #define HEATER_STATUS_MSK (0x3)
 #define HEATER_STATUS_HAS_POS (2)
 #define HEATER_STATUS_HAS_MSK (0x1) 
+
+/* Page refresh mask */
+#define Refresh_Heatst_Pos (0)
+#define Refresh_Heatst_Msk (1 << Refresh_Heatst_Pos)
+
+#define Refresh_Temperature_Pos (1)
+#define Refresh_Temperature_Msk (1 << Refresh_Temperature_Pos)
 
 /* For Default display */
 typedef enum {
@@ -69,8 +79,18 @@ typedef struct {
             uint64_t heatStatus : 2;
             uint64_t hasHeatStatus : 1;
             uint64_t reserve : 61;
-        } bits;
+        } SpcMaskBits;
         uint64_t SpcMaskRam;
+    };
+    union {
+        struct {
+            uint64_t heatStatus : 1;
+            uint64_t temperature : 1;
+            uint64_t tempRTDA : 1;
+            uint64_t tempRTDB : 1;
+            uint64_t reserve : 60;
+        } SpcRefreshBits;
+        uint64_t SpcRefreshMask;
     };
     SpcTemp_t SpcTemp;
     SpcTemp_t SpcTempRTDA;
@@ -82,9 +102,14 @@ void SpcDataInit(void);
 uint8_t SpcData_GetLcdDef(void);
 uint8_t SpcData_GetTempUint(void);
 uint64_t SpcData_GetMaskRam(void);
+void SpcData_SetRefreshMask(uint64_t val);
+uint64_t SpcData_GetRefreshMask(void);
 bool SpcData_GetTemperature(SpcTemp_t *temp);
+void SpcData_SetTemperature(SpcTempStatus_Enum_t status, int16_t tempA, int16_t tempB);
 bool SpcData_GetTempRTDA(SpcTemp_t *temp);
+void SpcData_SetTempRTDA(SpcTempStatus_Enum_t status, int16_t tempA, int16_t tempB);
 bool SpcData_GetTempRTDB(SpcTemp_t *temp);
+void SpcData_SetTempRTDB(SpcTempStatus_Enum_t status, int16_t tempA, int16_t tempB);
 
 #ifdef __cplusplus
 }

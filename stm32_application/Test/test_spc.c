@@ -33,8 +33,8 @@ uint8_t SpcData_GetTempUint(void)
 
 uint64_t SpcData_GetMaskRam(void)
 {
-    SpcDataRam.bits.hasHeatStatus = 1;
-    SpcDataRam.bits.heatStatus = 1;
+    SpcDataRam.SpcMaskBits.hasHeatStatus = 1;
+    SpcDataRam.SpcMaskBits.heatStatus = 1;
     return SpcDataRam.SpcMaskRam;
 }
 
@@ -80,6 +80,16 @@ bool SpcData_GetTempRTDB(SpcTemp_t *temp)
     memcpy(temp, &(SpcDataRam.SpcTempRTDB), sizeof(SpcTemp_t));
 
     return true;
+}
+
+void SpcData_SetRefreshMask(uint64_t val)
+{
+    SpcDataRam.SpcRefreshMask = val; 
+}
+
+uint64_t SpcData_GetRefreshMask(void)
+{
+    return SpcDataRam.SpcRefreshMask; 
 }
 
 void main()

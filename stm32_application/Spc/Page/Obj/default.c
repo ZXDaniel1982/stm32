@@ -8,35 +8,31 @@ void Page_Init_Default(Logger logger, PageEntity_t *page)
   uint8_t lcdDef = SpcData_GetLcdDef();
   switch (lcdDef) {
   case SysStatus:
+    SpcData_SetRefreshMask(DISABLE_REFRESH);
     strncpy((char *)(page->info.Title), "Sytem Status", MAX_INFO_LEN);
     strncpy((char *)(page->info.Content), "Unsupported", MAX_INFO_LEN);
     break;
   case HeatStatus:
     {
+      SpcData_SetRefreshMask(Refresh_Heatst_Msk);
       HeatStProcess(page);
     }
     break;
   case HeatTemp:
     {
+      SpcData_SetRefreshMask(Refresh_Temperature_Msk);
       strncpy((char *)(page->info.Title), "Heater Temp", MAX_INFO_LEN);
 
       SpcTemp_t temperature;
       if (SpcData_GetTemperature(&temperature)) {
-        if (temperature.hasValue) {
-          uint8_t content[MAX_INFO_LEN] = {0};
-          const uint8_t unit = SpcData_GetTempUint();
-          snprintf((char *)content, MAX_INFO_LEN, "%d %s", temperature.temperature[unit],
-            unit ? "F" : "C");
-          strncpy((char *)(page->info.Content), (char *)content, MAX_INFO_LEN);
-        } else {
-          strncpy((char *)(page->info.Content), "No Value", MAX_INFO_LEN);
-        }
+        TemperatureProcess(page, &temperature);
       } else {
         strncpy((char *)(page->info.Content), "Cant read temp", MAX_INFO_LEN);
       }
     }
     break;
   default:
+    SpcData_SetRefreshMask(DISABLE_REFRESH);
     strncpy((char *)(page->info.Title), "Default Error", MAX_INFO_LEN);
     strncpy((char *)(page->info.Content), "Unsupported Def", MAX_INFO_LEN);
     break;
@@ -52,6 +48,9 @@ PageEntity_t *Page_Func_Default(KeyEnum_t key, Logger logger, PageEntity_t *page
 	case Act:
   case Right:
 		return Page_CreatePage(Actual, logger, page->publisher);
+  case Update:
+    Page_Init_Default(logger, page);
+    return NULL;
 	default:
 		return NULL;
 	}

@@ -86,6 +86,7 @@ Spc/Page/Obj/ontime.c \
 Spc/Page/Obj/reset.c \
 Spc/Page/Obj/version.c \
 Spc/Page/Obj/program.c \
+Spc/Page/Obj/maintain.c \
 Spc/Data/data.c \
 Gui/gui.c \
 Gui/gui_button.c \
@@ -117,7 +118,8 @@ Spc/Page/Obj/enegy.c \
 Spc/Page/Obj/ontime.c \
 Spc/Page/Obj/reset.c \
 Spc/Page/Obj/version.c \
-Spc/Page/Obj/program.c
+Spc/Page/Obj/program.c \
+Spc/Page/Obj/maintain.c
 
 TEST_GUI_SOURCES = \
 Test/test_gui.c \

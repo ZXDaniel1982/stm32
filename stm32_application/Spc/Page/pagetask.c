@@ -36,6 +36,7 @@ static void Spc_PageMainloop(void *pvParameters)
 			if (Page->func != NULL) {
 				PageNext = Page->func(KeyIn, uartprintf, Page);
 				if (PageNext != NULL) {
+          if (Page->data != NULL) free(Page->data);
 					free(Page);
 					Page = PageNext;
 				}

@@ -9,6 +9,8 @@ PageEntity_t *Page_CreatePage(PageEnum_t type, Logger logger, Publisher pub)
         return NULL;
     }
 
+    memset(NewPage, 0 , sizeof(PageEntity_t));
+
     NewPage->type = type;
     NewPage->func = GetPageFunc(type);
     NewPage->publisher = pub;

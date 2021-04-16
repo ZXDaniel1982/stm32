@@ -38,7 +38,8 @@ typedef int (*Logger)(const char* fmt, ...);
   PAGE_OPT(OnPercent, type) \
   PAGE_OPT(ResetStatistic, type) \
   PAGE_OPT(Version, type) \
-  PAGE_OPT(Program, type)
+  PAGE_OPT(Program, type) \
+  PAGE_OPT(Maintain, type)
 
 #define OBJ_ENUM(TYPE, type) TYPE,
 #define PAGE_INIT_DECLARE(TYPE, type) void Page_Init_##TYPE(Logger, PageEntity_t *);
@@ -69,6 +70,7 @@ typedef enum PageEnum {
 typedef struct PageEntity {
 	PageEnum_t type;
   PageInfo_t info;
+  void *data;
   Publisher publisher;
 	struct PageEntity *(*func) (KeyEnum_t, Logger, struct PageEntity *);
 } PageEntity_t;

@@ -9,11 +9,12 @@ void Vector_Init()
     vector.listEnd = NULL;
 }
 
-List_t *Vector_AddList(uint8_t index)
+List_t *Vector_AddList(uint8_t index, ListCallback func)
 {
     List_t *NewList = (List_t *) malloc(sizeof(List_t));
 
     NewList->index = index;
+    NewList->func = func;
     NewList->elementHead = NULL;
     NewList->elementEnd = NULL;
 
@@ -85,3 +86,16 @@ void Vector_List_DeleteElement(List_t *list, uint8_t index)
         element = element->next;
     }
 }
+
+void Vector_List_WalkThrough(List_t *list)
+{
+    Element_t *element = list->elementHead;
+
+    if (list->func == NULL) return;
+
+	while (element) {
+		  list->func(element->data);
+      element = element->next;
+	}
+}
+

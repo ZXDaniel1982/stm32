@@ -16,11 +16,29 @@ typedef struct {
     int v3;
 } test2_t;
 
+static void show1(void *data)
+{
+    if (data == NULL) return;
+
+    test1_t *test = (test1_t *) data;
+
+    printf("%s, (%d, %d)\n", __func__, test->v1, test->v2);
+}
+
+static void show2(void *data)
+{
+    if (data == NULL) return;
+
+    test2_t *test = (test2_t *) data;
+
+    printf("%s, (%d, %d, %d)\n", __func__, test->v1, test->v2, test->v3);
+}
+
 void main()
 {
     Vector_Init();
-    list1 = Vector_AddList(1);
-    list2 = Vector_AddList(2);
+    list1 = Vector_AddList(1, show1);
+    list2 = Vector_AddList(2, show2);
     //list3 = Vector_AddList(3);
 
     test1_t *test11 = (test1_t *) Vector_List_AddElement(list1, 1, sizeof(test1_t));
@@ -48,6 +66,8 @@ void main()
     printf("%d %d\n", val4->v1, val4->v2);
     test1_t *val5 = (test1_t *)Vector_List_GetElement(list1, 3);
     printf("%d %d\n", val5->v1, val5->v2);
+
+    Vector_List_WalkThrough(list1);
 
     Vector_List_DeleteElement(list1, 1);
     Vector_List_DeleteElement(list1, 2);
@@ -91,6 +111,8 @@ void main()
     test2_t *val52 = (test2_t *)Vector_List_GetElement(list2, 3);
     printf("%d %d %d\n", val52->v1, val52->v2, val52->v3);
 
+    Vector_List_WalkThrough(list2);
+    
     Vector_List_DeleteElement(list2, 1);
     Vector_List_DeleteElement(list2, 2);
     Vector_List_DeleteElement(list2, 3);

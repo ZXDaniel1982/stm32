@@ -9,6 +9,8 @@ extern "C" {
 #include <stdint.h>
 #include <stdlib.h>
 
+typedef void (*ListCallback)(void *);
+
 typedef struct vElement_t {
     uint8_t index;
     void* data;
@@ -17,6 +19,7 @@ typedef struct vElement_t {
 
 typedef struct vList_t {
     uint8_t index;
+    ListCallback func;
     Element_t *elementHead;
     Element_t *elementEnd;
     struct vList_t *next;
@@ -28,10 +31,11 @@ typedef struct {
 } Vector_t;
 
 void Vector_Init(void);
-List_t *Vector_AddList(uint8_t index);
-void *Vector_List_AddElement(List_t *list, uint8_t index, uint16_t size);
-void *Vector_List_GetElement(List_t *list, uint8_t index);
-void Vector_List_DeleteElement(List_t *list, uint8_t index);
+List_t *Vector_AddList(uint8_t, ListCallback);
+void *Vector_List_AddElement(List_t *, uint8_t, uint16_t);
+void *Vector_List_GetElement(List_t *, uint8_t);
+void Vector_List_DeleteElement(List_t *, uint8_t);
+void Vector_List_WalkThrough(List_t *);
 
 #ifdef __cplusplus
 }

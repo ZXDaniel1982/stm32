@@ -23,17 +23,13 @@ void main()
     list2 = Vector_AddList(2);
     //list3 = Vector_AddList(3);
 
-    test1_t *test11 = (test1_t *) malloc(sizeof(test1_t));
+    test1_t *test11 = (test1_t *) Vector_List_AddElement(list1, 1, sizeof(test1_t));
     test11->v1 = 11;
     test11->v2 = 21;
-    Vector_List_AddElement(list1, 1, sizeof(test1_t), test11);
-    free(test11);
 
-    test1_t *test12 = (test1_t *) malloc(sizeof(test1_t));
+    test1_t *test12 = (test1_t *) Vector_List_AddElement(list1, 2, sizeof(test1_t));
     test12->v1 = 111;
     test12->v2 = 212;
-    Vector_List_AddElement(list1, 2, sizeof(test1_t), test12);
-    free(test12);
 
     test1_t *val1 = (test1_t *)Vector_List_GetElement(list1, 1);
     printf("%d %d\n", val1->v1, val1->v2);
@@ -42,11 +38,9 @@ void main()
 
     Vector_List_DeleteElement(list1, 1);
 
-    test1_t *test13 = (test1_t *) malloc(sizeof(test1_t));
+    test1_t *test13 = (test1_t *) Vector_List_AddElement(list1, 3, sizeof(test1_t));
     test13->v1 = 22;
     test13->v2 = 44;
-    Vector_List_AddElement(list1, 3, sizeof(test1_t), test13);
-    free(test13);
 
     test1_t *val3 = (test1_t *)Vector_List_GetElement(list1, 1);
     if (val3 == NULL) printf("val3 is NULL\n");
@@ -61,19 +55,15 @@ void main()
 
 
 
-    test2_t *test111 = (test2_t *) malloc(sizeof(test2_t));
+    test2_t *test111 = (test2_t *) Vector_List_AddElement(list2, 1, sizeof(test2_t));
     test111->v1 = 11;
     test111->v2 = 21;
     test111->v3 = 231;
-    Vector_List_AddElement(list2, 1, sizeof(test2_t), test111);
-    free(test111);
 
-    test2_t *test121 = (test2_t *) malloc(sizeof(test2_t));
+    test2_t *test121 = (test2_t *) Vector_List_AddElement(list2, 2, sizeof(test2_t));
     test121->v1 = 111;
     test121->v2 = 212;
     test121->v3 = 59;
-    Vector_List_AddElement(list2, 2, sizeof(test2_t), test121);
-    free(test121);
 
     test2_t *val11 = (test2_t *)Vector_List_GetElement(list2, 1);
     printf("%d %d %d\n", val11->v1, val11->v2, val11->v3);
@@ -82,12 +72,10 @@ void main()
 
     Vector_List_DeleteElement(list2, 1);
 
-    test2_t *test131 = (test2_t *) malloc(sizeof(test2_t));
+    test2_t *test131 = (test2_t *) Vector_List_AddElement(list2, 3, sizeof(test2_t));
     test131->v1 = 22;
     test131->v2 = 44;
     test131->v3 = 98;
-    Vector_List_AddElement(list2, 3, sizeof(test2_t), test131);
-    free(test131);
 
     test2_t *val31 = (test2_t *)Vector_List_GetElement(list2, 1);
     if (val31 == NULL) printf("val31 is NULL\n");

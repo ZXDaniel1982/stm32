@@ -29,7 +29,7 @@ typedef struct {
 
 void Vector_Init(void);
 List_t *Vector_AddList(uint8_t index);
-void Vector_List_AddElement(List_t *list, uint8_t index, uint16_t size, void *data);
+void *Vector_List_AddElement(List_t *list, uint8_t index, uint16_t size);
 void *Vector_List_GetElement(List_t *list, uint8_t index);
 void Vector_List_DeleteElement(List_t *list, uint8_t index);
 

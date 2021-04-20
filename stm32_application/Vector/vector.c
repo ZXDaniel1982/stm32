@@ -30,25 +30,25 @@ List_t *Vector_AddList(uint8_t index)
     return vector.listEnd;
 }
 
-void Vector_List_AddElement(List_t *list, uint8_t index, uint16_t size, void *data)
+void *Vector_List_AddElement(List_t *list, uint8_t index, uint16_t size)
 {
     Element_t *NewElement = (Element_t *) malloc(sizeof(Element_t));
-    NewElement->data = malloc(size);
+    if (NewElement == NULL) return NULL;
 
     NewElement->index = index;
-    memcpy(NewElement->data, data, size);
+    NewElement->data = malloc(size);
+    if (NewElement->data == NULL) return NULL;
 
     if (list->elementHead == NULL) {
         list->elementHead = NewElement;
         list->elementEnd = list->elementHead;
         list->elementEnd->next = NULL;
-        NewElement = NULL;
     } else {
         list->elementEnd->next = NewElement;
         list->elementEnd = NewElement;
         list->elementEnd->next = NULL;
-        NewElement = NULL;
     }
+    return NewElement->data;
 }
 
 void *Vector_List_GetElement(List_t *list, uint8_t index)

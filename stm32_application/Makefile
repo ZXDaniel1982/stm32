@@ -72,7 +72,8 @@ Spc/Page/Obj/program.c \
 Spc/Data/data.c \
 Gui/gui.c \
 Gui/gui_button.c \
-Gui/gui_label.c
+Gui/gui_label.c \
+Vector/vector.c
 
 # ASM sources
 ASM_SOURCES =  \
@@ -92,6 +93,10 @@ TEST_GUI_SOURCES = \
 Test/test_gui.c \
 Gui/gui_label.c \
 Gui/gui_button.c
+
+TEST_VEC_SOURCES = \
+Test/test_vector.c \
+Vector/vector.c
 
 UTEST_SOURCES = \
 Utest/Src/utest.c \
@@ -152,13 +157,15 @@ C_INCLUDES =  \
 -ICore/Inc \
 -ISpc/Inc \
 -IGui \
+-IVector \
 -IFreeRTOS/Source/include \
 -IFreeRTOS/Source/portable/GCC/ARM_CM3
 
 # Test includes
 TEST_INCLUDES = \
 -ISpc/Inc \
--IGui
+-IGui \
+-IVector
 
 # UTest includes
 UTEST_INCLUDES = \
@@ -195,7 +202,7 @@ LIBDIR =
 LDFLAGS = $(MCU) -specs=nano.specs -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--cref -Wl,--gc-sections
 
 # default action: build all
-all: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(TARGET).bin $(BUILD_DIR)/testSpc $(BUILD_DIR)/testGui $(BUILD_DIR)/utest
+all: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(TARGET).bin $(BUILD_DIR)/testSpc $(BUILD_DIR)/testGui $(BUILD_DIR)/testVec $(BUILD_DIR)/utest
 
 
 #######################################
@@ -231,6 +238,9 @@ $(BUILD_DIR)/testSpc: $(TEST_SPC_SOURCES)
 
 $(BUILD_DIR)/testGui: $(TEST_GUI_SOURCES)
 	$(TESTCC) -o $@ $^ $(TESTFLAGS)
+
+$(BUILD_DIR)/testVec: $(TEST_VEC_SOURCES)
+	$(TESTCC) -o $@ $^ $(TESTFLAGS) -g3
 
 $(BUILD_DIR)/utest: $(UTEST_SOURCES)
 	$(TESTCC) -o $@ $^ $(UTESTFLAGS)

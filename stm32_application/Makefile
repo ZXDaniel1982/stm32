@@ -90,7 +90,8 @@ Spc/Page/Obj/default.c \
 Spc/Page/Obj/actual.c \
 Spc/Page/Obj/heatst.c \
 Spc/Page/Obj/temperature.c \
-Spc/Page/Obj/program.c \
+Spc/Page/Obj/power.c \
+Spc/Page/Obj/program.c
 
 TEST_GUI_SOURCES = \
 Test/test_gui.c \

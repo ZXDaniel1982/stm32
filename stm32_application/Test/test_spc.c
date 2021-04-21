@@ -82,6 +82,17 @@ bool SpcData_GetTempRTDB(SpcTemp_t *temp)
     return true;
 }
 
+bool SpcData_GetVoltage(SpcUint16_t *volt)
+{
+    if (volt == NULL) return false;
+
+    SpcDataRam.SpcVoltage.hasValue = 1;
+    SpcDataRam.SpcVoltage.value = 102;
+
+    memset(volt, 0, sizeof(SpcUint16_t));
+    memcpy(volt, &(SpcDataRam.SpcVoltage), sizeof(SpcUint16_t));
+}
+
 void SpcData_SetRefreshMask(uint64_t val)
 {
     SpcDataRam.SpcRefreshMask = val; 

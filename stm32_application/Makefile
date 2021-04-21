@@ -61,7 +61,8 @@ FreeRTOS/Source/tasks.c \
 FreeRTOS/Source/timers.c \
 FreeRTOS/Source/portable/MemMang/heap_4.c \
 FreeRTOS/Source/portable/GCC/ARM_CM3/port.c \
-Spc/Measure/measure.c \
+Spc/Sensor/sensor.c \
+Spc/Sensor/Obj/temp.c \
 Spc/Page/pagetask.c \
 Spc/Page/page.c \
 Spc/Page/Obj/default.c \

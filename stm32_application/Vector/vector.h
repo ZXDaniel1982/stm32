@@ -13,7 +13,8 @@ typedef void (*ListCallback)(void *);
 
 typedef enum {
     LISTBUTTON = 1,
-    LISTLABEL
+    LISTLABEL,
+    LISTSENSOR
 } ListObj;
 
 typedef struct vElement_t {

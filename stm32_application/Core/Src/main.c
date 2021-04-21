@@ -9,36 +9,35 @@
  */
 int main()
 {
-	uint32_t i;
+    uint32_t i;
 
-  SpcDataInit();
-	RCC_Init();
-	GPIO_Init();
-	TIMER_Init();
-	USART_Init();
-	SPI_Init();
-	FSMC_Init();
-	LCD_Init();
-	SDIOEx_Init();
-	EEPROM_Init();
+    SpcDataInit();
+    RCC_Init();
+    GPIO_Init();
+    TIMER_Init();
+    USART_Init();
+    SPI_Init();
+    FSMC_Init();
+    LCD_Init();
+    SDIOEx_Init();
+    EEPROM_Init();
 
-	for (i = 0; i < 7200000; ++i) {
-	}
-	uartprintf("Start application\r\n");
+    for (i = 0; i < 7200000; ++i) {}
+    uartprintf("Start application\r\n");
 
-	Vector_Init();
-	Measure_VoltCurInit();
-	Gui_Init();
-	Page_Init();
+    Vector_Init();
+    Sensor_Init();
+    Gui_Init();
+    Page_Init();
 
-	vTaskStartScheduler();
+    vTaskStartScheduler();
 
-	while (1) {
+    while (1) {
 
-	}
+    }
 }
 
 void Error_Handle()
 {
-	while (1);
+    while (1);
 }

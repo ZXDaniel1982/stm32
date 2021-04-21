@@ -10,6 +10,7 @@ extern "C" {
 
 typedef enum {
     SensorTemp = 1,
+    SensorVoltage,
     MAX_SENSOR
 } Timer_Enum_t;
 

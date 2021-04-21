@@ -61,6 +61,11 @@ typedef struct {
     int16_t temperature[2];
 } SpcTemp_t;
 
+typedef struct {
+    uint8_t hasValue;
+    uint16_t value;
+} SpcUint16_t;
+
 /* Global values */
 typedef struct {
     union {
@@ -88,13 +93,15 @@ typedef struct {
             uint64_t temperature : 1;
             uint64_t tempRTDA : 1;
             uint64_t tempRTDB : 1;
-            uint64_t reserve : 60;
+            uint64_t voltage : 1;
+            uint64_t reserve : 59;
         } SpcRefreshBits;
         uint64_t SpcRefreshMask;
     };
     SpcTemp_t SpcTemp;
     SpcTemp_t SpcTempRTDA;
     SpcTemp_t SpcTempRTDB;
+    SpcUint16_t SpcVoltage;
 } SpcDataRam_t;
 
 /* From data.c */
@@ -110,6 +117,8 @@ bool SpcData_GetTempRTDA(SpcTemp_t *temp);
 void SpcData_SetTempRTDA(SpcTempStatus_Enum_t status, int16_t tempA, int16_t tempB);
 bool SpcData_GetTempRTDB(SpcTemp_t *temp);
 void SpcData_SetTempRTDB(SpcTempStatus_Enum_t status, int16_t tempA, int16_t tempB);
+void SpcData_SetVoltage(uint16_t voltage);
+bool SpcData_GetVoltage(SpcUint16_t *voltage);
 
 #ifdef __cplusplus
 }

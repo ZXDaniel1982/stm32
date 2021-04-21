@@ -148,6 +148,34 @@ void SpcData_SetTempRTDB(SpcTempStatus_Enum_t status, int16_t tempA, int16_t tem
         SpcData_Refresh();
 }
 
+void SpcData_SetVoltage(uint16_t voltage)
+{
+    bool update = false;
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    SpcDataRam.SpcVoltage.hasValue = 1;
+    SpcDataRam.SpcVoltage.value = voltage;
+
+    update = SpcDataRam.SpcRefreshBits.voltage;
+    xSemaphoreGive(DataMutex);
+
+    if (update)
+        SpcData_Refresh();
+}
+
+bool SpcData_GetVoltage(SpcUint16_t *voltage)
+{
+    if (voltage == NULL) return false;
+
+    memset(voltage, 0, sizeof(SpcUint16_t));
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    memcpy(voltage, &(SpcDataRam.SpcVoltage), sizeof(SpcUint16_t));
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
 void SpcData_SetRefreshMask(uint64_t val)
 {
     xSemaphoreTake(DataMutex, portMAX_DELAY);

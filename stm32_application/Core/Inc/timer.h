@@ -8,9 +8,14 @@ extern "C" {
 
 #include <stdint.h>
 
-typedef enum {
-    SensorTemp = 1,
-    SensorVoltage,
+#define SENSOR_INDEX(SENSOR_OPT, type) \
+  SENSOR_OPT(SensorTemp, type) \
+  SENSOR_OPT(SensorVoltage, type)
+
+#define OBJ_ENUM(TYPE, type) TYPE,
+
+typedef enum Timer_Enum {
+    SENSOR_INDEX(OBJ_ENUM, NULL)
     MAX_SENSOR
 } Timer_Enum_t;
 

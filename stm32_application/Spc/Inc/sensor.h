@@ -13,10 +13,6 @@ extern "C" {
 #include "semphr.h"
 #include "vector.h"
 
-#define SENSOR_INDEX(SENSOR_OPT, type) \
-  SENSOR_OPT(SensorTemp, type) \
-  SENSOR_OPT(SensorVoltage, type)
-
 #define SENSOR_FUNC_DECLARE(TYPE, type) void Sensor_Process##TYPE(void *);
 
 #define SENSOR_FUNC(TYPE, type) { \

@@ -1,9 +1,9 @@
 #include <string.h>
 #include "vector.h"
 
-static List_t *list1 = NULL;
-static List_t *list2 = NULL;
-static List_t *list3 = NULL;
+static SubVector_t *list1 = NULL;
+static SubVector_t *list2 = NULL;
+static SubVector_t *list3 = NULL;
 
 typedef struct {
     int v1;

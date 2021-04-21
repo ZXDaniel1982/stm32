@@ -16,7 +16,6 @@ typedef enum {
 typedef struct tMeasTimer_t {
     MeasTimer_Enum_t type;
     TaskHandle_t handle;
-    struct tMeasTimer_t *next;
 } MeasTimer_t;
 
 #ifdef __cplusplus

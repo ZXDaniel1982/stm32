@@ -10,7 +10,7 @@ extern "C" {
 
 // USART
 typedef enum {
-  Update = 0,
+  Update = 1,
   Def = 0x30,     // 48
   Act = 0x37,     // 55
   Prog = 0x39,    // 57

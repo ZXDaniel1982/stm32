@@ -1,7 +1,7 @@
 #include <string.h>
 #include "vector.h"
 
-Vector_t vector;
+static Vector_t vector;
 
 void Vector_Init()
 {
@@ -9,9 +9,9 @@ void Vector_Init()
     vector.listEnd = NULL;
 }
 
-List_t *Vector_AddList(uint8_t index, ListCallback func)
+SubVector_t *Vector_AddList(uint8_t index, ListCallback func)
 {
-    List_t *NewList = (List_t *) malloc(sizeof(List_t));
+    SubVector_t *NewList = (SubVector_t *) malloc(sizeof(SubVector_t));
 
     NewList->index = index;
     NewList->func = func;
@@ -31,7 +31,7 @@ List_t *Vector_AddList(uint8_t index, ListCallback func)
     return vector.listEnd;
 }
 
-void *Vector_List_AddElement(List_t *list, uint8_t index, uint16_t size)
+void *Vector_List_AddElement(SubVector_t *list, uint8_t index, uint16_t size)
 {
     Element_t *NewElement = (Element_t *) malloc(sizeof(Element_t));
     if (NewElement == NULL) return NULL;
@@ -52,7 +52,7 @@ void *Vector_List_AddElement(List_t *list, uint8_t index, uint16_t size)
     return NewElement->data;
 }
 
-void *Vector_List_GetElement(List_t *list, uint8_t index)
+void *Vector_List_GetElement(SubVector_t *list, uint8_t index)
 {
     Element_t *element = list->elementHead;
 
@@ -65,7 +65,7 @@ void *Vector_List_GetElement(List_t *list, uint8_t index)
     return NULL;
 }
 
-void Vector_List_DeleteElement(List_t *list, uint8_t index)
+void Vector_List_DeleteElement(SubVector_t *list, uint8_t index)
 {
     Element_t *element = list->elementHead;
 
@@ -87,7 +87,7 @@ void Vector_List_DeleteElement(List_t *list, uint8_t index)
     }
 }
 
-void Vector_List_WalkThrough(List_t *list)
+void Vector_List_WalkThrough(SubVector_t *list)
 {
     Element_t *element = list->elementHead;
 

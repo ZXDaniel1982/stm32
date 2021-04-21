@@ -2,6 +2,7 @@
 #include "stm32f103xe.h"
 #include "common.h"
 #include "data.h"
+#include "vector.h"
 
 /**
  * Entry point for the application.
@@ -25,6 +26,7 @@ int main()
 	}
 	uartprintf("Start application\r\n");
 
+	Vector_Init();
 	Measure_VoltCurInit();
 	Gui_Init();
 	Page_Init();

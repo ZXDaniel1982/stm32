@@ -92,7 +92,8 @@ Spc/Page/Obj/program.c
 TEST_GUI_SOURCES = \
 Test/test_gui.c \
 Gui/gui_label.c \
-Gui/gui_button.c
+Gui/gui_button.c \
+Vector/vector.c
 
 TEST_VEC_SOURCES = \
 Test/test_vector.c \

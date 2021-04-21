@@ -32,9 +32,9 @@ typedef struct tButtonObj {
     uint32_t push_timer_start;
     Drawer drawer;
     Tick tick;
-    struct tButtonObj *next;
 } buttonObj_t;
 
+void Gui_InitButton(void);
 void Gui_CreateButton(KeyEnum_t, uint16_t, uint16_t, Drawer, Tick);
 void Gui_UpdateButton(void);
 void Gui_PushButton(KeyEnum_t);

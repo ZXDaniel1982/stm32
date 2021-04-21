@@ -19,32 +19,32 @@ static void SpcData_Refresh(void)
 
 void SpcDataInit(void)
 {
-  memset(&SpcDataRom, 0, sizeof(SpcDataRom_t));
-  memset(&SpcDataRam, 0, sizeof(SpcDataRam_t));
+    memset(&SpcDataRom, 0, sizeof(SpcDataRom_t));
+    memset(&SpcDataRam, 0, sizeof(SpcDataRam_t));
 
-  DataMutex = xSemaphoreCreateMutex();
+    DataMutex = xSemaphoreCreateMutex();
 }
 
 uint8_t SpcData_GetLcdDef(void)
 {
-  uint8_t val = 0;
-  
-  xSemaphoreTake(DataMutex, portMAX_DELAY);
-  val = (uint8_t) SpcDataRom.bits.lcdDef;
-  xSemaphoreGive(DataMutex);
+    uint8_t val = 0;
 
-  return val;
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    val = (uint8_t) SpcDataRom.bits.lcdDef;
+    xSemaphoreGive(DataMutex);
+
+    return val;
 }
 
 uint8_t SpcData_GetTempUint(void)
 {
-  uint8_t val = 0;
-  
-  xSemaphoreTake(DataMutex, portMAX_DELAY);
-  val = (uint8_t) SpcDataRom.bits.tempUint;
-  xSemaphoreGive(DataMutex);
+    uint8_t val = 0;
 
-  return val;
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    val = (uint8_t) SpcDataRom.bits.tempUint;
+    xSemaphoreGive(DataMutex);
+
+    return val;
 }
 
 uint64_t SpcData_GetMaskRam(void)
@@ -85,7 +85,7 @@ void SpcData_SetTemperature(SpcTempStatus_Enum_t status, int16_t tempA, int16_t 
     xSemaphoreGive(DataMutex);
 
     if (update)
-      SpcData_Refresh();
+        SpcData_Refresh();
 }
 
 bool SpcData_GetTempRTDA(SpcTemp_t *temp)
@@ -115,7 +115,7 @@ void SpcData_SetTempRTDA(SpcTempStatus_Enum_t status, int16_t tempA, int16_t tem
     xSemaphoreGive(DataMutex);
 
     if (update)
-      SpcData_Refresh();
+        SpcData_Refresh();
 }
 
 bool SpcData_GetTempRTDB(SpcTemp_t *temp)
@@ -145,7 +145,7 @@ void SpcData_SetTempRTDB(SpcTempStatus_Enum_t status, int16_t tempA, int16_t tem
     xSemaphoreGive(DataMutex);
 
     if (update)
-      SpcData_Refresh();
+        SpcData_Refresh();
 }
 
 void SpcData_SetRefreshMask(uint64_t val)

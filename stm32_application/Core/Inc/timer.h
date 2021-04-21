@@ -8,6 +8,11 @@ extern "C" {
 
 #include <stdint.h>
 
+typedef enum {
+    SensorTemp = 1,
+    MAX_SENSOR
+} Timer_Enum_t;
+
 void Timer_TickInc(void);
 uint32_t Timer_GetTick(void);
 

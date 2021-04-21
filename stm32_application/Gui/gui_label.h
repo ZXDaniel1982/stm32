@@ -28,10 +28,10 @@ typedef struct tLabelObj {
 	uint16_t y;
 	uint8_t info[16];
 	Drawer drawer;
-  Cleaner cleaner;
-	struct tLabelObj *next;
+    Cleaner cleaner;
 } labelObj_t;
 
+void Gui_InitLabel(void);
 labelObj_t *Gui_CreateLabel(LabelEnum_t, uint16_t, uint16_t, uint8_t *, Drawer, Cleaner);
 void Gui_UpdateLabel(void);
 void Gui_InputLabel(labelObj_t *, uint8_t *);

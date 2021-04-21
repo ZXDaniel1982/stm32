@@ -1,20 +1,13 @@
 #include "stm32f1xx.h"
 #include "stm32f103xe.h"
 #include "common.h"
+#include "sensor.h"
 
 volatile uint32_t ulHighFrequencyTimerTicks = 0;
 
-extern TaskHandle_t TaskMeasure;
-
-static void TIMERx_Init(TIM_TypeDef * TIMx, uint32_t Periphs, IRQn_Type IRQn, bool High)
+static void TIMERx_Init(TIM_TypeDef * TIMx, uint32_t Periphs,
+    IRQn_Type IRQn, uint16_t arr, uint16_t psc)
 {
-    uint16_t ARR_Perem = 0, PSC_Perem = 0;
-    if (High) {
-        ARR_Perem = 200; PSC_Perem = 360;
-    } else {
-        ARR_Perem = 2000; PSC_Perem = 36000;
-    }
-
     if ((TIMx == TIM1) || (TIMx == TIM8)) {
         SET_BIT(RCC->APB2ENR, Periphs);
     } else {
@@ -23,8 +16,8 @@ static void TIMERx_Init(TIM_TypeDef * TIMx, uint32_t Periphs, IRQn_Type IRQn, bo
 
     /*清空计数器的值 */
     WRITE_REG(TIMx->CNT, 0);
-    WRITE_REG(TIMx->ARR, ARR_Perem - (TIM_CCMR1_IC1F_0 << 16U));
-    WRITE_REG(TIMx->PSC, PSC_Perem - (TIM_CCMR1_IC1F_0 << 16U));
+    WRITE_REG(TIMx->ARR, arr - (TIM_CCMR1_IC1F_0 << 16U));
+    WRITE_REG(TIMx->PSC, psc - (TIM_CCMR1_IC1F_0 << 16U));
 
     WRITE_REG(TIMx->CR1, 0);    //将控制寄存器1清空
 
@@ -59,14 +52,21 @@ uint32_t Timer_GetTick()
 
 void TIMER_Init()
 {
-    TIMERx_Init(TIM1, RCC_APB2ENR_TIM1EN, TIM1_UP_IRQn, true);
-    TIMERx_Init(TIM2, RCC_APB1ENR_TIM2EN, TIM2_IRQn, true);
-    TIMERx_Init(TIM3, RCC_APB1ENR_TIM3EN, TIM3_IRQn, false);
-    TIMERx_Init(TIM4, RCC_APB1ENR_TIM4EN, TIM4_IRQn, false);
-    TIMERx_Init(TIM5, RCC_APB1ENR_TIM5EN, TIM5_IRQn, false);
-    TIMERx_Init(TIM6, RCC_APB1ENR_TIM6EN, TIM6_IRQn, false);
-    TIMERx_Init(TIM7, RCC_APB1ENR_TIM7EN, TIM7_IRQn, false);
-    TIMERx_Init(TIM8, RCC_APB2ENR_TIM8EN, TIM8_UP_IRQn, false);
+    // Timer1 1ms reserved
+    TIMERx_Init(TIM1, RCC_APB2ENR_TIM1EN, TIM1_UP_IRQn, 200, 360);
+
+    // Timer2 1ms used for system tick
+    TIMERx_Init(TIM2, RCC_APB1ENR_TIM2EN, TIM2_IRQn, 200, 360);
+
+    // Timer3 10s used for temperature measurement
+    TIMERx_Init(TIM3, RCC_APB1ENR_TIM3EN, TIM3_IRQn, 20000, 36000);
+
+    // Timer4-8 1s reserved
+    TIMERx_Init(TIM4, RCC_APB1ENR_TIM4EN, TIM4_IRQn, 2000, 36000);
+    TIMERx_Init(TIM5, RCC_APB1ENR_TIM5EN, TIM5_IRQn, 2000, 36000);
+    TIMERx_Init(TIM6, RCC_APB1ENR_TIM6EN, TIM6_IRQn, 2000, 36000);
+    TIMERx_Init(TIM7, RCC_APB1ENR_TIM7EN, TIM7_IRQn, 2000, 36000);
+    TIMERx_Init(TIM8, RCC_APB2ENR_TIM8EN, TIM8_UP_IRQn, 2000, 36000);
 }
 
 void TIM1_UP_IRQHandler(void)
@@ -84,9 +84,11 @@ void TIM3_IRQHandler(void)
 {
     CLEAR_BIT(TIM3->SR, TIM_SR_UIF);
 
-    if (TaskMeasure != NULL) {
+    SensorTimer_t *sensor = Sensor_GetSensor(SensorTemp);
+
+    if ((sensor != NULL) && (sensor->handle != NULL)) {
         BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-        vTaskNotifyGiveFromISR(TaskMeasure, &xHigherPriorityTaskWoken);
+        vTaskNotifyGiveFromISR(sensor->handle, &xHigherPriorityTaskWoken);
         portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
     }
 }

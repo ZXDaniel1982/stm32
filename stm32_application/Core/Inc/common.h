@@ -141,8 +141,8 @@ void Error_Handle(void);
 
 // void DMA_Init(void);
 
-// Measurement
-void Measure_VoltCurInit(void);
+// Sensor
+void Sensor_Init(void);
 
 // Page
 void Page_Init(void);

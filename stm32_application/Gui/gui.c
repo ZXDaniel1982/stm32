@@ -19,6 +19,8 @@ static void Task_ButtonHandle(void *pvParameters)
 {
 	uartprintf("Button task handler\r\n");
 
+	Gui_InitButton();
+	
 	Gui_CreateButton(Act, 		30, 	120, 	LCD_Fill,   Timer_GetTick);
 	Gui_CreateButton(Up, 		  90, 	120, 	LCD_Fill,   Timer_GetTick);
 	Gui_CreateButton(Prog, 		150, 	120, 	LCD_Fill,   Timer_GetTick);
@@ -42,6 +44,8 @@ static void Task_ButtonHandle(void *pvParameters)
 static void Task_LabelHandle(void *pvParameters)
 {
 	uartprintf("Label task handler\r\n");
+
+	Gui_InitLabel();
 
 	labelObj_t *labelTitle = Gui_CreateLabel(Title, 		10, 	30, 	(uint8_t *) "", LCD_Fill, LCD_Clean);
 	labelObj_t *labelContent = Gui_CreateLabel(Content, 	10, 	50, 	(uint8_t *) "", LCD_Fill, LCD_Clean);

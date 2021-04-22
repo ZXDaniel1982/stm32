@@ -65,3 +65,4 @@ PageEntity_t *Page_Func_HeatSt(KeyEnum_t key, Logger logger, PageEntity_t *page)
         return NULL;
     }
 }
+

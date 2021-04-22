@@ -63,12 +63,14 @@ FreeRTOS/Source/portable/MemMang/heap_4.c \
 FreeRTOS/Source/portable/GCC/ARM_CM3/port.c \
 Spc/Sensor/sensor.c \
 Spc/Sensor/Obj/temp.c \
+Spc/Sensor/Obj/voltage.c \
 Spc/Page/pagetask.c \
 Spc/Page/page.c \
 Spc/Page/Obj/default.c \
 Spc/Page/Obj/actual.c \
 Spc/Page/Obj/heatst.c \
 Spc/Page/Obj/temperature.c \
+Spc/page/Obj/power.c \
 Spc/Page/Obj/program.c \
 Spc/Data/data.c \
 Gui/gui.c \
@@ -88,6 +90,7 @@ Spc/Page/Obj/default.c \
 Spc/Page/Obj/actual.c \
 Spc/Page/Obj/heatst.c \
 Spc/Page/Obj/temperature.c \
+Spc/Page/Obj/power.c \
 Spc/Page/Obj/program.c
 
 TEST_GUI_SOURCES = \

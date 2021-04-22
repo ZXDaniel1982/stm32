@@ -61,8 +61,10 @@ void TIMER_Init()
     // Timer3 10s used for temperature measurement
     TIMERx_Init(TIM3, RCC_APB1ENR_TIM3EN, TIM3_IRQn, 20000, 36000);
 
-    // Timer4-8 1s reserved
-    TIMERx_Init(TIM4, RCC_APB1ENR_TIM4EN, TIM4_IRQn, 2000, 36000);
+    // Timer4 10s used for voltage measurement
+    TIMERx_Init(TIM4, RCC_APB1ENR_TIM4EN, TIM4_IRQn, 20000, 36000);
+    
+    // Timer5-8 1s reserved
     TIMERx_Init(TIM5, RCC_APB1ENR_TIM5EN, TIM5_IRQn, 2000, 36000);
     TIMERx_Init(TIM6, RCC_APB1ENR_TIM6EN, TIM6_IRQn, 2000, 36000);
     TIMERx_Init(TIM7, RCC_APB1ENR_TIM7EN, TIM7_IRQn, 2000, 36000);
@@ -96,6 +98,14 @@ void TIM3_IRQHandler(void)
 void TIM4_IRQHandler(void)
 {
     CLEAR_BIT(TIM4->SR, TIM_SR_UIF);
+    
+    SensorTimer_t *sensor = Sensor_GetSensor(SensorVoltage);
+
+    if ((sensor != NULL) && (sensor->handle != NULL)) {
+        BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+        vTaskNotifyGiveFromISR(sensor->handle, &xHigherPriorityTaskWoken);
+        portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+    }
 }
 
 void TIM5_IRQHandler(void)

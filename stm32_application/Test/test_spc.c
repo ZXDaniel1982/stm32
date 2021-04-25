@@ -93,6 +93,17 @@ bool SpcData_GetVoltage(SpcUint16_t *volt)
     memcpy(volt, &(SpcDataRam.SpcVoltage), sizeof(SpcUint16_t));
 }
 
+bool SpcData_GetCurrent(SpcUint16_t *curr)
+{
+    if (curr == NULL) return false;
+
+    SpcDataRam.SpcCurrent.hasValue = 1;
+    SpcDataRam.SpcCurrent.value = 102;
+
+    memset(curr, 0, sizeof(SpcUint16_t));
+    memcpy(curr, &(SpcDataRam.SpcCurrent), sizeof(SpcUint16_t));
+}
+
 void SpcData_SetRefreshMask(uint64_t val)
 {
     SpcDataRam.SpcRefreshMask = val; 

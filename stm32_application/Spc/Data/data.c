@@ -176,6 +176,34 @@ bool SpcData_GetVoltage(SpcUint16_t *voltage)
     return true;
 }
 
+void SpcData_SetCurrent(uint16_t current)
+{
+    bool update = false;
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    SpcDataRam.SpcCurrent.hasValue = 1;
+    SpcDataRam.SpcCurrent.value = current;
+
+    update = SpcDataRam.SpcRefreshBits.current;
+    xSemaphoreGive(DataMutex);
+
+    if (update)
+        SpcData_Refresh();
+}
+
+bool SpcData_GetCurrent(SpcUint16_t *current)
+{
+    if (current == NULL) return false;
+
+    memset(current, 0, sizeof(SpcUint16_t));
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    memcpy(current, &(SpcDataRam.SpcCurrent), sizeof(SpcUint16_t));
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
 void SpcData_SetRefreshMask(uint64_t val)
 {
     xSemaphoreTake(DataMutex, portMAX_DELAY);

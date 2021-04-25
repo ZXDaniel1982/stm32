@@ -22,6 +22,7 @@ typedef int (*Logger)(const char* fmt, ...);
   PAGE_OPT(TempRTDA, type) \
   PAGE_OPT(TempRTDB, type) \
   PAGE_OPT(Voltage, type) \
+  PAGE_OPT(Current, type) \
   PAGE_OPT(Program, type)
 
 #define OBJ_ENUM(TYPE, type) TYPE,

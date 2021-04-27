@@ -37,13 +37,13 @@ PageEntity_t *Page_Func_Current(KeyEnum_t key, Logger logger, PageEntity_t *page
     case Act:
         return Page_CreatePage(Actual, logger, page->publisher);
     case Left:
-        return Page_CreatePage(Voltage, logger, page->publisher);
+        return Page_CreatePage(Power, logger, page->publisher);
     case Prog:
         return Page_CreatePage(Program, logger, page->publisher);
     case Def:
         return Page_CreatePage(Default, logger, page->publisher);
     case Update:
-        Page_Init_Voltage(logger, page);
+        Page_Init_Current(logger, page);
         return NULL;
     default:
         return NULL;

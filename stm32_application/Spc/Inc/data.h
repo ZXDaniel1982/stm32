@@ -93,15 +93,17 @@ typedef struct {
             uint64_t temperature : 1;
             uint64_t tempRTDA : 1;
             uint64_t tempRTDB : 1;
-            uint64_t voltage : 1;
+            uint64_t power : 1;
             uint64_t current : 1;
-            uint64_t reserve : 58;
+            uint64_t voltage : 1;
+            uint64_t reserve : 57;
         } SpcRefreshBits;
         uint64_t SpcRefreshMask;
     };
     SpcTemp_t SpcTemp;
     SpcTemp_t SpcTempRTDA;
     SpcTemp_t SpcTempRTDB;
+    SpcUint16_t SpcPower;
     SpcUint16_t SpcVoltage;
     SpcUint16_t SpcCurrent;
 } SpcDataRam_t;
@@ -119,10 +121,12 @@ bool SpcData_GetTempRTDA(SpcTemp_t *temp);
 void SpcData_SetTempRTDA(SpcTempStatus_Enum_t status, int16_t tempA, int16_t tempB);
 bool SpcData_GetTempRTDB(SpcTemp_t *temp);
 void SpcData_SetTempRTDB(SpcTempStatus_Enum_t status, int16_t tempA, int16_t tempB);
-void SpcData_SetVoltage(uint16_t voltage);
-bool SpcData_GetVoltage(SpcUint16_t *voltage);
+void SpcData_SetPower(uint16_t power);
+bool SpcData_GetPower(SpcUint16_t *power);
 void SpcData_SetCurrent(uint16_t current);
 bool SpcData_GetCurrent(SpcUint16_t *current);
+void SpcData_SetVoltage(uint16_t voltage);
+bool SpcData_GetVoltage(SpcUint16_t *voltage);
 
 #ifdef __cplusplus
 }

@@ -73,6 +73,7 @@ Spc/Page/Obj/heatst.c \
 Spc/Page/Obj/temperature.c \
 Spc/Page/Obj/power.c \
 Spc/Page/Obj/curr.c \
+Spc/Page/Obj/pagevolt.c \
 Spc/Page/Obj/program.c \
 Spc/Data/data.c \
 Gui/gui.c \
@@ -94,6 +95,7 @@ Spc/Page/Obj/heatst.c \
 Spc/Page/Obj/temperature.c \
 Spc/Page/Obj/power.c \
 Spc/Page/Obj/curr.c \
+Spc/Page/Obj/pagevolt.c \
 Spc/Page/Obj/program.c
 
 TEST_GUI_SOURCES = \

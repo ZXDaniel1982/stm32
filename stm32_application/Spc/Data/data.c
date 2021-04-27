@@ -235,6 +235,34 @@ bool SpcData_GetCurrent(SpcUint16_t *current)
     return true;
 }
 
+void SpcData_SetGfi(uint16_t gfi)
+{
+    bool update = false;
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    SpcDataRam.SpcGfi.hasValue = 1;
+    SpcDataRam.SpcGfi.value = gfi;
+
+    update = SpcDataRam.SpcRefreshBits.gfi;
+    xSemaphoreGive(DataMutex);
+
+    if (update)
+        SpcData_Refresh();
+}
+
+bool SpcData_GetGfi(SpcUint16_t *gfi)
+{
+    if (gfi == NULL) return false;
+
+    memset(gfi, 0, sizeof(SpcUint16_t));
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    memcpy(gfi, &(SpcDataRam.SpcGfi), sizeof(SpcUint16_t));
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
 void SpcData_SetRefreshMask(uint64_t val)
 {
     xSemaphoreTake(DataMutex, portMAX_DELAY);

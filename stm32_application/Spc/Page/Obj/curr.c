@@ -42,6 +42,8 @@ PageEntity_t *Page_Func_Current(KeyEnum_t key, Logger logger, PageEntity_t *page
         return Page_CreatePage(Program, logger, page->publisher);
     case Def:
         return Page_CreatePage(Default, logger, page->publisher);
+    case Right:
+        return Page_CreatePage(Gfi, logger, page->publisher);
     case Update:
         Page_Init_Current(logger, page);
         return NULL;

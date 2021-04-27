@@ -23,6 +23,9 @@ void SpcDataInit(void)
     memset(&SpcDataRam, 0, sizeof(SpcDataRam_t));
 
     DataMutex = xSemaphoreCreateMutex();
+
+    // TODO, for test, delete in future
+    SpcData_SetPower(60);
 }
 
 uint8_t SpcData_GetLcdDef(void)
@@ -146,6 +149,34 @@ void SpcData_SetTempRTDB(SpcTempStatus_Enum_t status, int16_t tempA, int16_t tem
 
     if (update)
         SpcData_Refresh();
+}
+
+void SpcData_SetPower(uint16_t power)
+{
+    bool update = false;
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    SpcDataRam.SpcPower.hasValue = 1;
+    SpcDataRam.SpcPower.value = power;
+
+    update = SpcDataRam.SpcRefreshBits.power;
+    xSemaphoreGive(DataMutex);
+
+    if (update)
+        SpcData_Refresh();
+}
+
+bool SpcData_GetPower(SpcUint16_t *power)
+{
+    if (power == NULL) return false;
+
+    memset(power, 0, sizeof(SpcUint16_t));
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    memcpy(power, &(SpcDataRam.SpcPower), sizeof(SpcUint16_t));
+    xSemaphoreGive(DataMutex);
+
+    return true;
 }
 
 void SpcData_SetVoltage(uint16_t voltage)

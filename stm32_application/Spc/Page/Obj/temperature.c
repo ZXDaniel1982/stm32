@@ -129,7 +129,7 @@ PageEntity_t *Page_Func_TempRTDB(KeyEnum_t key, Logger logger, PageEntity_t *pag
     case Left:
         return Page_CreatePage(TempRTDA, logger, page->publisher);
     case Right:
-        return Page_CreatePage(Voltage, logger, page->publisher);
+        return Page_CreatePage(Power, logger, page->publisher);
     case Update:
         Page_Init_TempRTDB(logger, page);
         return NULL;

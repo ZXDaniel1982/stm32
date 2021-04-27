@@ -82,6 +82,17 @@ bool SpcData_GetTempRTDB(SpcTemp_t *temp)
     return true;
 }
 
+bool SpcData_GetPower(SpcUint16_t *power)
+{
+    if (power == NULL) return false;
+
+    SpcDataRam.SpcPower.hasValue = 1;
+    SpcDataRam.SpcPower.value = 102;
+
+    memset(power, 0, sizeof(SpcUint16_t));
+    memcpy(power, &(SpcDataRam.SpcPower), sizeof(SpcUint16_t));
+}
+
 bool SpcData_GetVoltage(SpcUint16_t *volt)
 {
     if (volt == NULL) return false;

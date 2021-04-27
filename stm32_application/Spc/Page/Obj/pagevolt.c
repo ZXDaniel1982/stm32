@@ -1,37 +1,37 @@
 #include "spc.h"
 
-#define Refresh_Power_Pos (4)
-#define Refresh_Power_Msk (1 << Refresh_Power_Pos)
+#define Refresh_Voltage_Pos (4)
+#define Refresh_Voltage_Msk (1 << Refresh_Voltage_Pos)
 
-void PowerProcess(PageEntity_t *page, SpcUint16_t *Power)
+void VoltageProcess(PageEntity_t *page, SpcUint16_t *voltage)
 {
-  if (Power->hasValue) {
+  if (voltage->hasValue) {
     uint8_t content[MAX_INFO_LEN] = {0};
-    snprintf((char *)content, MAX_INFO_LEN, "%d %s", Power->value, "%");
+    snprintf((char *)content, MAX_INFO_LEN, "%d %s", voltage->value, "V");
     strncpy((char *)(page->info.Content), (char *)content, MAX_INFO_LEN);
   } else {
-    strncpy((char *)(page->info.Content), "No Power", MAX_INFO_LEN);
+    strncpy((char *)(page->info.Content), "No voltage", MAX_INFO_LEN);
   }
 }
 
-void Page_Init_Power(Logger logger, PageEntity_t *page)
+void Page_Init_Voltage(Logger logger, PageEntity_t *page)
 {
     //logger("\r\nActual\r\n");
   if ((page == NULL) || (page->publisher == NULL)) return;
 
-  SpcData_SetRefreshMask(Refresh_Power_Msk);
-  strncpy((char *)(page->info.Title), "Power", MAX_INFO_LEN);
+  SpcData_SetRefreshMask(Refresh_Voltage_Msk);
+  strncpy((char *)(page->info.Title), "Voltage", MAX_INFO_LEN);
  
-  SpcUint16_t Power;
-  if (SpcData_GetPower(&Power)) {
-    PowerProcess(page, &Power);
+  SpcUint16_t voltage;
+  if (SpcData_GetVoltage(&voltage)) {
+    VoltageProcess(page, &voltage);
   } else {
-    strncpy((char *)(page->info.Content), "Cant read Power", MAX_INFO_LEN);
+    strncpy((char *)(page->info.Content), "Cant read volt", MAX_INFO_LEN);
   }
   page->publisher(&(page->info));
 }
 
-PageEntity_t *Page_Func_Power(KeyEnum_t key, Logger logger, PageEntity_t *page)
+PageEntity_t *Page_Func_Voltage(KeyEnum_t key, Logger logger, PageEntity_t *page)
 {
     switch (key) {
     case Act:
@@ -45,7 +45,7 @@ PageEntity_t *Page_Func_Power(KeyEnum_t key, Logger logger, PageEntity_t *page)
     case Right:
         return Page_CreatePage(Current, logger, page->publisher);
     case Update:
-        Page_Init_Power(logger, page);
+        Page_Init_Voltage(logger, page);
         return NULL;
     default:
         return NULL;

@@ -10,8 +10,9 @@ extern "C" {
 
 #define SENSOR_INDEX(SENSOR_OPT, type) \
   SENSOR_OPT(SensorTemp, type) \
-  SENSOR_OPT(SensorVoltage, type) \
-  SENSOR_OPT(SensorCurrent, type)
+  SENSOR_OPT(SensorCurrent, type) \
+  SENSOR_OPT(SensorGfi, type) \
+  SENSOR_OPT(SensorVoltage, type)
 
 #define OBJ_ENUM(TYPE, type) TYPE,
 

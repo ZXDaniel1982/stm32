@@ -115,6 +115,17 @@ bool SpcData_GetCurrent(SpcUint16_t *curr)
     memcpy(curr, &(SpcDataRam.SpcCurrent), sizeof(SpcUint16_t));
 }
 
+bool SpcData_GetGfi(SpcUint16_t *gfi)
+{
+    if (gfi == NULL) return false;
+
+    SpcDataRam.SpcGfi.hasValue = 1;
+    SpcDataRam.SpcGfi.value = 102;
+
+    memset(gfi, 0, sizeof(SpcUint16_t));
+    memcpy(gfi, &(SpcDataRam.SpcGfi), sizeof(SpcUint16_t));
+}
+
 void SpcData_SetRefreshMask(uint64_t val)
 {
     SpcDataRam.SpcRefreshMask = val; 

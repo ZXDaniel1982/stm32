@@ -20,6 +20,8 @@ PageEntity_t *Page_Func_Statistic(KeyEnum_t key, Logger logger, PageEntity_t *pa
         return Page_CreatePage(Program, logger, page->publisher);
     case Def:
         return Page_CreatePage(Default, logger, page->publisher);
+    case Right:
+        return Page_CreatePage(MaxTemperature, logger, page->publisher);
     case Left:
         return Page_CreatePage(Voltage, logger, page->publisher);
     default:

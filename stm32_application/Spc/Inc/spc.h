@@ -26,6 +26,8 @@ typedef int (*Logger)(const char* fmt, ...);
   PAGE_OPT(Gfi, type) \
   PAGE_OPT(Voltage, type) \
   PAGE_OPT(Statistic, type) \
+  PAGE_OPT(MaxTemperature, type) \
+  PAGE_OPT(MinTemperature, type) \
   PAGE_OPT(Program, type)
 
 #define OBJ_ENUM(TYPE, type) TYPE,

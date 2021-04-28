@@ -77,6 +77,7 @@ Spc/Page/Obj/curr.c \
 Spc/Page/Obj/pagegfi.c \
 Spc/Page/Obj/pagevolt.c \
 Spc/Page/Obj/statistic.c \
+Spc/Page/Obj/tempstat.c \
 Spc/Page/Obj/program.c \
 Spc/Data/data.c \
 Gui/gui.c \
@@ -101,6 +102,7 @@ Spc/Page/Obj/curr.c \
 Spc/Page/Obj/pagegfi.c \
 Spc/Page/Obj/pagevolt.c \
 Spc/Page/Obj/statistic.c \
+Spc/Page/Obj/tempstat.c \
 Spc/Page/Obj/program.c
 
 TEST_GUI_SOURCES = \

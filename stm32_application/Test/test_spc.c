@@ -82,6 +82,34 @@ bool SpcData_GetTempRTDB(SpcTemp_t *temp)
     return true;
 }
 
+bool SpcData_GetMaxTemperature(SpcTemp_t *temp)
+{
+    if (temp == NULL) return false;
+
+    SpcDataRam.SpcMaxTemp.hasValue = 1;
+    SpcDataRam.SpcMaxTemp.temperature[0] = 16;
+    SpcDataRam.SpcMaxTemp.temperature[1] = 32;
+
+    memset(temp, 0, sizeof(SpcTemp_t));
+    memcpy(temp, &(SpcDataRam.SpcMaxTemp), sizeof(SpcTemp_t));
+
+    return true;
+}
+
+bool SpcData_GetMinTemperature(SpcTemp_t *temp)
+{
+    if (temp == NULL) return false;
+
+    SpcDataRam.SpcMinTemp.hasValue = 1;
+    SpcDataRam.SpcMinTemp.temperature[0] = 16;
+    SpcDataRam.SpcMinTemp.temperature[1] = 32;
+
+    memset(temp, 0, sizeof(SpcTemp_t));
+    memcpy(temp, &(SpcDataRam.SpcMinTemp), sizeof(SpcTemp_t));
+
+    return true;
+}
+
 bool SpcData_GetPower(SpcUint16_t *power)
 {
     if (power == NULL) return false;

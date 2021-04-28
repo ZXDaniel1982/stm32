@@ -151,6 +151,66 @@ void SpcData_SetTempRTDB(SpcTempStatus_Enum_t status, int16_t tempA, int16_t tem
         SpcData_Refresh();
 }
 
+bool SpcData_GetMaxTemperature(SpcTemp_t *temp)
+{
+    if (temp == NULL) return false;
+
+    memset(temp, 0, sizeof(SpcTemp_t));
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    memcpy(temp, &(SpcDataRam.SpcMaxTemp), sizeof(SpcTemp_t));
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
+void SpcData_SetMaxTemperature(SpcTempStatus_Enum_t status, int16_t tempA, int16_t tempB)
+{
+    bool update = false;
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    SpcDataRam.SpcMaxTemp.hasValue = 1;
+    SpcDataRam.SpcMaxTemp.status = status;
+    SpcDataRam.SpcMaxTemp.temperature[0] = tempA;
+    SpcDataRam.SpcMaxTemp.temperature[1] = tempB;
+
+    update = SpcDataRam.SpcRefreshBits.maxtemp;
+    xSemaphoreGive(DataMutex);
+
+    if (update)
+        SpcData_Refresh();
+}
+
+bool SpcData_GetMinTemperature(SpcTemp_t *temp)
+{
+    if (temp == NULL) return false;
+
+    memset(temp, 0, sizeof(SpcTemp_t));
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    memcpy(temp, &(SpcDataRam.SpcMinTemp), sizeof(SpcTemp_t));
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
+void SpcData_SetMinTemperature(SpcTempStatus_Enum_t status, int16_t tempA, int16_t tempB)
+{
+    bool update = false;
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    SpcDataRam.SpcMinTemp.hasValue = 1;
+    SpcDataRam.SpcMinTemp.status = status;
+    SpcDataRam.SpcMinTemp.temperature[0] = tempA;
+    SpcDataRam.SpcMinTemp.temperature[1] = tempB;
+
+    update = SpcDataRam.SpcRefreshBits.mintemp;
+    xSemaphoreGive(DataMutex);
+
+    if (update)
+        SpcData_Refresh();
+}
+
 void SpcData_SetPower(uint16_t power)
 {
     bool update = false;

@@ -99,7 +99,15 @@ typedef struct {
             uint64_t voltage : 1;
             uint64_t maxtemp : 1;
             uint64_t mintemp : 1;
-            uint64_t reserve : 54;
+            uint64_t maxcurr : 1;
+            uint64_t maxgfi : 1;
+            uint64_t maxvolt : 1;
+            uint64_t minvolt : 1;
+            uint64_t enegy : 1;
+            uint64_t cost : 1;
+            uint64_t ontime : 1;
+            uint64_t onpercent : 1;
+            uint64_t reserve : 47;
         } SpcRefreshBits;
         uint64_t SpcRefreshMask;
     };
@@ -110,8 +118,16 @@ typedef struct {
     SpcTemp_t SpcMinTemp;
     SpcUint16_t SpcPower;
     SpcUint16_t SpcCurrent;
+    SpcUint16_t SpcMaxCurrent;
     SpcUint16_t SpcGfi;
+    SpcUint16_t SpcMaxGfi;
     SpcUint16_t SpcVoltage;
+    SpcUint16_t SpcMaxVoltage;
+    SpcUint16_t SpcMinVoltage;
+    SpcUint16_t SpcEnegy;
+    SpcUint16_t SpcCost;
+    SpcUint16_t SpcOnTime;
+    SpcUint16_t SpcOnPercent;
 } SpcDataRam_t;
 
 /* From data.c */
@@ -135,10 +151,26 @@ void SpcData_SetPower(uint16_t power);
 bool SpcData_GetPower(SpcUint16_t *power);
 void SpcData_SetCurrent(uint16_t current);
 bool SpcData_GetCurrent(SpcUint16_t *current);
+void SpcData_SetMaxCurrent(uint16_t current);
+bool SpcData_GetMaxCurrent(SpcUint16_t *current);
 void SpcData_SetGfi(uint16_t gfi);
 bool SpcData_GetGfi(SpcUint16_t *gfi);
+void SpcData_SetMaxGfi(uint16_t gfi);
+bool SpcData_GetMaxGfi(SpcUint16_t *gfi);
 void SpcData_SetVoltage(uint16_t voltage);
 bool SpcData_GetVoltage(SpcUint16_t *voltage);
+void SpcData_SetMaxVoltage(uint16_t voltage);
+bool SpcData_GetMaxVoltage(SpcUint16_t *voltage);
+void SpcData_SetMinVoltage(uint16_t voltage);
+bool SpcData_GetMinVoltage(SpcUint16_t *voltage);
+void SpcData_SetEnegy(uint16_t voltage);
+bool SpcData_GetEnegy(SpcUint16_t *voltage);
+void SpcData_SetCost(uint16_t voltage);
+bool SpcData_GetCost(SpcUint16_t *voltage);
+void SpcData_SetOnTime(uint16_t voltage);
+bool SpcData_GetOnTime(SpcUint16_t *voltage);
+void SpcData_SetOnPercent(uint16_t voltage);
+bool SpcData_GetOnPercent(SpcUint16_t *voltage);
 
 #ifdef __cplusplus
 }

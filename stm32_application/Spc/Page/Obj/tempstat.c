@@ -69,8 +69,8 @@ PageEntity_t *Page_Func_MinTemperature(KeyEnum_t key, Logger logger, PageEntity_
         return Page_CreatePage(Program, logger, page->publisher);
     case Def:
         return Page_CreatePage(Default, logger, page->publisher);
-    /*case Right:
-        return Page_CreatePage(TempRTDB, logger, page->publisher);*/
+    case Right:
+        return Page_CreatePage(MaxCurrent, logger, page->publisher);
     case Left:
         return Page_CreatePage(MaxTemperature, logger, page->publisher);
     case Update:

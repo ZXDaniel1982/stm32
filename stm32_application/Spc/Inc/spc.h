@@ -28,6 +28,16 @@ typedef int (*Logger)(const char* fmt, ...);
   PAGE_OPT(Statistic, type) \
   PAGE_OPT(MaxTemperature, type) \
   PAGE_OPT(MinTemperature, type) \
+  PAGE_OPT(MaxCurrent, type) \
+  PAGE_OPT(MaxGfi, type) \
+  PAGE_OPT(MaxVoltage, type) \
+  PAGE_OPT(MinVoltage, type) \
+  PAGE_OPT(Enegy, type) \
+  PAGE_OPT(Cost, type) \
+  PAGE_OPT(OnTime, type) \
+  PAGE_OPT(OnPercent, type) \
+  PAGE_OPT(ResetStatistic, type) \
+  PAGE_OPT(Version, type) \
   PAGE_OPT(Program, type)
 
 #define OBJ_ENUM(TYPE, type) TYPE,
@@ -85,6 +95,15 @@ void HeatStProcess(PageEntity_t *page);
 
 /* From page temperature*/
 void TemperatureProcess(PageEntity_t *page, SpcTemp_t *temperature);
+
+/* From Page current */
+void CurrentProcess(PageEntity_t *page, SpcUint16_t *current);
+
+/* From Page Gfi */
+void GfiProcess(PageEntity_t *page, SpcUint16_t *gfi);
+
+/* From Page Voltage */
+void VoltageProcess(PageEntity_t *page, SpcUint16_t *voltage);
 
 #ifdef __cplusplus
 }

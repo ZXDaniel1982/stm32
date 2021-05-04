@@ -211,6 +211,62 @@ void SpcData_SetMinTemperature(SpcTempStatus_Enum_t status, int16_t tempA, int16
         SpcData_Refresh();
 }
 
+void SpcData_SetMaxCurrent(uint16_t current)
+{
+    bool update = false;
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    SpcDataRam.SpcMaxCurrent.hasValue = 1;
+    SpcDataRam.SpcMaxCurrent.value = current;
+
+    update = SpcDataRam.SpcRefreshBits.maxcurr;
+    xSemaphoreGive(DataMutex);
+
+    if (update)
+        SpcData_Refresh();
+}
+
+bool SpcData_GetMaxCurrent(SpcUint16_t *current)
+{
+    if (current == NULL) return false;
+
+    memset(current, 0, sizeof(SpcUint16_t));
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    memcpy(current, &(SpcDataRam.SpcMaxCurrent), sizeof(SpcUint16_t));
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
+void SpcData_SetMaxGfi(uint16_t gfi)
+{
+    bool update = false;
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    SpcDataRam.SpcMaxGfi.hasValue = 1;
+    SpcDataRam.SpcMaxGfi.value = gfi;
+
+    update = SpcDataRam.SpcRefreshBits.maxgfi;
+    xSemaphoreGive(DataMutex);
+
+    if (update)
+        SpcData_Refresh();
+}
+
+bool SpcData_GetMaxGfi(SpcUint16_t *gfi)
+{
+    if (gfi == NULL) return false;
+
+    memset(gfi, 0, sizeof(SpcUint16_t));
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    memcpy(gfi, &(SpcDataRam.SpcMaxGfi), sizeof(SpcUint16_t));
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
 void SpcData_SetPower(uint16_t power)
 {
     bool update = false;
@@ -267,6 +323,62 @@ bool SpcData_GetVoltage(SpcUint16_t *voltage)
     return true;
 }
 
+void SpcData_SetMaxVoltage(uint16_t voltage)
+{
+    bool update = false;
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    SpcDataRam.SpcMaxVoltage.hasValue = 1;
+    SpcDataRam.SpcMaxVoltage.value = voltage;
+
+    update = SpcDataRam.SpcRefreshBits.maxvolt;
+    xSemaphoreGive(DataMutex);
+
+    if (update)
+        SpcData_Refresh();
+}
+
+bool SpcData_GetMaxVoltage(SpcUint16_t *voltage)
+{
+    if (voltage == NULL) return false;
+
+    memset(voltage, 0, sizeof(SpcUint16_t));
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    memcpy(voltage, &(SpcDataRam.SpcMaxVoltage), sizeof(SpcUint16_t));
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
+void SpcData_SetMinVoltage(uint16_t voltage)
+{
+    bool update = false;
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    SpcDataRam.SpcMinVoltage.hasValue = 1;
+    SpcDataRam.SpcMinVoltage.value = voltage;
+
+    update = SpcDataRam.SpcRefreshBits.minvolt;
+    xSemaphoreGive(DataMutex);
+
+    if (update)
+        SpcData_Refresh();
+}
+
+bool SpcData_GetMinVoltage(SpcUint16_t *voltage)
+{
+    if (voltage == NULL) return false;
+
+    memset(voltage, 0, sizeof(SpcUint16_t));
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    memcpy(voltage, &(SpcDataRam.SpcMinVoltage), sizeof(SpcUint16_t));
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
 void SpcData_SetCurrent(uint16_t current)
 {
     bool update = false;
@@ -318,6 +430,118 @@ bool SpcData_GetGfi(SpcUint16_t *gfi)
 
     xSemaphoreTake(DataMutex, portMAX_DELAY);
     memcpy(gfi, &(SpcDataRam.SpcGfi), sizeof(SpcUint16_t));
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
+void SpcData_SetEnegy(uint16_t enegy)
+{
+    bool update = false;
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    SpcDataRam.SpcEnegy.hasValue = 1;
+    SpcDataRam.SpcEnegy.value = enegy;
+
+    update = SpcDataRam.SpcRefreshBits.enegy;
+    xSemaphoreGive(DataMutex);
+
+    if (update)
+        SpcData_Refresh();
+}
+
+bool SpcData_GetEnegy(SpcUint16_t *enegy)
+{
+    if (enegy == NULL) return false;
+
+    memset(enegy, 0, sizeof(SpcUint16_t));
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    memcpy(enegy, &(SpcDataRam.SpcEnegy), sizeof(SpcUint16_t));
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
+void SpcData_SetCost(uint16_t cost)
+{
+    bool update = false;
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    SpcDataRam.SpcCost.hasValue = 1;
+    SpcDataRam.SpcCost.value = cost;
+
+    update = SpcDataRam.SpcRefreshBits.cost;
+    xSemaphoreGive(DataMutex);
+
+    if (update)
+        SpcData_Refresh();
+}
+
+bool SpcData_GetCost(SpcUint16_t *cost)
+{
+    if (cost == NULL) return false;
+
+    memset(cost, 0, sizeof(SpcUint16_t));
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    memcpy(cost, &(SpcDataRam.SpcCost), sizeof(SpcUint16_t));
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
+void SpcData_SetOnTime(uint16_t ontime)
+{
+    bool update = false;
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    SpcDataRam.SpcOnTime.hasValue = 1;
+    SpcDataRam.SpcOnTime.value = ontime;
+
+    update = SpcDataRam.SpcRefreshBits.ontime;
+    xSemaphoreGive(DataMutex);
+
+    if (update)
+        SpcData_Refresh();
+}
+
+bool SpcData_GetOnTime(SpcUint16_t *ontime)
+{
+    if (ontime == NULL) return false;
+
+    memset(ontime, 0, sizeof(SpcUint16_t));
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    memcpy(ontime, &(SpcDataRam.SpcOnTime), sizeof(SpcUint16_t));
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
+void SpcData_SetOnPercent(uint16_t onpercent)
+{
+    bool update = false;
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    SpcDataRam.SpcOnPercent.hasValue = 1;
+    SpcDataRam.SpcOnPercent.value = onpercent;
+
+    update = SpcDataRam.SpcRefreshBits.onpercent;
+    xSemaphoreGive(DataMutex);
+
+    if (update)
+        SpcData_Refresh();
+}
+
+bool SpcData_GetOnPercent(SpcUint16_t *onpercent)
+{
+    if (onpercent == NULL) return false;
+
+    memset(onpercent, 0, sizeof(SpcUint16_t));
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    memcpy(onpercent, &(SpcDataRam.SpcOnPercent), sizeof(SpcUint16_t));
     xSemaphoreGive(DataMutex);
 
     return true;

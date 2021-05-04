@@ -132,6 +132,28 @@ bool SpcData_GetVoltage(SpcUint16_t *volt)
     memcpy(volt, &(SpcDataRam.SpcVoltage), sizeof(SpcUint16_t));
 }
 
+bool SpcData_GetMaxVoltage(SpcUint16_t *volt)
+{
+    if (volt == NULL) return false;
+
+    SpcDataRam.SpcMaxVoltage.hasValue = 1;
+    SpcDataRam.SpcMaxVoltage.value = 150;
+
+    memset(volt, 0, sizeof(SpcUint16_t));
+    memcpy(volt, &(SpcDataRam.SpcMaxVoltage), sizeof(SpcUint16_t));
+}
+
+bool SpcData_GetMinVoltage(SpcUint16_t *volt)
+{
+    if (volt == NULL) return false;
+
+    SpcDataRam.SpcMinVoltage.hasValue = 1;
+    SpcDataRam.SpcMinVoltage.value = 80;
+
+    memset(volt, 0, sizeof(SpcUint16_t));
+    memcpy(volt, &(SpcDataRam.SpcMinVoltage), sizeof(SpcUint16_t));
+}
+
 bool SpcData_GetCurrent(SpcUint16_t *curr)
 {
     if (curr == NULL) return false;
@@ -143,6 +165,17 @@ bool SpcData_GetCurrent(SpcUint16_t *curr)
     memcpy(curr, &(SpcDataRam.SpcCurrent), sizeof(SpcUint16_t));
 }
 
+bool SpcData_GetMaxCurrent(SpcUint16_t *curr)
+{
+    if (curr == NULL) return false;
+
+    SpcDataRam.SpcMaxCurrent.hasValue = 1;
+    SpcDataRam.SpcMaxCurrent.value = 102;
+
+    memset(curr, 0, sizeof(SpcUint16_t));
+    memcpy(curr, &(SpcDataRam.SpcMaxCurrent), sizeof(SpcUint16_t));
+}
+
 bool SpcData_GetGfi(SpcUint16_t *gfi)
 {
     if (gfi == NULL) return false;
@@ -152,6 +185,61 @@ bool SpcData_GetGfi(SpcUint16_t *gfi)
 
     memset(gfi, 0, sizeof(SpcUint16_t));
     memcpy(gfi, &(SpcDataRam.SpcGfi), sizeof(SpcUint16_t));
+}
+
+bool SpcData_GetMaxGfi(SpcUint16_t *gfi)
+{
+    if (gfi == NULL) return false;
+
+    SpcDataRam.SpcMaxGfi.hasValue = 1;
+    SpcDataRam.SpcMaxGfi.value = 102;
+
+    memset(gfi, 0, sizeof(SpcUint16_t));
+    memcpy(gfi, &(SpcDataRam.SpcMaxGfi), sizeof(SpcUint16_t));
+}
+
+bool SpcData_GetEnegy(SpcUint16_t *enegy)
+{
+    if (enegy == NULL) return false;
+
+    SpcDataRam.SpcEnegy.hasValue = 1;
+    SpcDataRam.SpcEnegy.value = 102;
+
+    memset(enegy, 0, sizeof(SpcUint16_t));
+    memcpy(enegy, &(SpcDataRam.SpcEnegy), sizeof(SpcUint16_t));
+}
+
+bool SpcData_GetCost(SpcUint16_t *cost)
+{
+    if (cost == NULL) return false;
+
+    SpcDataRam.SpcCost.hasValue = 1;
+    SpcDataRam.SpcCost.value = 102;
+
+    memset(cost, 0, sizeof(SpcUint16_t));
+    memcpy(cost, &(SpcDataRam.SpcCost), sizeof(SpcUint16_t));
+}
+
+bool SpcData_GetOnTime(SpcUint16_t *ontime)
+{
+    if (ontime == NULL) return false;
+
+    SpcDataRam.SpcOnTime.hasValue = 1;
+    SpcDataRam.SpcOnTime.value = 1000;
+
+    memset(ontime, 0, sizeof(SpcUint16_t));
+    memcpy(ontime, &(SpcDataRam.SpcOnTime), sizeof(SpcUint16_t));
+}
+
+bool SpcData_GetOnPercent(SpcUint16_t *onpercent)
+{
+    if (onpercent == NULL) return false;
+
+    SpcDataRam.SpcOnPercent.hasValue = 1;
+    SpcDataRam.SpcOnPercent.value = 78;
+
+    memset(onpercent, 0, sizeof(SpcUint16_t));
+    memcpy(onpercent, &(SpcDataRam.SpcOnPercent), sizeof(SpcUint16_t));
 }
 
 void SpcData_SetRefreshMask(uint64_t val)

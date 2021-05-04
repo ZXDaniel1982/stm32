@@ -78,6 +78,13 @@ Spc/Page/Obj/pagegfi.c \
 Spc/Page/Obj/pagevolt.c \
 Spc/Page/Obj/statistic.c \
 Spc/Page/Obj/tempstat.c \
+Spc/Page/Obj/currstat.c \
+Spc/Page/Obj/gfistat.c \
+Spc/Page/Obj/voltstat.c \
+Spc/Page/Obj/enegy.c \
+Spc/Page/Obj/ontime.c \
+Spc/Page/Obj/reset.c \
+Spc/Page/Obj/version.c \
 Spc/Page/Obj/program.c \
 Spc/Data/data.c \
 Gui/gui.c \
@@ -103,6 +110,13 @@ Spc/Page/Obj/pagegfi.c \
 Spc/Page/Obj/pagevolt.c \
 Spc/Page/Obj/statistic.c \
 Spc/Page/Obj/tempstat.c \
+Spc/Page/Obj/currstat.c \
+Spc/Page/Obj/gfistat.c \
+Spc/Page/Obj/voltstat.c \
+Spc/Page/Obj/enegy.c \
+Spc/Page/Obj/ontime.c \
+Spc/Page/Obj/reset.c \
+Spc/Page/Obj/version.c \
 Spc/Page/Obj/program.c
 
 TEST_GUI_SOURCES = \

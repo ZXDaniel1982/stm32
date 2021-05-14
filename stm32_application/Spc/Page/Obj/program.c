@@ -21,8 +21,8 @@ PageEntity_t *Page_Func_Program(KeyEnum_t key, Logger logger, PageEntity_t *page
 		return Page_CreatePage(Actual, logger, page->publisher);
 	case Left:
         return Page_CreatePage(Version, logger, page->publisher);
-    /*case Right:
-        return Page_CreatePage(OnPercent, logger, page->publisher);*/
+  case Right:
+        return Page_CreatePage(Maintain, logger, page->publisher);
 	default:
 		return NULL;
 	}

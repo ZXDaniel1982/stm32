@@ -26,6 +26,10 @@ void SpcDataInit(void)
 
     // TODO, for test, delete in future
     SpcData_SetPower(60);
+
+    SpcDataRom.SpcMaintain.status = Opt;
+    SpcDataRom.SpcMaintain.temperature[0] = 50;
+    SpcDataRom.SpcMaintain.temperature[1] = 10;
 }
 
 uint8_t SpcData_GetLcdDef(void)
@@ -542,6 +546,30 @@ bool SpcData_GetOnPercent(SpcUint16_t *onpercent)
 
     xSemaphoreTake(DataMutex, portMAX_DELAY);
     memcpy(onpercent, &(SpcDataRam.SpcOnPercent), sizeof(SpcUint16_t));
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
+bool SpcData_SetMaintain(SpcTempConfig_t *maintain)
+{
+    if (maintain == NULL) return false;
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    memcpy(&(SpcDataRom.SpcMaintain), maintain, sizeof(SpcTempConfig_t));
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
+bool SpcData_GetMaintain(SpcTempConfig_t *maintain)
+{
+    if (maintain == NULL) return false;
+
+    memset(maintain, 0, sizeof(SpcTempConfig_t));
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    memcpy(maintain, &(SpcDataRom.SpcMaintain), sizeof(SpcTempConfig_t));
     xSemaphoreGive(DataMutex);
 
     return true;

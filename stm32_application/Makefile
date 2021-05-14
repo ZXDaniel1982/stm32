@@ -86,7 +86,9 @@ Spc/Page/Obj/ontime.c \
 Spc/Page/Obj/reset.c \
 Spc/Page/Obj/version.c \
 Spc/Page/Obj/program.c \
+Spc/Page/Obj/maintain.c \
 Spc/Data/data.c \
+Spc/Timer/spctimer.c \
 Gui/gui.c \
 Gui/gui_button.c \
 Gui/gui_label.c \
@@ -117,7 +119,10 @@ Spc/Page/Obj/enegy.c \
 Spc/Page/Obj/ontime.c \
 Spc/Page/Obj/reset.c \
 Spc/Page/Obj/version.c \
-Spc/Page/Obj/program.c
+Spc/Page/Obj/program.c \
+Spc/Page/Obj/maintain.c \
+Spc/Timer/spctimermock.c \
+Vector/vector.c
 
 TEST_GUI_SOURCES = \
 Test/test_gui.c \

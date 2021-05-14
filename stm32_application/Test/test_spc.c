@@ -1,6 +1,7 @@
 #include <unistd.h>
 #include "spc.h"
 #include "data.h"
+#include "spctimer.h"
 
 static SpcDataRom_t SpcDataRom;
 static SpcDataRam_t SpcDataRam;
@@ -17,6 +18,10 @@ void SpcDataInit(void)
 {
     memset(&SpcDataRom, 0, sizeof(SpcDataRom_t));
     memset(&SpcDataRam, 0, sizeof(SpcDataRam_t));
+    
+    SpcDataRom.SpcMaintain.status = Opt;
+    SpcDataRom.SpcMaintain.temperature[0] = 50;
+    SpcDataRom.SpcMaintain.temperature[1] = 10;
 }
 
 uint8_t SpcData_GetLcdDef(void)
@@ -242,6 +247,25 @@ bool SpcData_GetOnPercent(SpcUint16_t *onpercent)
     memcpy(onpercent, &(SpcDataRam.SpcOnPercent), sizeof(SpcUint16_t));
 }
 
+bool SpcData_SetMaintain(SpcTempConfig_t *maintain)
+{
+    if (maintain == NULL) return false;
+
+    memcpy(&(SpcDataRom.SpcMaintain), maintain, sizeof(SpcTempConfig_t));
+
+    return true;
+}
+
+bool SpcData_GetMaintain(SpcTempConfig_t *maintain)
+{
+    if (maintain == NULL) return false;
+
+    memset(maintain, 0, sizeof(SpcTempConfig_t));
+    memcpy(maintain, &(SpcDataRom.SpcMaintain), sizeof(SpcTempConfig_t));
+
+    return true;
+}
+
 void SpcData_SetRefreshMask(uint64_t val)
 {
     SpcDataRam.SpcRefreshMask = val; 
@@ -258,6 +282,7 @@ void main()
     PageEntity_t *PageNext = NULL;
 
     SpcDataInit();
+    SpcTimer_Init();
 
     printf("Spc mainloop task\r\n");
     Page = Page_CreatePage(Default, printf, Demo_Publish);
@@ -271,10 +296,21 @@ void main()
         if (Page->func != NULL) {
             PageNext = Page->func(KeyIn, printf, Page);
             if (PageNext != NULL) {
+                if (Page->data != NULL) free(Page->data);
                 free(Page);
                 Page = PageNext;
             }
         } else {
         }
+        if (KeyIn == 1) {
+          if (Page != NULL) {
+            if (Page->data != NULL) free(Page->data);
+            free(Page);
+            return;
+          }
+          return;
+        }
+
+        SpcTimer_UpdateTimer();
     }
 }

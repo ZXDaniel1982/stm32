@@ -55,6 +55,14 @@ typedef enum {
   RTD_SHORT
 } SpcTempStatus_Enum_t;
 
+/* For temperature config */
+typedef enum {
+  Opt = 0,
+  OFF,
+  NONE
+} SpcTempConfig_Enum_t;
+
+/* Data type in Ram */
 typedef struct {
     SpcTempStatus_Enum_t status;
     uint8_t hasValue;
@@ -66,6 +74,12 @@ typedef struct {
     uint16_t value;
 } SpcUint16_t;
 
+/* Data type in Rom */
+typedef struct {
+    SpcTempConfig_Enum_t status;
+    int16_t temperature[2];
+} SpcTempConfig_t;
+
 /* Global values */
 typedef struct {
     union {
@@ -76,6 +90,7 @@ typedef struct {
         } bits;
         uint64_t SpcMaskRom;
     };
+    SpcTempConfig_t SpcMaintain;
 } SpcDataRom_t;
 
 typedef struct {
@@ -171,6 +186,8 @@ void SpcData_SetOnTime(uint16_t voltage);
 bool SpcData_GetOnTime(SpcUint16_t *voltage);
 void SpcData_SetOnPercent(uint16_t voltage);
 bool SpcData_GetOnPercent(SpcUint16_t *voltage);
+bool SpcData_SetMaintain(SpcTempConfig_t *maintain);
+bool SpcData_GetMaintain(SpcTempConfig_t *maintain);
 
 #ifdef __cplusplus
 }

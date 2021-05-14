@@ -3,6 +3,7 @@
 #include "common.h"
 #include "data.h"
 #include "vector.h"
+#include "spctimer.h"
 
 /**
  * Entry point for the application.
@@ -29,6 +30,7 @@ int main()
     Sensor_Init();
     Gui_Init();
     Page_Init();
+    SpcTimer_Init();
 
     vTaskStartScheduler();
 

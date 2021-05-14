@@ -1,6 +1,7 @@
 #include <unistd.h>
 #include "spc.h"
 #include "data.h"
+#include "spctimer.h"
 
 static SpcDataRom_t SpcDataRom;
 static SpcDataRam_t SpcDataRam;
@@ -281,6 +282,7 @@ void main()
     PageEntity_t *PageNext = NULL;
 
     SpcDataInit();
+    SpcTimer_Init();
 
     printf("Spc mainloop task\r\n");
     Page = Page_CreatePage(Default, printf, Demo_Publish);
@@ -308,5 +310,7 @@ void main()
           }
           return;
         }
+
+        SpcTimer_UpdateTimer();
     }
 }

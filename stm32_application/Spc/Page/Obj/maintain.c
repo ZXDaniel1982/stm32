@@ -1,4 +1,5 @@
 #include "spc.h"
+#include "spctimer.h"
 
 static inline int16_t FetchMaxMaint(bool unit) {
   return unit ? 932 : 500;
@@ -31,6 +32,9 @@ static void Page_Update_Maintain(Logger logger, PageEntity_t *page, KeyEnum_t ke
   SpcTempConfig_t *maintain = (SpcTempConfig_t *) page->data;
   const uint8_t unit = SpcData_GetTempUint();
 
+  SpcTimer_StopTimer(Restore);
+  SpcTimer_StartTimer(Flash, 40, true);
+  
   if (key == Up) {
     if (maintain->status == OFF) {
       return;
@@ -64,7 +68,12 @@ static void Page_Config_Maintain(Logger logger, PageEntity_t *page)
 {
   if ((page == NULL) || (page->publisher == NULL) || (page->data == NULL)) return;
 
+  
+  SpcTimer_StopTimer(Flash);
+  SpcTimer_StartTimer(Restore, 40, false);
+
   SpcData_SetMaintain(page->data);
+  strncpy((char *)(page->info.Content), "Stored", MAX_INFO_LEN);
   page->publisher(&(page->info));
 }
 
@@ -74,7 +83,37 @@ static void Page_Reset_Maintain(Logger logger, PageEntity_t *page)
   
   memset(page->data, 0, sizeof(SpcTempConfig_t));
 
+  SpcTimer_StopTimer(Flash);
+  SpcTimer_StopTimer(Restore);
+
   SpcData_GetMaintain(page->data);
+  TemperatureStoreProcess(page);
+  page->publisher(&(page->info));
+}
+
+static void Page_Flash_Maintain(Logger logger, PageEntity_t *page)
+{
+  if ((page == NULL) || (page->publisher == NULL) || (page->data == NULL)) return;
+
+  static bool flash = false;
+
+  if (flash) {
+    memset(page->info.Content, 0, MAX_INFO_LEN);
+  } else {
+    TemperatureStoreProcess(page);
+  }
+
+  flash = !flash;
+  page->publisher(&(page->info));
+}
+
+static void Page_Restore_Maintain(Logger logger, PageEntity_t *page)
+{
+  if ((page == NULL) || (page->publisher == NULL) || (page->data == NULL)) return;
+
+  SpcTimer_StopTimer(Flash);
+  SpcTimer_StopTimer(Restore);
+  
   TemperatureStoreProcess(page);
   page->publisher(&(page->info));
 }
@@ -102,14 +141,22 @@ PageEntity_t *Page_Func_Maintain(KeyEnum_t key, Logger logger, PageEntity_t *pag
 {
     switch (key) {
     case Act:
+        SpcTimer_StopTimer(Flash);
+        SpcTimer_StopTimer(Restore);
         return Page_CreatePage(Actual, logger, page->publisher);
     case Prog:
+        SpcTimer_StopTimer(Flash);
+        SpcTimer_StopTimer(Restore);
         return Page_CreatePage(Program, logger, page->publisher);
     case Def:
+        SpcTimer_StopTimer(Flash);
+        SpcTimer_StopTimer(Restore);
         return Page_CreatePage(Default, logger, page->publisher);
     /*case Right:
         return Page_CreatePage(TempRTDA, logger, page->publisher);*/
     case Left:
+        SpcTimer_StopTimer(Flash);
+        SpcTimer_StopTimer(Restore);
         return Page_CreatePage(Program, logger, page->publisher);
     case Up:
     case Down:
@@ -120,6 +167,12 @@ PageEntity_t *Page_Func_Maintain(KeyEnum_t key, Logger logger, PageEntity_t *pag
         return NULL;
     case Reset:
         Page_Reset_Maintain(logger, page);
+        return NULL;
+    case Flash:
+        Page_Flash_Maintain(logger, page);
+        return NULL;
+    case Restore:
+        Page_Restore_Maintain(logger, page);
         return NULL;
     default:
         return NULL;

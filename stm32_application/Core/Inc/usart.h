@@ -10,6 +10,7 @@ extern "C" {
 
 void USART_SendData(uint8_t *data, uint16_t len);
 void uartAssert(unsigned long ulLine, const char * const pcFileName);
+int uartprintf(const char* fmt, ...);
 
 #ifdef __cplusplus
 }

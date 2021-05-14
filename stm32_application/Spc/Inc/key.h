@@ -11,6 +11,8 @@ extern "C" {
 // USART
 typedef enum {
   Update = 1,
+  Flash = 2,
+  Restore = 3,
   Def = 0x30,     // 48
   Act = 0x37,     // 55
   Prog = 0x39,    // 57

@@ -7,6 +7,7 @@ extern "C" {
 #endif
 
 void LedBlink(void);
+void LedOn(void);
 
 #ifdef __cplusplus
 }

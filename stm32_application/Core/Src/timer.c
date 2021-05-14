@@ -2,6 +2,8 @@
 #include "stm32f103xe.h"
 #include "common.h"
 #include "sensor.h"
+#include "spctimer.h"
+#include "gpio.h"
 
 volatile uint32_t ulHighFrequencyTimerTicks = 0;
 
@@ -64,8 +66,10 @@ void TIMER_Init()
     // Timer4 10s used for voltage measurement
     TIMERx_Init(TIM4, RCC_APB1ENR_TIM4EN, TIM4_IRQn, 20000, 36000);
     
-    // Timer5-8 1s reserved
-    TIMERx_Init(TIM5, RCC_APB1ENR_TIM5EN, TIM5_IRQn, 2000, 36000);
+    // Timer5 20ms used for spc timer
+    TIMERx_Init(TIM5, RCC_APB1ENR_TIM5EN, TIM5_IRQn, 400, 3600);
+
+    // Timer6-8 1s reserved
     TIMERx_Init(TIM6, RCC_APB1ENR_TIM6EN, TIM6_IRQn, 2000, 36000);
     TIMERx_Init(TIM7, RCC_APB1ENR_TIM7EN, TIM7_IRQn, 2000, 36000);
     TIMERx_Init(TIM8, RCC_APB2ENR_TIM8EN, TIM8_UP_IRQn, 2000, 36000);
@@ -111,6 +115,8 @@ void TIM4_IRQHandler(void)
 void TIM5_IRQHandler(void)
 {
     CLEAR_BIT(TIM5->SR, TIM_SR_UIF);
+
+    SpcTimer_UpdateTimer();
 }
 
 void TIM6_IRQHandler(void)

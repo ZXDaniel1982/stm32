@@ -140,3 +140,9 @@ void LedBlink(void)
 		CLEAR_BIT(Led_GPIO_Port->ODR, Led_Pin);
 	}
 }
+
+void LedOn(void)
+{
+		SET_BIT(Led_GPIO_Port->ODR, Led_Pin);
+}
+

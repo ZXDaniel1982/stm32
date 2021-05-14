@@ -86,7 +86,6 @@ void TIMER_Init(void);
 
 // USART1
 void USART_Init(void);
-int uartprintf(const char* fmt, ...);
 
 // FLASH
 void FLASH_Lock(void);

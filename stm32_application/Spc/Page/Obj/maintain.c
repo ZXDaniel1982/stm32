@@ -141,22 +141,14 @@ PageEntity_t *Page_Func_Maintain(KeyEnum_t key, Logger logger, PageEntity_t *pag
 {
     switch (key) {
     case Act:
-        SpcTimer_StopTimer(Flash);
-        SpcTimer_StopTimer(Restore);
         return Page_CreatePage(Actual, logger, page->publisher);
     case Prog:
-        SpcTimer_StopTimer(Flash);
-        SpcTimer_StopTimer(Restore);
         return Page_CreatePage(Program, logger, page->publisher);
     case Def:
-        SpcTimer_StopTimer(Flash);
-        SpcTimer_StopTimer(Restore);
         return Page_CreatePage(Default, logger, page->publisher);
     /*case Right:
         return Page_CreatePage(TempRTDA, logger, page->publisher);*/
     case Left:
-        SpcTimer_StopTimer(Flash);
-        SpcTimer_StopTimer(Restore);
         return Page_CreatePage(Program, logger, page->publisher);
     case Up:
     case Down:

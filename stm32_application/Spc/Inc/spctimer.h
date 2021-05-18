@@ -32,6 +32,7 @@ void SpcTimer_Init(void);
 void SpcTimer_StartTimer(SpcTimer_Enum_t type, uint16_t interval, bool renew);
 void SpcTimer_StopTimer(SpcTimer_Enum_t type);
 void SpcTimer_UpdateTimer(void);
+void SpcTimer_StopAllTimer(void);
 
 #ifdef __cplusplus
 }

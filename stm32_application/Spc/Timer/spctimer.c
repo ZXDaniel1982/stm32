@@ -68,6 +68,12 @@ void SpcTimer_UpdateTimer(void)
     Vector_List_WalkThrough(ListTimer);
 }
 
+void SpcTimer_StopAllTimer(void)
+{
+    for (uint8_t i=TimerFlash; i<MAX_TIMER; i++)
+        SpcTimer_StopTimer(i);
+}
+
 void SpcTimer_Init(void)
 {
     uartprintf("Init Spc Timer\r\n");

@@ -9,62 +9,62 @@ static inline int16_t FetchMinMaint(bool unit) {
   return unit ? -58 : -50;
 }
 
-void TemperatureStoreProcess(PageEntity_t *page)
+void HighTempStoreProcess(PageEntity_t *page)
 {
   if ((page == NULL) || (page->data == NULL)) return;
 
-  SpcTempConfig_t *maintain = (SpcTempConfig_t *) page->data;
-  if (maintain->status == OFF) {
+  SpcTempConfig_t *hightemp = (SpcTempConfig_t *) page->data;
+  if (hightemp->status == OFF) {
       strncpy((char *)(page->info.Content), "Off", MAX_INFO_LEN);
-  } else if (maintain->status == NONE) {
+  } else if (hightemp->status == NONE) {
       strncpy((char *)(page->info.Content), "None", MAX_INFO_LEN);
   } else {
       uint8_t content[MAX_INFO_LEN] = {0};
       const uint8_t unit = SpcData_GetTempUint();
-      snprintf((char *)content, MAX_INFO_LEN, "%d %s", maintain->temperature[unit],
+      snprintf((char *)content, MAX_INFO_LEN, "%d %s", hightemp->temperature[unit],
         unit ? "F" : "C");
       strncpy((char *)(page->info.Content), (char *)content, MAX_INFO_LEN);
   }
 }
 
-static void Page_Update_Maintain(Logger logger, PageEntity_t *page, KeyEnum_t key)
+static void Page_Update_HighTemp(Logger logger, PageEntity_t *page, KeyEnum_t key)
 {
-  SpcTempConfig_t *maintain = (SpcTempConfig_t *) page->data;
+  SpcTempConfig_t *hightemp = (SpcTempConfig_t *) page->data;
   const uint8_t unit = SpcData_GetTempUint();
 
   SpcTimer_StopTimer(Restore);
   SpcTimer_StartTimer(Flash, 40, true);
   
   if (key == Up) {
-    if (maintain->status == OFF) {
+    if (hightemp->status == OFF) {
       return;
-    } else if (maintain->status == NONE) {
-      maintain->status = OFF;
-    } else if (maintain->temperature[unit] == FetchMaxMaint(unit)) {
-      maintain->status = NONE;
-    } else if (maintain->temperature[unit] < FetchMaxMaint(unit)) {
-      maintain->temperature[unit]++;
+    } else if (hightemp->status == NONE) {
+      hightemp->status = OFF;
+    } else if (hightemp->temperature[unit] == FetchMaxMaint(unit)) {
+      hightemp->status = NONE;
+    } else if (hightemp->temperature[unit] < FetchMaxMaint(unit)) {
+      hightemp->temperature[unit]++;
     } else {
       logger("\r\nexit\r\n");
       return;
     }
   } else if (key == Down) {
-    if (maintain->status == OFF) {
-      maintain->status = NONE;
-    } else if (maintain->status == NONE) {
-      maintain->status = Opt;
-      maintain->temperature[unit] = FetchMaxMaint(unit);
-    } else if (maintain->temperature[unit] > FetchMinMaint(unit)) {
-      maintain->temperature[unit]--;
+    if (hightemp->status == OFF) {
+      hightemp->status = NONE;
+    } else if (hightemp->status == NONE) {
+      hightemp->status = Opt;
+      hightemp->temperature[unit] = FetchMaxMaint(unit);
+    } else if (hightemp->temperature[unit] > FetchMinMaint(unit)) {
+      hightemp->temperature[unit]--;
     } else {
       return;
     }
   }
-  TemperatureStoreProcess(page);
+  HighTempStoreProcess(page);
   page->publisher(&(page->info));
 }
 
-static void Page_Config_Maintain(Logger logger, PageEntity_t *page)
+static void Page_Config_HighTemp(Logger logger, PageEntity_t *page)
 {
   if ((page == NULL) || (page->publisher == NULL) || (page->data == NULL)) return;
 
@@ -72,12 +72,12 @@ static void Page_Config_Maintain(Logger logger, PageEntity_t *page)
   SpcTimer_StopTimer(Flash);
   SpcTimer_StartTimer(Restore, 40, false);
 
-  SpcData_SetMaintain(page->data);
+  SpcData_SetHighTemp(page->data);
   strncpy((char *)(page->info.Content), "Stored", MAX_INFO_LEN);
   page->publisher(&(page->info));
 }
 
-static void Page_Reset_Maintain(Logger logger, PageEntity_t *page)
+static void Page_Reset_HighTemp(Logger logger, PageEntity_t *page)
 {
   if ((page == NULL) || (page->publisher == NULL) || (page->data == NULL)) return;
   
@@ -86,12 +86,12 @@ static void Page_Reset_Maintain(Logger logger, PageEntity_t *page)
   SpcTimer_StopTimer(Flash);
   SpcTimer_StopTimer(Restore);
 
-  SpcData_GetMaintain(page->data);
-  TemperatureStoreProcess(page);
+  SpcData_GetHighTemp(page->data);
+  HighTempStoreProcess(page);
   page->publisher(&(page->info));
 }
 
-static void Page_Flash_Maintain(Logger logger, PageEntity_t *page)
+static void Page_Flash_HighTemp(Logger logger, PageEntity_t *page)
 {
   if ((page == NULL) || (page->publisher == NULL) || (page->data == NULL)) return;
 
@@ -100,44 +100,44 @@ static void Page_Flash_Maintain(Logger logger, PageEntity_t *page)
   if (flash) {
     memset(page->info.Content, 0, MAX_INFO_LEN);
   } else {
-    TemperatureStoreProcess(page);
+    HighTempStoreProcess(page);
   }
 
   flash = !flash;
   page->publisher(&(page->info));
 }
 
-static void Page_Restore_Maintain(Logger logger, PageEntity_t *page)
+static void Page_Restore_HighTemp(Logger logger, PageEntity_t *page)
 {
   if ((page == NULL) || (page->publisher == NULL) || (page->data == NULL)) return;
 
   SpcTimer_StopTimer(Flash);
   SpcTimer_StopTimer(Restore);
   
-  TemperatureStoreProcess(page);
+  HighTempStoreProcess(page);
   page->publisher(&(page->info));
 }
 
-void Page_Init_Maintain(Logger logger, PageEntity_t *page)
+void Page_Init_HighTemp(Logger logger, PageEntity_t *page)
 {
     //logger("\r\nActual\r\n");
   if ((page == NULL) || (page->publisher == NULL)) return;
 
   SpcData_SetRefreshMask(DISABLE_REFRESH);
-  strncpy((char *)(page->info.Title), "Maintain Temp", MAX_INFO_LEN);
+  strncpy((char *)(page->info.Title), "High Temp Alarm", MAX_INFO_LEN);
 
   if (page->data != NULL) free(page->data);
   page->data = (SpcTempConfig_t *) malloc(sizeof(SpcTempConfig_t));
   memset(page->data, 0, sizeof(SpcTempConfig_t));
-  if (SpcData_GetMaintain(page->data)) {
-    TemperatureStoreProcess(page);
+  if (SpcData_GetHighTemp(page->data)) {
+    HighTempStoreProcess(page);
   } else {
-    strncpy((char *)(page->info.Content), "Cant read Main", MAX_INFO_LEN);
+    strncpy((char *)(page->info.Content), "Cant read High", MAX_INFO_LEN);
   }
   page->publisher(&(page->info));
 }
 
-PageEntity_t *Page_Func_Maintain(KeyEnum_t key, Logger logger, PageEntity_t *page)
+PageEntity_t *Page_Func_HighTemp(KeyEnum_t key, Logger logger, PageEntity_t *page)
 {
     switch (key) {
     case Act:
@@ -146,25 +146,25 @@ PageEntity_t *Page_Func_Maintain(KeyEnum_t key, Logger logger, PageEntity_t *pag
         return Page_CreatePage(Program, logger, page->publisher);
     case Def:
         return Page_CreatePage(Default, logger, page->publisher);
-    case Right:
-        return Page_CreatePage(LowTemp, logger, page->publisher);
+    /*case Right:
+        return Page_CreatePage(TempRTDA, logger, page->publisher);*/
     case Left:
-        return Page_CreatePage(Program, logger, page->publisher);
+        return Page_CreatePage(LowTemp, logger, page->publisher);
     case Up:
     case Down:
-        Page_Update_Maintain(logger, page, key);
+        Page_Update_HighTemp(logger, page, key);
         return NULL;
     case Enter:
-        Page_Config_Maintain(logger, page);
+        Page_Config_HighTemp(logger, page);
         return NULL;
     case Reset:
-        Page_Reset_Maintain(logger, page);
+        Page_Reset_HighTemp(logger, page);
         return NULL;
     case Flash:
-        Page_Flash_Maintain(logger, page);
+        Page_Flash_HighTemp(logger, page);
         return NULL;
     case Restore:
-        Page_Restore_Maintain(logger, page);
+        Page_Restore_HighTemp(logger, page);
         return NULL;
     default:
         return NULL;

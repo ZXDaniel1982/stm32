@@ -266,6 +266,44 @@ bool SpcData_GetMaintain(SpcTempConfig_t *maintain)
     return true;
 }
 
+bool SpcData_SetLowTemp(SpcTempConfig_t *lowtemp)
+{
+    if (lowtemp == NULL) return false;
+
+    memcpy(&(SpcDataRom.SpcLowTemp), lowtemp, sizeof(SpcTempConfig_t));
+
+    return true;
+}
+
+bool SpcData_GetLowTemp(SpcTempConfig_t *lowtemp)
+{
+    if (lowtemp == NULL) return false;
+
+    memset(lowtemp, 0, sizeof(SpcTempConfig_t));
+    memcpy(lowtemp, &(SpcDataRom.SpcLowTemp), sizeof(SpcTempConfig_t));
+
+    return true;
+}
+
+bool SpcData_SetHighTemp(SpcTempConfig_t *hightemp)
+{
+    if (hightemp == NULL) return false;
+
+    memcpy(&(SpcDataRom.SpcHighTemp), hightemp, sizeof(SpcTempConfig_t));
+
+    return true;
+}
+
+bool SpcData_GetHighTemp(SpcTempConfig_t *hightemp)
+{
+    if (hightemp == NULL) return false;
+
+    memset(hightemp, 0, sizeof(SpcTempConfig_t));
+    memcpy(hightemp, &(SpcDataRom.SpcHighTemp), sizeof(SpcTempConfig_t));
+
+    return true;
+}
+
 void SpcData_SetRefreshMask(uint64_t val)
 {
     SpcDataRam.SpcRefreshMask = val; 

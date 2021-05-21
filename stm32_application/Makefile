@@ -87,6 +87,8 @@ Spc/Page/Obj/reset.c \
 Spc/Page/Obj/version.c \
 Spc/Page/Obj/program.c \
 Spc/Page/Obj/maintain.c \
+Spc/Page/Obj/lowtemp.c \
+Spc/Page/Obj/hightemp.c \
 Spc/Data/data.c \
 Spc/Timer/spctimer.c \
 Gui/gui.c \
@@ -121,6 +123,8 @@ Spc/Page/Obj/reset.c \
 Spc/Page/Obj/version.c \
 Spc/Page/Obj/program.c \
 Spc/Page/Obj/maintain.c \
+Spc/Page/Obj/lowtemp.c \
+Spc/Page/Obj/hightemp.c \
 Spc/Timer/spctimermock.c \
 Vector/vector.c
 

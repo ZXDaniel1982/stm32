@@ -91,6 +91,8 @@ typedef struct {
         uint64_t SpcMaskRom;
     };
     SpcTempConfig_t SpcMaintain;
+    SpcTempConfig_t SpcLowTemp;
+    SpcTempConfig_t SpcHighTemp;
 } SpcDataRom_t;
 
 typedef struct {
@@ -188,6 +190,10 @@ void SpcData_SetOnPercent(uint16_t voltage);
 bool SpcData_GetOnPercent(SpcUint16_t *voltage);
 bool SpcData_SetMaintain(SpcTempConfig_t *maintain);
 bool SpcData_GetMaintain(SpcTempConfig_t *maintain);
+bool SpcData_SetLowTemp(SpcTempConfig_t *lowtemp);
+bool SpcData_GetLowTemp(SpcTempConfig_t *lowtemp);
+bool SpcData_SetHighTemp(SpcTempConfig_t *hightemp);
+bool SpcData_GetHighTemp(SpcTempConfig_t *hightemp);
 
 #ifdef __cplusplus
 }

@@ -623,6 +623,56 @@ bool SpcData_GetHighTemp(SpcTempConfig_t *hightemp)
     return true;
 }
 
+bool SpcData_SetDeadBand(SpcTempConfig_t *deadband)
+{
+    if (deadband == NULL) return false;
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    memcpy(&(SpcDataRom.SpcDeadBand), deadband, sizeof(SpcTempConfig_t));
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
+bool SpcData_GetDeadBand(SpcTempConfig_t *deadband)
+{
+    if (deadband == NULL) return false;
+
+    memset(deadband, 0, sizeof(SpcTempConfig_t));
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    memcpy(deadband, &(SpcDataRom.SpcDeadBand), sizeof(SpcTempConfig_t));
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
+bool SpcData_GetTempGroup(SpcTempGroupConfig_t *tempgroup)
+{
+    if (tempgroup == NULL) return false;
+
+    memset(tempgroup, 0, sizeof(SpcTempGroupConfig_t));
+
+    SpcData_GetMaintain(&(tempgroup->maintain));
+    SpcData_GetLowTemp(&(tempgroup->lowtemp));
+    SpcData_GetHighTemp(&(tempgroup->hightemp));
+    SpcData_GetDeadBand(&(tempgroup->deadband));
+
+    return true;
+}
+
+bool SpcData_SetTempGroup(SpcTempGroupConfig_t *tempgroup)
+{
+    if (tempgroup == NULL) return false;
+
+    SpcData_SetMaintain(&(tempgroup->maintain));
+    SpcData_SetLowTemp(&(tempgroup->lowtemp));
+    SpcData_SetHighTemp(&(tempgroup->hightemp));
+    SpcData_SetDeadBand(&(tempgroup->deadband));
+
+    return true;
+}
+
 void SpcData_SetRefreshMask(uint64_t val)
 {
     xSemaphoreTake(DataMutex, portMAX_DELAY);

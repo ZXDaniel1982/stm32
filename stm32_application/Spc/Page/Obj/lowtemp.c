@@ -1,27 +1,35 @@
 #include "spc.h"
 #include "spctimer.h"
 
-static inline int16_t FetchMaxMaint(bool unit) {
-  return unit ? 932 : 500;
+static inline int16_t FetchMaxLowTemp(SpcTempGroupConfig_t* tempgroup, bool unit) {
+    if (tempgroup->maintain.status == Opt) {
+        // TODO : get proportional control
+    } else if (tempgroup->hightemp.status == OFF) {
+        return unit ? 931 : 499;
+    } else {
+        return (tempgroup->hightemp.temperature[unit] - 1);
+    }
+
+    return unit ? 932 : 500;
 }
 
-static inline int16_t FetchMinMaint(bool unit) {
-  return unit ? -58 : -50;
+static inline int16_t FetchMinLowTemp(bool unit) {
+    return unit ? -58 : -50;
 }
 
 void LowTempStoreProcess(PageEntity_t *page)
 {
   if ((page == NULL) || (page->data == NULL)) return;
 
-  SpcTempConfig_t *lowtemp = (SpcTempConfig_t *) page->data;
-  if (lowtemp->status == OFF) {
+  SpcTempGroupConfig_t *tempgroup = (SpcTempGroupConfig_t *) page->data;
+  if (tempgroup->lowtemp.status == OFF) {
       strncpy((char *)(page->info.Content), "Off", MAX_INFO_LEN);
-  } else if (lowtemp->status == NONE) {
+  } else if (tempgroup->lowtemp.status == NONE) {
       strncpy((char *)(page->info.Content), "None", MAX_INFO_LEN);
   } else {
       uint8_t content[MAX_INFO_LEN] = {0};
       const uint8_t unit = SpcData_GetTempUint();
-      snprintf((char *)content, MAX_INFO_LEN, "%d %s", lowtemp->temperature[unit],
+      snprintf((char *)content, MAX_INFO_LEN, "%d %s", tempgroup->lowtemp.temperature[unit],
         unit ? "F" : "C");
       strncpy((char *)(page->info.Content), (char *)content, MAX_INFO_LEN);
   }
@@ -29,66 +37,75 @@ void LowTempStoreProcess(PageEntity_t *page)
 
 static void Page_Update_LowTemp(Logger logger, PageEntity_t *page, KeyEnum_t key)
 {
-  SpcTempConfig_t *lowtemp = (SpcTempConfig_t *) page->data;
-  const uint8_t unit = SpcData_GetTempUint();
+    SpcTempGroupConfig_t *tempgroup = (SpcTempGroupConfig_t *) page->data;
+    SpcTempConfig_t *maintain = &(tempgroup->maintain);
+    SpcTempConfig_t *lowtemp = &(tempgroup->lowtemp);
+    SpcTempConfig_t *hightemp = &(tempgroup->hightemp);
+    SpcTempConfig_t *deadband = &(tempgroup->deadband);
+    const uint8_t unit = SpcData_GetTempUint();
 
-  SpcTimer_StopTimer(Restore);
-  SpcTimer_StartTimer(Flash, 40, true);
-  
-  if (key == Up) {
-    if (lowtemp->status == OFF) {
-      return;
-    } else if (lowtemp->status == NONE) {
-      lowtemp->status = OFF;
-    } else if (lowtemp->temperature[unit] == FetchMaxMaint(unit)) {
-      lowtemp->status = NONE;
-    } else if (lowtemp->temperature[unit] < FetchMaxMaint(unit)) {
-      lowtemp->temperature[unit]++;
-    } else {
-      logger("\r\nexit\r\n");
-      return;
+    if (maintain->status == OFF) return;
+    (void) hightemp;
+    (void) deadband;
+
+    SpcTimer_StopTimer(Restore);
+    SpcTimer_StartTimer(Flash, 40, true);
+
+    if (key == Up) {
+        if (lowtemp->status == OFF) {
+            return;
+        } else if (lowtemp->temperature[unit] == FetchMaxLowTemp(tempgroup, unit)) {
+            lowtemp->status = OFF;
+        } else if (lowtemp->temperature[unit] < FetchMaxLowTemp(tempgroup, unit)) {
+            lowtemp->temperature[unit]++;
+        } else {
+            logger("\r\nexit\r\n");
+            return;
+        }
+    } else if (key == Down) {
+        if (lowtemp->status == OFF) {
+            lowtemp->status = Opt;
+            lowtemp->temperature[unit] = FetchMaxLowTemp(tempgroup, unit);
+        } else if (lowtemp->temperature[unit] > FetchMinLowTemp(unit)) {
+            lowtemp->temperature[unit]--;
+        } else {
+            return;
+        }
     }
-  } else if (key == Down) {
-    if (lowtemp->status == OFF) {
-      lowtemp->status = NONE;
-    } else if (lowtemp->status == NONE) {
-      lowtemp->status = Opt;
-      lowtemp->temperature[unit] = FetchMaxMaint(unit);
-    } else if (lowtemp->temperature[unit] > FetchMinMaint(unit)) {
-      lowtemp->temperature[unit]--;
-    } else {
-      return;
-    }
-  }
-  LowTempStoreProcess(page);
-  page->publisher(&(page->info));
+    LowTempStoreProcess(page);
+    page->publisher(&(page->info));
 }
 
 static void Page_Config_LowTemp(Logger logger, PageEntity_t *page)
 {
-  if ((page == NULL) || (page->publisher == NULL) || (page->data == NULL)) return;
+    if ((page == NULL) || (page->publisher == NULL) || (page->data == NULL)) return;
 
-  
-  SpcTimer_StopTimer(Flash);
-  SpcTimer_StartTimer(Restore, 40, false);
+    SpcTempGroupConfig_t *tempgroup = (SpcTempGroupConfig_t *) page->data;
+    if (tempgroup->maintain.status == OFF) return;
 
-  SpcData_SetLowTemp(page->data);
-  strncpy((char *)(page->info.Content), "Stored", MAX_INFO_LEN);
-  page->publisher(&(page->info));
+    SpcTimer_StopTimer(Flash);
+    SpcTimer_StartTimer(Restore, 40, false);
+
+    SpcData_SetTempGroup(page->data);
+    strncpy((char *)(page->info.Content), "Stored", MAX_INFO_LEN);
+    page->publisher(&(page->info));
 }
 
 static void Page_Reset_LowTemp(Logger logger, PageEntity_t *page)
 {
-  if ((page == NULL) || (page->publisher == NULL) || (page->data == NULL)) return;
-  
-  memset(page->data, 0, sizeof(SpcTempConfig_t));
+    if ((page == NULL) || (page->publisher == NULL) || (page->data == NULL)) return;
 
-  SpcTimer_StopTimer(Flash);
-  SpcTimer_StopTimer(Restore);
+    SpcTempGroupConfig_t *tempgroup = (SpcTempGroupConfig_t *) page->data;
+    if (tempgroup->maintain.status == OFF) return;
 
-  SpcData_GetLowTemp(page->data);
-  LowTempStoreProcess(page);
-  page->publisher(&(page->info));
+    memset(page->data, 0, sizeof(SpcTempGroupConfig_t));
+
+    SpcTimer_StopTimer(Flash);
+    SpcTimer_StopTimer(Restore);
+
+    SpcData_GetTempGroup(page->data);
+    LowTempStoreProcess(page);
+    page->publisher(&(page->info));
 }
 
 static void Page_Flash_LowTemp(Logger logger, PageEntity_t *page)
@@ -127,9 +144,9 @@ void Page_Init_LowTemp(Logger logger, PageEntity_t *page)
   strncpy((char *)(page->info.Title), "Low Temp Alarm", MAX_INFO_LEN);
 
   if (page->data != NULL) free(page->data);
-  page->data = (SpcTempConfig_t *) malloc(sizeof(SpcTempConfig_t));
-  memset(page->data, 0, sizeof(SpcTempConfig_t));
-  if (SpcData_GetLowTemp(page->data)) {
+  page->data = (SpcTempGroupConfig_t *) malloc(sizeof(SpcTempGroupConfig_t));
+  memset(page->data, 0, sizeof(SpcTempGroupConfig_t));
+  if (SpcData_GetTempGroup(page->data)) {
     LowTempStoreProcess(page);
   } else {
     strncpy((char *)(page->info.Content), "Cant read Low", MAX_INFO_LEN);

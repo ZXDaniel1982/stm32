@@ -93,7 +93,8 @@ typedef struct {
         struct {
             uint64_t lcdDef : 2;
             uint64_t tempUint : 1;
-            uint64_t reserve : 61;
+            uint64_t ctrType : 1;
+            uint64_t reserve : 60;
         } bits;
         uint64_t SpcMaskRom;
     };
@@ -159,6 +160,7 @@ typedef struct {
 void SpcDataInit(void);
 uint8_t SpcData_GetLcdDef(void);
 uint8_t SpcData_GetTempUint(void);
+uint8_t SpcData_GetCtrlType(void);
 uint64_t SpcData_GetMaskRam(void);
 void SpcData_SetRefreshMask(uint64_t val);
 uint64_t SpcData_GetRefreshMask(void);

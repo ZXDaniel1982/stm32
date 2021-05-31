@@ -54,6 +54,17 @@ uint8_t SpcData_GetTempUint(void)
     return val;
 }
 
+uint8_t SpcData_GetCtrlType(void)
+{
+    uint8_t val = 0;
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    val = (uint8_t) SpcDataRom.bits.ctrType;
+    xSemaphoreGive(DataMutex);
+
+    return val;
+}
+
 uint64_t SpcData_GetMaskRam(void)
 {
     uint64_t val = 0;

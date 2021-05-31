@@ -36,6 +36,12 @@ uint8_t SpcData_GetTempUint(void)
     return (uint8_t) SpcDataRom.bits.tempUint;
 }
 
+uint8_t SpcData_GetCtrlType(void)
+{
+    SpcDataRom.bits.ctrType = 1;
+    return (uint8_t) SpcDataRom.bits.ctrType;
+}
+
 uint64_t SpcData_GetMaskRam(void)
 {
     SpcDataRam.SpcMaskBits.hasHeatStatus = 1;

@@ -80,19 +80,28 @@ typedef struct {
     int16_t temperature[2];
 } SpcTempConfig_t;
 
+typedef struct {
+    SpcTempConfig_t maintain;
+    SpcTempConfig_t lowtemp;
+    SpcTempConfig_t hightemp;
+    SpcTempConfig_t deadband;
+} SpcTempGroupConfig_t;
+
 /* Global values */
 typedef struct {
     union {
         struct {
             uint64_t lcdDef : 2;
             uint64_t tempUint : 1;
-            uint64_t reserve : 61;
+            uint64_t ctrType : 1;
+            uint64_t reserve : 60;
         } bits;
         uint64_t SpcMaskRom;
     };
     SpcTempConfig_t SpcMaintain;
     SpcTempConfig_t SpcLowTemp;
     SpcTempConfig_t SpcHighTemp;
+    SpcTempConfig_t SpcDeadBand;
 } SpcDataRom_t;
 
 typedef struct {
@@ -151,6 +160,7 @@ typedef struct {
 void SpcDataInit(void);
 uint8_t SpcData_GetLcdDef(void);
 uint8_t SpcData_GetTempUint(void);
+uint8_t SpcData_GetCtrlType(void);
 uint64_t SpcData_GetMaskRam(void);
 void SpcData_SetRefreshMask(uint64_t val);
 uint64_t SpcData_GetRefreshMask(void);
@@ -194,6 +204,10 @@ bool SpcData_SetLowTemp(SpcTempConfig_t *lowtemp);
 bool SpcData_GetLowTemp(SpcTempConfig_t *lowtemp);
 bool SpcData_SetHighTemp(SpcTempConfig_t *hightemp);
 bool SpcData_GetHighTemp(SpcTempConfig_t *hightemp);
+bool SpcData_SetDeadBand(SpcTempConfig_t *deadband);
+bool SpcData_GetDeadBand(SpcTempConfig_t *deadband);
+bool SpcData_GetTempGroup(SpcTempGroupConfig_t *tempgroup);
+bool SpcData_SetTempGroup(SpcTempGroupConfig_t *tempgroup);
 
 #ifdef __cplusplus
 }

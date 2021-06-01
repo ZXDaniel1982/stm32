@@ -36,6 +36,12 @@ uint8_t SpcData_GetTempUint(void)
     return (uint8_t) SpcDataRom.bits.tempUint;
 }
 
+uint8_t SpcData_GetCtrlType(void)
+{
+    SpcDataRom.bits.ctrType = 1;
+    return (uint8_t) SpcDataRom.bits.ctrType;
+}
+
 uint64_t SpcData_GetMaskRam(void)
 {
     SpcDataRam.SpcMaskBits.hasHeatStatus = 1;
@@ -300,6 +306,51 @@ bool SpcData_GetHighTemp(SpcTempConfig_t *hightemp)
 
     memset(hightemp, 0, sizeof(SpcTempConfig_t));
     memcpy(hightemp, &(SpcDataRom.SpcHighTemp), sizeof(SpcTempConfig_t));
+
+    return true;
+}
+
+bool SpcData_SetDeadBand(SpcTempConfig_t *deadband)
+{
+    if (deadband == NULL) return false;
+
+    memcpy(&(SpcDataRom.SpcDeadBand), deadband, sizeof(SpcTempConfig_t));
+
+    return true;
+}
+
+bool SpcData_GetDeadBand(SpcTempConfig_t *deadband)
+{
+    if (deadband == NULL) return false;
+
+    memset(deadband, 0, sizeof(SpcTempConfig_t));
+    memcpy(deadband, &(SpcDataRom.SpcDeadBand), sizeof(SpcTempConfig_t));
+
+    return true;
+}
+
+bool SpcData_GetTempGroup(SpcTempGroupConfig_t *tempgroup)
+{
+    if (tempgroup == NULL) return false;
+
+    memset(tempgroup, 0, sizeof(SpcTempGroupConfig_t));
+
+    SpcData_GetMaintain(&(tempgroup->maintain));
+    SpcData_GetLowTemp(&(tempgroup->lowtemp));
+    SpcData_GetHighTemp(&(tempgroup->hightemp));
+    SpcData_GetDeadBand(&(tempgroup->deadband));
+
+    return true;
+}
+
+bool SpcData_SetTempGroup(SpcTempGroupConfig_t *tempgroup)
+{
+    if (tempgroup == NULL) return false;
+
+    SpcData_SetMaintain(&(tempgroup->maintain));
+    SpcData_SetLowTemp(&(tempgroup->lowtemp));
+    SpcData_SetHighTemp(&(tempgroup->hightemp));
+    SpcData_SetDeadBand(&(tempgroup->deadband));
 
     return true;
 }

@@ -22,6 +22,22 @@ static inline int16_t FetchMinMaint(SpcTempGroupConfig_t *tempgroup, bool unit) 
     }
 }
 
+static void SpcData_CorrectHighTemp(SpcTempGroupConfig_t *tempgroup)
+{
+    if (tempgroup == NULL) return;
+
+    const uint8_t unit = SpcData_GetTempUint();
+    SpcTempConfig_t *lowtemp = &(tempgroup->lowtemp);
+    SpcTempConfig_t *hightemp = &(tempgroup->hightemp);
+
+    if ((lowtemp->status == Opt) &&
+        (hightemp->status == Opt)) {
+        if (lowtemp->temperature[unit] >= hightemp->temperature[unit]) {
+            lowtemp->temperature[unit] = hightemp->temperature[unit] - 1;
+        }
+    }
+}
+
 void HighTempStoreProcess(PageEntity_t *page)
 {
     if ((page == NULL) || (page->data == NULL)) return;
@@ -93,6 +109,7 @@ static void Page_Config_HighTemp(Logger logger, PageEntity_t *page)
     SpcTimer_StopTimer(Flash);
     SpcTimer_StartTimer(Restore, 40, false);
 
+    SpcData_CorrectHighTemp(tempgroup);
     SpcData_SetTempGroup(page->data);
     strncpy((char *)(page->info.Content), "Stored", MAX_INFO_LEN);
     page->publisher(&(page->info));

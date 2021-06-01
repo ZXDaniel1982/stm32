@@ -27,11 +27,16 @@ void HighTempStoreProcess(PageEntity_t *page)
     if ((page == NULL) || (page->data == NULL)) return;
 
     SpcTempGroupConfig_t *tempgroup = (SpcTempGroupConfig_t *) page->data;
+    SpcTempConfig_t *maintain = &(tempgroup->maintain);
     SpcTempConfig_t *hightemp = &(tempgroup->hightemp);
+    
+    if (maintain->status == OFF) {
+        strncpy((char *)(page->info.Content), "--", MAX_INFO_LEN);
+        return;
+    }
+    
     if (hightemp->status == OFF) {
         strncpy((char *)(page->info.Content), "Off", MAX_INFO_LEN);
-    } else if (hightemp->status == NONE) {
-        strncpy((char *)(page->info.Content), "--", MAX_INFO_LEN);
     } else {
         uint8_t content[MAX_INFO_LEN] = {0};
         const uint8_t unit = SpcData_GetTempUint();
@@ -44,9 +49,12 @@ void HighTempStoreProcess(PageEntity_t *page)
 static void Page_Update_HighTemp(Logger logger, PageEntity_t *page, KeyEnum_t key)
 {
     SpcTempGroupConfig_t *tempgroup = (SpcTempGroupConfig_t *) page->data;
+    SpcTempConfig_t *maintain = &(tempgroup->maintain);
     SpcTempConfig_t *hightemp = &(tempgroup->hightemp);
     const uint8_t unit = SpcData_GetTempUint();
 
+    if (maintain->status == OFF) return;
+    
     SpcTimer_StopTimer(Restore);
     SpcTimer_StartTimer(Flash, 40, true);
   
@@ -94,6 +102,9 @@ static void Page_Reset_HighTemp(Logger logger, PageEntity_t *page)
 {
     if ((page == NULL) || (page->publisher == NULL) || (page->data == NULL)) return;
 
+    SpcTempGroupConfig_t *tempgroup = (SpcTempGroupConfig_t *) page->data;
+    if (tempgroup->maintain.status == OFF) return;
+    
     memset(page->data, 0, sizeof(SpcTempGroupConfig_t));
 
     SpcTimer_StopTimer(Flash);
@@ -108,6 +119,9 @@ static void Page_Flash_HighTemp(Logger logger, PageEntity_t *page)
 {
     if ((page == NULL) || (page->publisher == NULL) || (page->data == NULL)) return;
 
+    SpcTempGroupConfig_t *tempgroup = (SpcTempGroupConfig_t *) page->data;
+    if (tempgroup->maintain.status == OFF) return;
+    
     static bool flash = false;
 
     if (flash) {
@@ -124,6 +138,9 @@ static void Page_Restore_HighTemp(Logger logger, PageEntity_t *page)
 {
     if ((page == NULL) || (page->publisher == NULL) || (page->data == NULL)) return;
 
+    SpcTempGroupConfig_t *tempgroup = (SpcTempGroupConfig_t *) page->data;
+    if (tempgroup->maintain.status == OFF) return;
+    
     SpcTimer_StopTimer(Flash);
     SpcTimer_StopTimer(Restore);
 

@@ -20,12 +20,6 @@ static void SpcData_CorrectMaintain(SpcTempGroupConfig_t *tempgroup)
     SpcTempConfig_t *hightemp = &(tempgroup->hightemp);
     SpcTempConfig_t *deadband = &(tempgroup->deadband);
 
-    if (maintain->status == NONE) {
-        lowtemp->status = NONE;
-        hightemp->status = NONE;
-        return;
-    }
-
     if (maintain->status != Opt) return;
 
     if (lowtemp->status == Opt) {

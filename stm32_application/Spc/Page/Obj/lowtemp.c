@@ -27,14 +27,20 @@ void LowTempStoreProcess(PageEntity_t *page)
     if ((page == NULL) || (page->data == NULL)) return;
 
     SpcTempGroupConfig_t *tempgroup = (SpcTempGroupConfig_t *) page->data;
-    if (tempgroup->lowtemp.status == OFF) {
-        strncpy((char *)(page->info.Content), "Off", MAX_INFO_LEN);
-    } else if (tempgroup->lowtemp.status == NONE) {
+    SpcTempConfig_t *maintain = &(tempgroup->maintain);
+    SpcTempConfig_t *lowtemp = &(tempgroup->lowtemp);
+    
+    if (maintain->status == OFF) {
         strncpy((char *)(page->info.Content), "--", MAX_INFO_LEN);
+        return;
+    }
+    
+    if (lowtemp->status == OFF) {
+        strncpy((char *)(page->info.Content), "Off", MAX_INFO_LEN);
     } else {
         uint8_t content[MAX_INFO_LEN] = {0};
         const uint8_t unit = SpcData_GetTempUint();
-        snprintf((char *)content, MAX_INFO_LEN, "%d %s", tempgroup->lowtemp.temperature[unit],
+        snprintf((char *)content, MAX_INFO_LEN, "%d %s", lowtemp->temperature[unit],
             unit ? "F" : "C");
         strncpy((char *)(page->info.Content), (char *)content, MAX_INFO_LEN);
     }
@@ -45,13 +51,9 @@ static void Page_Update_LowTemp(Logger logger, PageEntity_t *page, KeyEnum_t key
     SpcTempGroupConfig_t *tempgroup = (SpcTempGroupConfig_t *) page->data;
     SpcTempConfig_t *maintain = &(tempgroup->maintain);
     SpcTempConfig_t *lowtemp = &(tempgroup->lowtemp);
-    SpcTempConfig_t *hightemp = &(tempgroup->hightemp);
-    SpcTempConfig_t *deadband = &(tempgroup->deadband);
     const uint8_t unit = SpcData_GetTempUint();
 
     if (maintain->status == OFF) return;
-    (void) hightemp;
-    (void) deadband;
 
     SpcTimer_StopTimer(Restore);
     SpcTimer_StartTimer(Flash, 40, true);
@@ -74,6 +76,7 @@ static void Page_Update_LowTemp(Logger logger, PageEntity_t *page, KeyEnum_t key
         } else if (lowtemp->temperature[unit] > FetchMinLowTemp(unit)) {
             lowtemp->temperature[unit]--;
         } else {
+            logger("\r\nexit\r\n");
             return;
         }
     }
@@ -117,6 +120,9 @@ static void Page_Flash_LowTemp(Logger logger, PageEntity_t *page)
 {
     if ((page == NULL) || (page->publisher == NULL) || (page->data == NULL)) return;
 
+    SpcTempGroupConfig_t *tempgroup = (SpcTempGroupConfig_t *) page->data;
+    if (tempgroup->maintain.status == OFF) return;
+    
     static bool flash = false;
 
     if (flash) {
@@ -133,6 +139,9 @@ static void Page_Restore_LowTemp(Logger logger, PageEntity_t *page)
 {
     if ((page == NULL) || (page->publisher == NULL) || (page->data == NULL)) return;
 
+    SpcTempGroupConfig_t *tempgroup = (SpcTempGroupConfig_t *) page->data;
+    if (tempgroup->maintain.status == OFF) return;
+    
     SpcTimer_StopTimer(Flash);
     SpcTimer_StopTimer(Restore);
 

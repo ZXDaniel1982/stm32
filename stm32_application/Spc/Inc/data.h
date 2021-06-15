@@ -91,6 +91,16 @@ typedef struct {
 } SpcCurrentGroupConfig_t;
 
 typedef struct {
+    SpcUint16Config_t gfialarm;
+    SpcUint16Config_t gfitrip;
+} SpcGfiGroupConfig_t;
+
+typedef struct {
+    SpcUint16Config_t lowvoltage;
+    SpcUint16Config_t highvoltage;
+} SpcVoltageGroupConfig_t;
+
+typedef struct {
     SpcTempConfig_Enum_t status;
     int16_t temperature[2];
 } SpcTempConfig_t;
@@ -119,6 +129,10 @@ typedef struct {
     SpcTempConfig_t SpcDeadBand;
     SpcUint16Config_t SpcLowCurrent;
     SpcUint16Config_t SpcHighCurrent;
+    SpcUint16Config_t SpcGFIAlarm;
+    SpcUint16Config_t SpcGFITrip;
+    SpcUint16Config_t SpcLowVoltage;
+    SpcUint16Config_t SpcHighVoltage;
 } SpcDataRom_t;
 
 typedef struct {
@@ -231,6 +245,18 @@ bool SpcData_SetHighCurrent(SpcUint16Config_t *highcurrent);
 bool SpcData_GetHighCurrent(SpcUint16Config_t *highcurrent);
 bool SpcData_GetCurrentGroup(SpcCurrentGroupConfig_t *currentgroup);
 bool SpcData_SetCurrentGroup(SpcCurrentGroupConfig_t *currentgroup);
+bool SpcData_SetGFIAlarm(SpcUint16Config_t *gfialarm);
+bool SpcData_GetGFIAlarm(SpcUint16Config_t *gfialarm);
+bool SpcData_SetGFITrip(SpcUint16Config_t *gfitrip);
+bool SpcData_GetGFITrip(SpcUint16Config_t *gfitrip);
+bool SpcData_GetGfiGroup(SpcGfiGroupConfig_t *gfigroup);
+bool SpcData_SetGfiGroup(SpcGfiGroupConfig_t *gfigroup);
+bool SpcData_SetLowVoltage(SpcUint16Config_t *lowvoltage);
+bool SpcData_GetLowVoltage(SpcUint16Config_t *lowvoltage);
+bool SpcData_SetHighVoltage(SpcUint16Config_t *highvoltage);
+bool SpcData_GetHighVoltage(SpcUint16Config_t *highvoltage);
+bool SpcData_GetVoltageGroup(SpcVoltageGroupConfig_t *voltagegroup);
+bool SpcData_SetVoltageGroup(SpcVoltageGroupConfig_t *voltagegroup);
 
 #ifdef __cplusplus
 }

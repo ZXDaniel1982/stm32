@@ -754,6 +754,146 @@ bool SpcData_SetCurrentGroup(SpcCurrentGroupConfig_t *currentgroup)
     return true;
 }
 
+bool SpcData_SetGFIAlarm(SpcUint16Config_t *gfialarm)
+{
+    if (gfialarm == NULL) return false;
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    memcpy(&(SpcDataRom.SpcGFIAlarm), gfialarm, sizeof(SpcUint16Config_t));
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
+bool SpcData_GetGFIAlarm(SpcUint16Config_t *gfialarm)
+{
+    if (gfialarm == NULL) return false;
+
+    memset(gfialarm, 0, sizeof(SpcUint16Config_t));
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    memcpy(gfialarm, &(SpcDataRom.SpcGFIAlarm), sizeof(SpcUint16Config_t));
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
+bool SpcData_SetGFITrip(SpcUint16Config_t *gfitrip)
+{
+    if (gfitrip == NULL) return false;
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    memcpy(&(SpcDataRom.SpcGFITrip), gfitrip, sizeof(SpcUint16Config_t));
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
+bool SpcData_GetGFITrip(SpcUint16Config_t *gfitrip)
+{
+    if (gfitrip == NULL) return false;
+
+    memset(gfitrip, 0, sizeof(SpcUint16Config_t));
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    memcpy(gfitrip, &(SpcDataRom.SpcGFITrip), sizeof(SpcUint16Config_t));
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
+bool SpcData_GetGfiGroup(SpcGfiGroupConfig_t *gfigroup)
+{
+    if (gfigroup == NULL) return false;
+
+    memset(gfigroup, 0, sizeof(SpcGfiGroupConfig_t));
+
+    SpcData_GetGFIAlarm(&(gfigroup->gfialarm));
+    SpcData_GetGFITrip(&(gfigroup->gfitrip));
+
+    return true;
+}
+
+bool SpcData_SetGfiGroup(SpcGfiGroupConfig_t *gfigroup)
+{
+    if (gfigroup == NULL) return false;
+
+    SpcData_SetGFIAlarm(&(gfigroup->gfialarm));
+    SpcData_SetGFITrip(&(gfigroup->gfitrip));
+
+    return true;
+}
+
+bool SpcData_SetLowVoltage(SpcUint16Config_t *lowvoltage)
+{
+    if (lowvoltage == NULL) return false;
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    memcpy(&(SpcDataRom.SpcLowVoltage), lowvoltage, sizeof(SpcUint16Config_t));
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
+bool SpcData_GetLowVoltage(SpcUint16Config_t *lowvoltage)
+{
+    if (lowvoltage == NULL) return false;
+
+    memset(lowvoltage, 0, sizeof(SpcUint16Config_t));
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    memcpy(lowvoltage, &(SpcDataRom.SpcLowVoltage), sizeof(SpcUint16Config_t));
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
+bool SpcData_SetHighVoltage(SpcUint16Config_t *highvoltage)
+{
+    if (highvoltage == NULL) return false;
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    memcpy(&(SpcDataRom.SpcHighVoltage), highvoltage, sizeof(SpcUint16Config_t));
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
+bool SpcData_GetHighVoltage(SpcUint16Config_t *highvoltage)
+{
+    if (highvoltage == NULL) return false;
+
+    memset(highvoltage, 0, sizeof(SpcUint16Config_t));
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    memcpy(highvoltage, &(SpcDataRom.SpcHighVoltage), sizeof(SpcUint16Config_t));
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
+bool SpcData_GetVoltageGroup(SpcVoltageGroupConfig_t *voltagegroup)
+{
+    if (voltagegroup == NULL) return false;
+
+    memset(voltagegroup, 0, sizeof(SpcVoltageGroupConfig_t));
+
+    SpcData_GetLowVoltage(&(voltagegroup->lowvoltage));
+    SpcData_GetHighVoltage(&(voltagegroup->highvoltage));
+
+    return true;
+}
+
+bool SpcData_SetVoltageGroup(SpcVoltageGroupConfig_t *voltagegroup)
+{
+    if (voltagegroup == NULL) return false;
+
+    SpcData_SetLowVoltage(&(voltagegroup->lowvoltage));
+    SpcData_SetHighVoltage(&(voltagegroup->highvoltage));
+
+    return true;
+}
+
 void SpcData_SetRefreshMask(uint64_t val)
 {
     xSemaphoreTake(DataMutex, portMAX_DELAY);

@@ -162,8 +162,8 @@ PageEntity_t *Page_Func_HighCurrent(KeyEnum_t key, Logger logger, PageEntity_t *
         return Page_CreatePage(Program, logger, page->publisher);
     case Def:
         return Page_CreatePage(Default, logger, page->publisher);
-    /*case Right:
-        return Page_CreatePage(CurrentRTDA, logger, page->publisher);*/
+    case Right:
+        return Page_CreatePage(GFIAlarm, logger, page->publisher);
     case Left:
         return Page_CreatePage(LowCurrent, logger, page->publisher);
     case Up:

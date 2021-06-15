@@ -57,6 +57,11 @@ typedef enum {
 
 /* For temperature config */
 typedef enum {
+  Uint16Opt = 0,
+  Uint16OFF
+} SpcUint16Config_Enum_t;
+
+typedef enum {
   Opt = 0,
   OFF,
   NONE
@@ -75,6 +80,16 @@ typedef struct {
 } SpcUint16_t;
 
 /* Data type in Rom */
+typedef struct {
+    SpcUint16Config_Enum_t status;
+    uint16_t value;
+} SpcUint16Config_t;
+
+typedef struct {
+    SpcUint16Config_t lowcurrent;
+    SpcUint16Config_t highcurrent;
+} SpcCurrentGroupConfig_t;
+
 typedef struct {
     SpcTempConfig_Enum_t status;
     int16_t temperature[2];
@@ -102,6 +117,8 @@ typedef struct {
     SpcTempConfig_t SpcLowTemp;
     SpcTempConfig_t SpcHighTemp;
     SpcTempConfig_t SpcDeadBand;
+    SpcUint16Config_t SpcLowCurrent;
+    SpcUint16Config_t SpcHighCurrent;
 } SpcDataRom_t;
 
 typedef struct {
@@ -208,6 +225,12 @@ bool SpcData_SetDeadBand(SpcTempConfig_t *deadband);
 bool SpcData_GetDeadBand(SpcTempConfig_t *deadband);
 bool SpcData_GetTempGroup(SpcTempGroupConfig_t *tempgroup);
 bool SpcData_SetTempGroup(SpcTempGroupConfig_t *tempgroup);
+bool SpcData_SetLowCurrent(SpcUint16Config_t *lowcurrent);
+bool SpcData_GetLowCurrent(SpcUint16Config_t *lowcurrent);
+bool SpcData_SetHighCurrent(SpcUint16Config_t *highcurrent);
+bool SpcData_GetHighCurrent(SpcUint16Config_t *highcurrent);
+bool SpcData_GetCurrentGroup(SpcCurrentGroupConfig_t *currentgroup);
+bool SpcData_SetCurrentGroup(SpcCurrentGroupConfig_t *currentgroup);
 
 #ifdef __cplusplus
 }

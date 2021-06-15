@@ -1,11 +1,11 @@
 #include "spc.h"
 #include "spctimer.h"
 
-static inline int16_t FetchMaxMaint(bool unit) {
+static inline int16_t FetchMaxHighTemp(bool unit) {
     return unit ? 932 : 500;
 }
 
-static inline int16_t FetchMinMaint(SpcTempGroupConfig_t *tempgroup, bool unit) {
+static inline int16_t FetchMinHighTemp(SpcTempGroupConfig_t *tempgroup, bool unit) {
     SpcTempConfig_t *maintain = &(tempgroup->maintain);
     SpcTempConfig_t *lowtemp = &(tempgroup->lowtemp);
     SpcTempConfig_t *deadband = &(tempgroup->deadband);
@@ -77,9 +77,9 @@ static void Page_Update_HighTemp(Logger logger, PageEntity_t *page, KeyEnum_t ke
     if (key == Up) {
         if (hightemp->status == OFF) {
             return;
-        } else if (hightemp->temperature[unit] == FetchMaxMaint(unit)) {
+        } else if (hightemp->temperature[unit] == FetchMaxHighTemp(unit)) {
             hightemp->status = OFF;
-        } else if (hightemp->temperature[unit] < FetchMaxMaint(unit)) {
+        } else if (hightemp->temperature[unit] < FetchMaxHighTemp(unit)) {
             hightemp->temperature[unit]++;
         } else {
             logger("\r\nexit\r\n");
@@ -88,8 +88,8 @@ static void Page_Update_HighTemp(Logger logger, PageEntity_t *page, KeyEnum_t ke
     } else if (key == Down) {
         if (hightemp->status == OFF) {
             hightemp->status = Opt;
-            hightemp->temperature[unit] = FetchMaxMaint(unit);
-        } else if (hightemp->temperature[unit] > FetchMinMaint(tempgroup, unit)) {
+            hightemp->temperature[unit] = FetchMaxHighTemp(unit);
+        } else if (hightemp->temperature[unit] > FetchMinHighTemp(tempgroup, unit)) {
             hightemp->temperature[unit]--;
         } else {
             return;
@@ -193,8 +193,8 @@ PageEntity_t *Page_Func_HighTemp(KeyEnum_t key, Logger logger, PageEntity_t *pag
         return Page_CreatePage(Program, logger, page->publisher);
     case Def:
         return Page_CreatePage(Default, logger, page->publisher);
-    /*case Right:
-        return Page_CreatePage(TempRTDA, logger, page->publisher);*/
+    case Right:
+        return Page_CreatePage(LowCurrent, logger, page->publisher);
     case Left:
         return Page_CreatePage(LowTemp, logger, page->publisher);
     case Up:

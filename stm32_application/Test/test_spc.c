@@ -355,6 +355,62 @@ bool SpcData_SetTempGroup(SpcTempGroupConfig_t *tempgroup)
     return true;
 }
 
+bool SpcData_SetLowCurrent(SpcUint16Config_t *lowcurrent)
+{
+    if (lowcurrent == NULL) return false;
+
+    memcpy(&(SpcDataRom.SpcLowCurrent), lowcurrent, sizeof(SpcUint16Config_t));
+    return true;
+}
+
+bool SpcData_GetLowCurrent(SpcUint16Config_t *lowcurrent)
+{
+    if (lowcurrent == NULL) return false;
+
+    memset(lowcurrent, 0, sizeof(SpcUint16Config_t));
+    memcpy(lowcurrent, &(SpcDataRom.SpcLowCurrent), sizeof(SpcUint16Config_t));
+    return true;
+}
+
+bool SpcData_SetHighCurrent(SpcUint16Config_t *highcurrent)
+{
+    if (highcurrent == NULL) return false;
+
+    memcpy(&(SpcDataRom.SpcHighCurrent), highcurrent, sizeof(SpcUint16Config_t));
+    return true;
+}
+
+bool SpcData_GetHighCurrent(SpcUint16Config_t *highcurrent)
+{
+    if (highcurrent == NULL) return false;
+
+    memset(highcurrent, 0, sizeof(SpcUint16Config_t));
+    memcpy(highcurrent, &(SpcDataRom.SpcHighCurrent), sizeof(SpcUint16Config_t));
+    return true;
+}
+
+bool SpcData_GetCurrentGroup(SpcCurrentGroupConfig_t *currentgroup)
+{
+    if (currentgroup == NULL) return false;
+
+    memset(currentgroup, 0, sizeof(SpcCurrentGroupConfig_t));
+
+    SpcData_GetLowCurrent(&(currentgroup->lowcurrent));
+    SpcData_GetHighCurrent(&(currentgroup->highcurrent));
+
+    return true;
+}
+
+bool SpcData_SetCurrentGroup(SpcCurrentGroupConfig_t *currentgroup)
+{
+    if (currentgroup == NULL) return false;
+
+    SpcData_SetLowCurrent(&(currentgroup->lowcurrent));
+    SpcData_SetHighCurrent(&(currentgroup->highcurrent));
+
+    return true;
+}
+
 void SpcData_SetRefreshMask(uint64_t val)
 {
     SpcDataRam.SpcRefreshMask = val; 

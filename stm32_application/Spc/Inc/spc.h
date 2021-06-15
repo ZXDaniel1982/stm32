@@ -41,7 +41,9 @@ typedef int (*Logger)(const char* fmt, ...);
   PAGE_OPT(Program, type) \
   PAGE_OPT(Maintain, type) \
   PAGE_OPT(LowTemp, type) \
-  PAGE_OPT(HighTemp, type)
+  PAGE_OPT(HighTemp, type) \
+  PAGE_OPT(LowCurrent, type) \
+  PAGE_OPT(HighCurrent, type)
 
 #define OBJ_ENUM(TYPE, type) TYPE,
 #define PAGE_INIT_DECLARE(TYPE, type) void Page_Init_##TYPE(Logger, PageEntity_t *);

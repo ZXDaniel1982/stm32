@@ -19,9 +19,11 @@ PageEntity_t *Page_Func_Program(KeyEnum_t key, Logger logger, PageEntity_t *page
 		return Page_CreatePage(Default, logger, page->publisher);
 	case Act:
 		return Page_CreatePage(Actual, logger, page->publisher);
+    case Prog:
+        return Page_CreatePage(HeaterSetup, logger, page->publisher);
 	case Left:
         return Page_CreatePage(Version, logger, page->publisher);
-  case Right:
+    case Right:
         return Page_CreatePage(Maintain, logger, page->publisher);
 	default:
 		return NULL;

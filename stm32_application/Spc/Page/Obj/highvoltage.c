@@ -162,8 +162,8 @@ PageEntity_t *Page_Func_HighVoltage(KeyEnum_t key, Logger logger, PageEntity_t *
         return Page_CreatePage(Program, logger, page->publisher);
     case Def:
         return Page_CreatePage(Default, logger, page->publisher);
-    /*case Right:
-        return Page_CreatePage(VoltageRTDA, logger, page->publisher);*/
+    case Right:
+        return Page_CreatePage(HeaterSetup, logger, page->publisher);
     case Left:
         return Page_CreatePage(LowVoltage, logger, page->publisher);
     case Up:

@@ -89,6 +89,12 @@ Spc/Page/Obj/program.c \
 Spc/Page/Obj/maintain.c \
 Spc/Page/Obj/lowtemp.c \
 Spc/Page/Obj/hightemp.c \
+Spc/Page/Obj/lowcurrent.c \
+Spc/Page/Obj/highcurrent.c \
+Spc/Page/Obj/gfialarm.c \
+Spc/Page/Obj/gfitrip.c \
+Spc/Page/Obj/lowvoltage.c \
+Spc/Page/Obj/highvoltage.c \
 Spc/Data/data.c \
 Spc/Timer/spctimer.c \
 Gui/gui.c \
@@ -125,6 +131,12 @@ Spc/Page/Obj/program.c \
 Spc/Page/Obj/maintain.c \
 Spc/Page/Obj/lowtemp.c \
 Spc/Page/Obj/hightemp.c \
+Spc/Page/Obj/lowcurrent.c \
+Spc/Page/Obj/highcurrent.c \
+Spc/Page/Obj/gfialarm.c \
+Spc/Page/Obj/gfitrip.c \
+Spc/Page/Obj/lowvoltage.c \
+Spc/Page/Obj/highvoltage.c \
 Spc/Timer/spctimermock.c \
 Vector/vector.c
 

@@ -15,6 +15,11 @@ extern "C" {
 
 #define DISABLE_REFRESH (0)
 
+/* mask modify */
+#define WRITE_MASK(REG, VAL)   ((REG) = (VAL))
+#define READ_MASK(REG)         ((REG))
+#define MODIFY_MASK(REG, CLEARMASK, SETMASK)  WRITE_MASK((REG), (((READ_MASK(REG)) & (~(CLEARMASK))) | (SETMASK)))
+
 /* Operational mask */
 #define HEATER_STATUS_POS (0)
 #define HEATER_STATUS_MSK (0x3)
@@ -119,7 +124,8 @@ typedef struct {
             uint64_t lcdDef : 2;
             uint64_t tempUint : 1;
             uint64_t ctrType : 1;
-            uint64_t reserve : 60;
+            uint64_t heaterEn : 1;
+            uint64_t reserve : 59;
         } bits;
         uint64_t SpcMaskRom;
     };
@@ -192,6 +198,8 @@ void SpcDataInit(void);
 uint8_t SpcData_GetLcdDef(void);
 uint8_t SpcData_GetTempUint(void);
 uint8_t SpcData_GetCtrlType(void);
+bool SpcData_GetMaskRom(uint64_t *mask);
+bool SpcData_SetMaskRom(uint64_t *mask);
 uint64_t SpcData_GetMaskRam(void);
 void SpcData_SetRefreshMask(uint64_t val);
 uint64_t SpcData_GetRefreshMask(void);

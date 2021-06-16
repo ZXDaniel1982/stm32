@@ -65,6 +65,30 @@ uint8_t SpcData_GetCtrlType(void)
     return val;
 }
 
+bool SpcData_GetMaskRom(uint64_t *mask)
+{
+    if (mask == NULL) return false;
+
+    memset(mask, 0, sizeof(uint64_t));
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    memcpy(mask, &(SpcDataRom.SpcMaskRom), sizeof(uint64_t));
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
+bool SpcData_SetMaskRom(uint64_t *mask)
+{
+    if (mask == NULL) return false;
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    memcpy(&(SpcDataRom.SpcMaskRom), mask, sizeof(uint64_t));
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
 uint64_t SpcData_GetMaskRam(void)
 {
     uint64_t val = 0;

@@ -96,6 +96,7 @@ Spc/Page/Obj/gfitrip.c \
 Spc/Page/Obj/lowvoltage.c \
 Spc/Page/Obj/highvoltage.c \
 Spc/Page/Obj/heatersetup.c \
+Spc/Page/Obj/heateren.c \
 Spc/Data/data.c \
 Spc/Timer/spctimer.c \
 Gui/gui.c \
@@ -139,6 +140,7 @@ Spc/Page/Obj/gfitrip.c \
 Spc/Page/Obj/lowvoltage.c \
 Spc/Page/Obj/highvoltage.c \
 Spc/Page/Obj/heatersetup.c \
+Spc/Page/Obj/heateren.c \
 Spc/Timer/spctimermock.c \
 Vector/vector.c
 

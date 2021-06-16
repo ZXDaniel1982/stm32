@@ -23,8 +23,8 @@ PageEntity_t *Page_Func_HeaterSetup(KeyEnum_t key, Logger logger, PageEntity_t *
         return Page_CreatePage(Program, logger, page->publisher);*/
     case Left:
         return Page_CreatePage(HighVoltage, logger, page->publisher);
-    /*case Right:
-        return Page_CreatePage(Maintain, logger, page->publisher);*/
+    case Right:
+        return Page_CreatePage(HeaterEn, logger, page->publisher);
 	default:
 		return NULL;
 	}

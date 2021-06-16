@@ -42,6 +42,23 @@ uint8_t SpcData_GetCtrlType(void)
     return (uint8_t) SpcDataRom.bits.ctrType;
 }
 
+bool SpcData_GetMaskRom(uint64_t *mask)
+{
+    if (mask == NULL) return false;
+
+    memset(mask, 0, sizeof(uint64_t));
+    memcpy(mask, &(SpcDataRom.SpcMaskRom), sizeof(uint64_t));
+    return true;
+}
+
+bool SpcData_SetMaskRom(uint64_t *mask)
+{
+    if (mask == NULL) return false;
+
+    memcpy(&(SpcDataRom.SpcMaskRom), mask, sizeof(uint64_t));
+    return true;
+}
+
 uint64_t SpcData_GetMaskRam(void)
 {
     SpcDataRam.SpcMaskBits.hasHeatStatus = 1;

@@ -540,6 +540,23 @@ bool SpcData_SetVoltageGroup(SpcVoltageGroupConfig_t *voltagegroup)
     return true;
 }
 
+bool SpcData_SetHeaterName(uint8_t *name)
+{
+    if (name == NULL) return false;
+
+    strncpy((char *)SpcDataRom.HeaterName, (char *)name, MAX_INFO_LEN);
+    return true;
+}
+
+bool SpcData_GetHeaterName(uint8_t *name)
+{
+    if (name == NULL) return false;
+
+    memset((char *)name, 0, MAX_INFO_LEN);
+    strncpy((char *)name, (char *)SpcDataRom.HeaterName, MAX_INFO_LEN);
+    return true;
+}
+
 void SpcData_SetRefreshMask(uint64_t val)
 {
     SpcDataRam.SpcRefreshMask = val; 

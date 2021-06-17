@@ -127,8 +127,8 @@ PageEntity_t *Page_Func_HeaterEn(KeyEnum_t key, Logger logger, PageEntity_t *pag
         return Page_CreatePage(Program, logger, page->publisher);
     case Def:
         return Page_CreatePage(Default, logger, page->publisher);
-    /*case Right:
-        return Page_CreatePage(HeaterSetup, logger, page->publisher);*/
+    case Right:
+        return Page_CreatePage(HeaterName, logger, page->publisher);
     case Left:
         return Page_CreatePage(HeaterSetup, logger, page->publisher);
     case Up:

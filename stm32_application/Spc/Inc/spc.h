@@ -49,7 +49,8 @@ typedef int (*Logger)(const char* fmt, ...);
     PAGE_OPT(LowVoltage, type) \
     PAGE_OPT(HighVoltage, type) \
     PAGE_OPT(HeaterSetup, type) \
-    PAGE_OPT(HeaterEn, type)
+    PAGE_OPT(HeaterEn, type) \
+    PAGE_OPT(HeaterName, type)
 
 #define OBJ_ENUM(TYPE, type) TYPE,
 #define PAGE_INIT_DECLARE(TYPE, type) void Page_Init_##TYPE(Logger, PageEntity_t *);
@@ -65,7 +66,7 @@ typedef int (*Logger)(const char* fmt, ...);
     } \
 }
 
-#define MAX_INFO_LEN (16)
+#define MAX_INFO_LEN (17)
 typedef struct {
     uint8_t Title[MAX_INFO_LEN];
     uint8_t Content[MAX_INFO_LEN];

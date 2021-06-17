@@ -11,7 +11,7 @@ extern "C" {
 
 #define NUM_ROWS(ARRAY) (sizeof(ARRAY) / sizeof(ARRAY[0]))
 
-#define MAX_INFO_LEN (16)
+#define MAX_INFO_LEN (17)
 
 #define DISABLE_REFRESH (0)
 
@@ -117,6 +117,12 @@ typedef struct {
     SpcTempConfig_t deadband;
 } SpcTempGroupConfig_t;
 
+/* Heater name for Page */
+typedef struct {
+    uint8_t index;
+    uint8_t name[MAX_INFO_LEN];
+} SpcHeaterNameConfig_t;
+
 /* Global values */
 typedef struct {
     union {
@@ -139,6 +145,7 @@ typedef struct {
     SpcUint16Config_t SpcGFITrip;
     SpcUint16Config_t SpcLowVoltage;
     SpcUint16Config_t SpcHighVoltage;
+    uint8_t HeaterName[MAX_INFO_LEN];
 } SpcDataRom_t;
 
 typedef struct {
@@ -265,6 +272,8 @@ bool SpcData_SetHighVoltage(SpcUint16Config_t *highvoltage);
 bool SpcData_GetHighVoltage(SpcUint16Config_t *highvoltage);
 bool SpcData_GetVoltageGroup(SpcVoltageGroupConfig_t *voltagegroup);
 bool SpcData_SetVoltageGroup(SpcVoltageGroupConfig_t *voltagegroup);
+bool SpcData_SetHeaterName(uint8_t *name);
+bool SpcData_GetHeaterName(uint8_t *name);
 
 #ifdef __cplusplus
 }

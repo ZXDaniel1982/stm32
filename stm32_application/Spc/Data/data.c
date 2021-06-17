@@ -918,6 +918,30 @@ bool SpcData_SetVoltageGroup(SpcVoltageGroupConfig_t *voltagegroup)
     return true;
 }
 
+bool SpcData_SetHeaterName(uint8_t *name)
+{
+    if (name == NULL) return false;
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    strncpy((char *)SpcDataRom.HeaterName, (char *)name, MAX_INFO_LEN);
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
+bool SpcData_GetHeaterName(uint8_t *name)
+{
+    if (name == NULL) return false;
+
+    memset((char *)name, 0, MAX_INFO_LEN);
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    strncpy((char *)name, (char *)SpcDataRom.HeaterName, MAX_INFO_LEN);
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
 void SpcData_SetRefreshMask(uint64_t val)
 {
     xSemaphoreTake(DataMutex, portMAX_DELAY);

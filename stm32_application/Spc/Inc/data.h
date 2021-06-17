@@ -131,7 +131,9 @@ typedef struct {
             uint64_t tempUint : 1;
             uint64_t ctrType : 1;
             uint64_t heaterEn : 1;
-            uint64_t reserve : 59;
+            uint64_t heatertype : 1;
+            uint64_t manualoverride : 1;
+            uint64_t reserve : 57;
         } bits;
         uint64_t SpcMaskRom;
     };

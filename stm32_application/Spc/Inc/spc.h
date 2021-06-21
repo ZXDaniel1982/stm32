@@ -52,7 +52,9 @@ typedef int (*Logger)(const char* fmt, ...);
     PAGE_OPT(HeaterEn, type) \
     PAGE_OPT(HeaterName, type) \
     PAGE_OPT(HeaterType, type) \
-    PAGE_OPT(ManualOverride, type)
+    PAGE_OPT(ManualOverride, type) \
+    PAGE_OPT(DeadBand, type) \
+    PAGE_OPT(ControlType, type)
 
 #define OBJ_ENUM(TYPE, type) TYPE,
 #define PAGE_INIT_DECLARE(TYPE, type) void Page_Init_##TYPE(Logger, PageEntity_t *);

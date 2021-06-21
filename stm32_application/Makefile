@@ -100,6 +100,8 @@ Spc/Page/Obj/heateren.c \
 Spc/Page/Obj/heatername.c \
 Spc/Page/Obj/heatertype.c \
 Spc/Page/Obj/manualoverride.c \
+Spc/Page/Obj/deadband.c \
+Spc/Page/Obj/ctltype.c \
 Spc/Data/data.c \
 Spc/Timer/spctimer.c \
 Gui/gui.c \
@@ -147,6 +149,8 @@ Spc/Page/Obj/heateren.c \
 Spc/Page/Obj/heatername.c \
 Spc/Page/Obj/heatertype.c \
 Spc/Page/Obj/manualoverride.c \
+Spc/Page/Obj/deadband.c \
+Spc/Page/Obj/ctltype.c \
 Spc/Timer/spctimermock.c \
 Vector/vector.c
 

@@ -942,6 +942,198 @@ bool SpcData_GetHeaterName(uint8_t *name)
     return true;
 }
 
+bool SpcData_SetCurrentLimit(SpcUint16Config_t *currentlimit)
+{
+    if (currentlimit == NULL) return false;
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    memcpy(&(SpcDataRom.SpcCurrentLimit), currentlimit, sizeof(SpcUint16Config_t));
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
+bool SpcData_GetCurrentLimit(SpcUint16Config_t *currentlimit)
+{
+    if (currentlimit == NULL) return false;
+
+    memset(currentlimit, 0, sizeof(SpcUint16Config_t));
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    memcpy(currentlimit, &(SpcDataRom.SpcCurrentLimit), sizeof(SpcUint16Config_t));
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
+bool SpcData_SetSoftStart(SpcUint16Config_t *softstart)
+{
+    if (softstart == NULL) return false;
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    memcpy(&(SpcDataRom.SpcSoftStart), softstart, sizeof(SpcUint16Config_t));
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
+bool SpcData_GetSoftStart(SpcUint16Config_t *softstart)
+{
+    if (softstart == NULL) return false;
+
+    memset(softstart, 0, sizeof(SpcUint16Config_t));
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    memcpy(softstart, &(SpcDataRom.SpcSoftStart), sizeof(SpcUint16Config_t));
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
+bool SpcData_SetAutoTest(SpcUint16Config_t *autotest)
+{
+    if (autotest == NULL) return false;
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    memcpy(&(SpcDataRom.SpcAutoTest), autotest, sizeof(SpcUint16Config_t));
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
+bool SpcData_GetAutoTest(SpcUint16Config_t *autotest)
+{
+    if (autotest == NULL) return false;
+
+    memset(autotest, 0, sizeof(SpcUint16Config_t));
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    memcpy(autotest, &(SpcDataRom.SpcAutoTest), sizeof(SpcUint16Config_t));
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
+bool SpcData_SetPowerPrice(SpcUint16Config_t *powerprice)
+{
+    if (powerprice == NULL) return false;
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    memcpy(&(SpcDataRom.SpcPowerPrice), powerprice, sizeof(SpcUint16Config_t));
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
+bool SpcData_GetPowerPrice(SpcUint16Config_t *powerprice)
+{
+    if (powerprice == NULL) return false;
+
+    memset(powerprice, 0, sizeof(SpcUint16Config_t));
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    memcpy(powerprice, &(SpcDataRom.SpcPowerPrice), sizeof(SpcUint16Config_t));
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
+bool SpcData_SetTimeout(SpcUint16Config_t *timeout)
+{
+    if (timeout == NULL) return false;
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    memcpy(&(SpcDataRom.SpcTimeout), timeout, sizeof(SpcUint16Config_t));
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
+bool SpcData_GetTimeout(SpcUint16Config_t *timeout)
+{
+    if (timeout == NULL) return false;
+
+    memset(timeout, 0, sizeof(SpcUint16Config_t));
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    memcpy(timeout, &(SpcDataRom.SpcTimeout), sizeof(SpcUint16Config_t));
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
+bool SpcData_SetScanSpeed(SpcUint16Config_t *scanspeed)
+{
+    if (scanspeed == NULL) return false;
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    memcpy(&(SpcDataRom.SpcScanSpeed), scanspeed, sizeof(SpcUint16Config_t));
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
+bool SpcData_GetScanSpeed(SpcUint16Config_t *scanspeed)
+{
+    if (scanspeed == NULL) return false;
+
+    memset(scanspeed, 0, sizeof(SpcUint16Config_t));
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    memcpy(scanspeed, &(SpcDataRom.SpcScanSpeed), sizeof(SpcUint16Config_t));
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
+bool SpcData_SetModbusAddress(SpcUint16Config_t *modbusaddress)
+{
+    if (modbusaddress == NULL) return false;
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    memcpy(&(SpcDataRom.SpcModbusAddress), modbusaddress, sizeof(SpcUint16Config_t));
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
+bool SpcData_GetModbusAddress(SpcUint16Config_t *modbusaddress)
+{
+    if (modbusaddress == NULL) return false;
+
+    memset(modbusaddress, 0, sizeof(SpcUint16Config_t));
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    memcpy(modbusaddress, &(SpcDataRom.SpcModbusAddress), sizeof(SpcUint16Config_t));
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
+bool SpcData_SetAlarmOutput(SpcUint16Config_t *alarmoutput)
+{
+    if (alarmoutput == NULL) return false;
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    memcpy(&(SpcDataRom.SpcAlarmOutput), alarmoutput, sizeof(SpcUint16Config_t));
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
+bool SpcData_GetAlarmOutput(SpcUint16Config_t *alarmoutput)
+{
+    if (alarmoutput == NULL) return false;
+
+    memset(alarmoutput, 0, sizeof(SpcUint16Config_t));
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    memcpy(alarmoutput, &(SpcDataRom.SpcAlarmOutput), sizeof(SpcUint16Config_t));
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
 void SpcData_SetRefreshMask(uint64_t val)
 {
     xSemaphoreTake(DataMutex, portMAX_DELAY);

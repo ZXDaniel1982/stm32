@@ -61,7 +61,6 @@ static void Page_Update_LowCurrent(Logger logger, PageEntity_t *page, KeyEnum_t 
         } else if (lowcurrent->value < FetchMaxLowCurrent(currentgroup)) {
             lowcurrent->value++;
         } else {
-            logger("\r\nexit\r\n");
             return;
         }
     } else if (key == Down) {
@@ -71,7 +70,6 @@ static void Page_Update_LowCurrent(Logger logger, PageEntity_t *page, KeyEnum_t 
         } else if (lowcurrent->value > FetchMinLowCurrent()) {
             lowcurrent->value--;
         } else {
-            logger("\r\nexit\r\n");
             return;
         }
     }

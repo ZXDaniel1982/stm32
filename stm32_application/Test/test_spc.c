@@ -693,6 +693,23 @@ bool SpcData_GetAlarmOutput(SpcUint16Config_t *alarmoutput)
     return true;
 }
 
+bool SpcData_SetPassword(uint8_t *passwd)
+{
+    if (passwd == NULL) return false;
+
+    strncpy((char *)SpcDataRom.Password, (char *)passwd, MAX_INFO_LEN);
+    return true;
+}
+
+bool SpcData_GetPassword(uint8_t *passwd)
+{
+    if (passwd == NULL) return false;
+
+    memset((char *)passwd, 0, MAX_INFO_LEN);
+    strncpy((char *)passwd, (char *)SpcDataRom.Password, MAX_INFO_LEN);
+    return true;
+}
+
 void SpcData_SetRefreshMask(uint64_t val)
 {
     SpcDataRam.SpcRefreshMask = val; 

@@ -81,6 +81,13 @@ typedef enum {
     NONE
 } SpcTempConfig_Enum_t;
 
+typedef enum {
+    EnterOldPasswd = 0,
+    EnterOldPasswdBusy,
+    EnterNewPasswdBusy,
+    EnterNewPasswdAgainBusy
+} SpcPasswdConfig_Enum_t;
+
 /* Data type in Ram */
 typedef struct {
     SpcTempStatus_Enum_t status;
@@ -129,8 +136,17 @@ typedef struct {
 /* Heater name for Page */
 typedef struct {
     uint8_t index;
-    uint8_t name[MAX_INFO_LEN];
-} SpcHeaterNameConfig_t;
+    uint8_t value[MAX_INFO_LEN];
+} SpcStringConfig_t;
+
+typedef struct {
+    SpcPasswdConfig_Enum_t status;
+    uint8_t           changePasswd;
+    SpcStringConfig_t oldPasswd;
+    SpcStringConfig_t oldPasswdInput;
+    SpcStringConfig_t newPasswd;
+    SpcStringConfig_t newPasswdAgain;
+} SpcPasswdConfig_t;
 
 /* Global values */
 typedef struct {
@@ -316,6 +332,8 @@ bool SpcData_SetModbusAddress(SpcUint16Config_t *modbusaddress);
 bool SpcData_GetModbusAddress(SpcUint16Config_t *modbusaddress);
 bool SpcData_SetAlarmOutput(SpcUint16Config_t *alarmoutput);
 bool SpcData_GetAlarmOutput(SpcUint16Config_t *alarmoutput);
+bool SpcData_SetPassword(uint8_t *passwd);
+bool SpcData_GetPassword(uint8_t *passwd);
 
 #ifdef __cplusplus
 }

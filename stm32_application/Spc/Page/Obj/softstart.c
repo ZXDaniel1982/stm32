@@ -48,8 +48,6 @@ static void Page_Config_SoftStart(Logger logger, PageEntity_t *page)
 {
     if ((page == NULL) || (page->publisher == NULL) || (page->data == NULL)) return;
 
-    SpcUint16Config_t *softstart = (SpcUint16Config_t *) page->data;
-
     SpcTimer_StopTimer(Flash);
     SpcTimer_StartTimer(Restore, 40, false);
 

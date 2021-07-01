@@ -1134,6 +1134,30 @@ bool SpcData_GetAlarmOutput(SpcUint16Config_t *alarmoutput)
     return true;
 }
 
+bool SpcData_SetPassword(uint8_t *passwd)
+{
+    if (passwd == NULL) return false;
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    strncpy((char *)SpcDataRom.Password, (char *)passwd, MAX_INFO_LEN);
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
+bool SpcData_GetPassword(uint8_t *passwd)
+{
+    if (passwd == NULL) return false;
+
+    memset((char *)passwd, 0, MAX_INFO_LEN);
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    strncpy((char *)passwd, (char *)SpcDataRom.Password, MAX_INFO_LEN);
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
 void SpcData_SetRefreshMask(uint64_t val)
 {
     xSemaphoreTake(DataMutex, portMAX_DELAY);

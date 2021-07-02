@@ -22,6 +22,8 @@ void SpcDataInit(void)
     SpcDataRom.SpcMaintain.status = Opt;
     SpcDataRom.SpcMaintain.temperature[0] = 50;
     SpcDataRom.SpcMaintain.temperature[1] = 10;
+
+    strncpy(SpcDataRom.Password, "1234", MAX_INFO_LEN);
 }
 
 uint8_t SpcData_GetLcdDef(void)

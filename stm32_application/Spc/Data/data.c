@@ -26,6 +26,7 @@ void SpcDataInit(void)
 
     // TODO, for test, delete in future
     SpcData_SetPower(60);
+    SpcData_SetPassword((uint8_t *)"1234");
 
     SpcDataRom.SpcMaintain.status = Opt;
     SpcDataRom.SpcMaintain.temperature[0] = 50;

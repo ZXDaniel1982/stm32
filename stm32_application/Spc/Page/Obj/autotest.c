@@ -103,7 +103,7 @@ void Page_Init_AutoTest(Logger logger, PageEntity_t *page)
     if ((page == NULL) || (page->publisher == NULL)) return;
 
     SpcData_SetRefreshMask(DISABLE_REFRESH);
-    strncpy((char *)(page->info.Title), "Power Limiting", MAX_INFO_LEN);
+    strncpy((char *)(page->info.Title), "Auto Test Cycle", MAX_INFO_LEN);
 
     if (page->data != NULL) free(page->data);
     page->data = (SpcUint16Config_t *) malloc(sizeof(SpcUint16Config_t));
@@ -111,7 +111,7 @@ void Page_Init_AutoTest(Logger logger, PageEntity_t *page)
     if (SpcData_GetAutoTest(page->data)) {
         AutoTestStoreProcess(page);
     } else {
-        strncpy((char *)(page->info.Content), "Cant read Lmt", MAX_INFO_LEN);
+        strncpy((char *)(page->info.Content), "Cant read ATC", MAX_INFO_LEN);
     }
     page->publisher(&(page->info));
 }
@@ -126,7 +126,7 @@ PageEntity_t *Page_Func_AutoTest(KeyEnum_t key, Logger logger, PageEntity_t *pag
     case Def:
         return Page_CreatePage(Default, logger, page->publisher);
     case Right:
-        return Page_CreatePage(RtdFailMode, logger, page->publisher);
+        return Page_CreatePage(RtdOptMode, logger, page->publisher);
     case Left:
         return Page_CreatePage(SoftStart, logger, page->publisher);
     case Up:

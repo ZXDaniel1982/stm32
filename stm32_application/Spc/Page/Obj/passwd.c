@@ -21,14 +21,14 @@ static uint8_t PasswordGetCharactor(uint8_t charator)
     return 0;
 }
 
-typedef void (*PasswdFunc)(PageEntity_t *, KeyEnum_t);
+typedef void (*PasswdFunc)(KeyEnum_t, Logger, PageEntity_t *);
 typedef struct {
     SpcPasswdConfig_Enum_t status;
     PasswdFunc func;
 } PasswordFunction;
 
-static void OldPasswordRequireUpdate(PageEntity_t *page, KeyEnum_t key);
-static void PasswordUpdate(PageEntity_t *page, KeyEnum_t key);
+static void OldPasswordRequireUpdate(KeyEnum_t key, Logger logger, PageEntity_t *page);
+static void PasswordUpdate(KeyEnum_t key, Logger logger, PageEntity_t *page);
 static const PasswordFunction PasswdUpdateFunctions[] = {
     {EnterOldPasswd,                    OldPasswordRequireUpdate},
     {EnterOldPasswdBusy,                PasswordUpdate},
@@ -36,10 +36,10 @@ static const PasswordFunction PasswdUpdateFunctions[] = {
     {EnterNewPasswdAgainBusy,           PasswordUpdate}
 };
 
-static void OldPasswordRequireConfig(PageEntity_t *page, KeyEnum_t key);
-static void OldPasswordChangeConfig(PageEntity_t *page, KeyEnum_t key);
-static void NewPasswordChangeConfig(PageEntity_t *page, KeyEnum_t key);
-static void NewPasswordChangeAgainConfig(PageEntity_t *page, KeyEnum_t key);
+static void OldPasswordRequireConfig(KeyEnum_t key, Logger logger, PageEntity_t *page);
+static void OldPasswordChangeConfig(KeyEnum_t key, Logger logger, PageEntity_t *page);
+static void NewPasswordChangeConfig(KeyEnum_t key, Logger logger, PageEntity_t *page);
+static void NewPasswordChangeAgainConfig(KeyEnum_t key, Logger logger, PageEntity_t *page);
 static const PasswordFunction PasswdConfigFunctions[] = {
     {EnterOldPasswd,                    OldPasswordRequireConfig},
     {EnterOldPasswdBusy,                OldPasswordChangeConfig},
@@ -47,24 +47,26 @@ static const PasswordFunction PasswdConfigFunctions[] = {
     {EnterNewPasswdAgainBusy,           NewPasswordChangeAgainConfig}
 };
 
-static void ExecutePasswdUpdateFunction (PageEntity_t *page, KeyEnum_t key)
+static void ExecutePasswdUpdateFunction (KeyEnum_t key, Logger logger, PageEntity_t *page)
 {
     SpcPasswdConfig_t *password = (SpcPasswdConfig_t *) (page->data);
     for (uint8_t i=0;i<NUM_ROWS(PasswdUpdateFunctions);i++) {
         if (password->status == PasswdUpdateFunctions[i].status) {
             PasswdFunc func = PasswdUpdateFunctions[i].func;
-            func(page, key);
+            func(key, logger, page);
+            return;
         }
     }
 }
 
-static void ExecutePasswdSwitchFunction (PageEntity_t *page, KeyEnum_t key)
+static void ExecutePasswdSwitchFunction (KeyEnum_t key, Logger logger, PageEntity_t *page)
 {
     SpcPasswdConfig_t *password = (SpcPasswdConfig_t *) (page->data);
     for (uint8_t i=0;i<NUM_ROWS(PasswdConfigFunctions);i++) {
         if (password->status == PasswdConfigFunctions[i].status) {
             PasswdFunc func = PasswdConfigFunctions[i].func;
-            func(page, key);
+            func(key, logger, page);
+            return;
         }
     }
 }
@@ -85,32 +87,31 @@ static SpcStringConfig_t *GetPasswordType(SpcPasswdConfig_t *password)
 
 static void PasswordStringOpt(SpcStringConfig_t *in, KeyEnum_t key)
 {
-    uint8_t index = in->index;
     if (key == Up) {
-        if (in->value[index] == '\0') {
-            in->value[index] = '0';
+        if (in->value[in->index] == '\0') {
+            in->value[in->index] = '0';
         } else {
-            uint8_t charator = PasswordGetCharactor(in->value[index]);
+            uint8_t charator = PasswordGetCharactor(in->value[in->index]);
             uint8_t charatorNum = NUM_ROWS(kMapPasswdCharactor);
             charator = (charator + charatorNum + 1) % charatorNum;
-            if ((index == 0) && (charator == 0)) charator++;
-            in->value[index] = kMapPasswdCharactor[charator];
+            if ((in->index == 0) && (charator == 0)) charator++;
+            in->value[in->index] = kMapPasswdCharactor[charator];
         }
     } else if (key == Down) {
-        if (in->value[index] == '\0') {
-            in->value[index] = 'Z';
+        if (in->value[in->index] == '\0') {
+            in->value[in->index] = 'Z';
         } else {
-            uint8_t charator = PasswordGetCharactor(in->value[index]);
+            uint8_t charator = PasswordGetCharactor(in->value[in->index]);
             uint8_t charatorNum = NUM_ROWS(kMapPasswdCharactor);
             charator = (charator + charatorNum - 1) % charatorNum;
-            if ((index == 0) && (charator == 0)) charator = charatorNum - 1;
-            in->value[index] = kMapPasswdCharactor[charator];
+            if ((in->index == 0) && (charator == 0)) charator = charatorNum - 1;
+            in->value[in->index] = kMapPasswdCharactor[charator];
         }
     } else if (key == Left) {
         if (in->index > 0) in->index--;
     } else if (key == Right) {
         if (in->index < 10) {
-            if (in->value[index] != '\0') {
+            if (in->value[in->index] != '\0') {
                 in->index++;
                 if (in->value[in->index] == '\0') 
                     in->value[in->index] = '0';
@@ -122,7 +123,7 @@ static void PasswordStringOpt(SpcStringConfig_t *in, KeyEnum_t key)
 // Password string update functions
 // Up and Down keys
 //=================  Start =============================//
-static void OldPasswordRequireUpdate(PageEntity_t *page, KeyEnum_t key)
+static void OldPasswordRequireUpdate(KeyEnum_t key, Logger logger, PageEntity_t *page)
 {
     if ((page == NULL) || (page->data == NULL)) return;
     SpcPasswdConfig_t *password = (SpcPasswdConfig_t *) (page->data);
@@ -136,7 +137,7 @@ static void OldPasswordRequireUpdate(PageEntity_t *page, KeyEnum_t key)
     }
 }
 
-static void PasswordUpdate(PageEntity_t *page, KeyEnum_t key)
+static void PasswordUpdate(KeyEnum_t key, Logger logger, PageEntity_t *page)
 {
     if ((page == NULL) || (page->data == NULL)) return;
     SpcPasswdConfig_t *password = (SpcPasswdConfig_t *) (page->data);
@@ -147,12 +148,12 @@ static void PasswordUpdate(PageEntity_t *page, KeyEnum_t key)
     page->info.Content[passwordSingle->index] = passwordSingle->value[passwordSingle->index];
 }
 
-static void Page_Update_Password(Logger logger, PageEntity_t *page, KeyEnum_t key)
+static void Page_Update_Password(KeyEnum_t key, Logger logger, PageEntity_t *page)
 {
     SpcTimer_StopTimer(Restore);
     SpcTimer_StartTimer(Flash, 40, true);
 
-    ExecutePasswdUpdateFunction(page, key);
+    ExecutePasswdUpdateFunction(key, logger, page);
     page->publisher(&(page->info));
 }
 //=================  End =============================//
@@ -160,8 +161,9 @@ static void Page_Update_Password(Logger logger, PageEntity_t *page, KeyEnum_t ke
 // Password string config functions
 // Enter keys
 //=================  Start =============================//
-static void OldPasswordRequireConfig(PageEntity_t *page, KeyEnum_t key)
+static void OldPasswordRequireConfig(KeyEnum_t key, Logger logger, PageEntity_t *page)
 {
+    logger("\r\n%s\r\n", __func__);
     if ((page == NULL) || (page->data == NULL)) return;
     SpcPasswdConfig_t *password = (SpcPasswdConfig_t *) (page->data);
 
@@ -172,8 +174,9 @@ static void OldPasswordRequireConfig(PageEntity_t *page, KeyEnum_t key)
     }
 }
 
-static void OldPasswordChangeConfig(PageEntity_t *page, KeyEnum_t key)
+static void OldPasswordChangeConfig(KeyEnum_t key, Logger logger, PageEntity_t *page)
 {
+    logger("\r\n%s\r\n", __func__);
     if ((page == NULL) || (page->data == NULL)) return;
     SpcPasswdConfig_t *password = (SpcPasswdConfig_t *) (page->data);
     SpcStringConfig_t *oldPasswd = &(password->oldPasswd);
@@ -184,14 +187,18 @@ static void OldPasswordChangeConfig(PageEntity_t *page, KeyEnum_t key)
         memset((char *)(page->info.Content), 0, MAX_INFO_LEN);
         password->status = EnterNewPasswdBusy;
     } else {
+        SpcTimer_StopTimer(Flash);
+        SpcTimer_StartTimer(Restore, 40, false);
+
         strncpy((char *)(page->info.Title), "Invalid Password", MAX_INFO_LEN);
         memset((char *)(page->info.Content), 0, MAX_INFO_LEN);
         password->status = EnterOldPasswd;
     }
 }
 
-static void NewPasswordChangeConfig(PageEntity_t *page, KeyEnum_t key)
+static void NewPasswordChangeConfig(KeyEnum_t key, Logger logger, PageEntity_t *page)
 {
+    logger("\r\n%s\r\n", __func__);
     if ((page == NULL) || (page->data == NULL)) return;
     SpcPasswdConfig_t *password = (SpcPasswdConfig_t *) (page->data);
 
@@ -200,8 +207,9 @@ static void NewPasswordChangeConfig(PageEntity_t *page, KeyEnum_t key)
     password->status = EnterNewPasswdAgainBusy;
 }
 
-static void NewPasswordChangeAgainConfig(PageEntity_t *page, KeyEnum_t key)
+static void NewPasswordChangeAgainConfig(KeyEnum_t key, Logger logger, PageEntity_t *page)
 {
+    logger("\r\n%s\r\n", __func__);
     if ((page == NULL) || (page->data == NULL)) return;
     SpcPasswdConfig_t *password = (SpcPasswdConfig_t *) (page->data);
     SpcStringConfig_t *newPasswd = &(password->newPasswd);
@@ -211,19 +219,24 @@ static void NewPasswordChangeAgainConfig(PageEntity_t *page, KeyEnum_t key)
         strncpy((char *)(page->info.Title), "Operate success", MAX_INFO_LEN);
         memset((char *)(page->info.Content), 0, MAX_INFO_LEN);
         password->status = EnterOldPasswd;
+
+        SpcData_SetPassword(newPasswd->value);
     } else {
+        SpcTimer_StopTimer(Flash);
+        SpcTimer_StartTimer(Restore, 40, false);
+        
         strncpy((char *)(page->info.Title), "Not match", MAX_INFO_LEN);
         memset((char *)(page->info.Content), 0, MAX_INFO_LEN);
         password->status = EnterOldPasswd;
     }
 }
 
-static void Page_Config_Password(Logger logger, PageEntity_t *page, KeyEnum_t key)
+static void Page_Config_Password(KeyEnum_t key, Logger logger, PageEntity_t *page)
 {
     SpcTimer_StopTimer(Restore);
     SpcTimer_StartTimer(Flash, 40, true);
 
-    ExecutePasswdSwitchFunction(page, key);
+    ExecutePasswdSwitchFunction(key, logger, page);
     page->publisher(&(page->info));
 }
 //=================  End =============================//
@@ -242,7 +255,7 @@ static void Page_Reset_Password(Logger logger, PageEntity_t *page)
     SpcPasswdConfig_t *password = (SpcPasswdConfig_t *) (page->data);
     SpcStringConfig_t *oldPasswd = &(password->oldPasswd);
     SpcData_GetPassword(oldPasswd->value);
-    OldPasswordRequireUpdate(page, password->changePasswd);
+    OldPasswordRequireUpdate(password->changePasswd, logger, page);
     page->publisher(&(page->info));
 }
 
@@ -293,11 +306,19 @@ void Page_Init_Password(Logger logger, PageEntity_t *page)
     SpcPasswdConfig_t *password = (SpcPasswdConfig_t *) (page->data);
     SpcStringConfig_t *oldPasswd = &(password->oldPasswd);
     if (SpcData_GetPassword(oldPasswd->value)) {
-        OldPasswordRequireUpdate(page, password->changePasswd);
+        OldPasswordRequireUpdate(password->changePasswd, logger, page);
     } else {
         strncpy((char *)(page->info.Content), "Cant read name", MAX_INFO_LEN);
     }
     page->publisher(&(page->info));
+}
+
+static uint8_t PasswordPageLock(Logger logger, PageEntity_t *page)
+{
+    if ((page == NULL) || (page->publisher == NULL) || (page->data == NULL)) return 0;
+
+    SpcPasswdConfig_t *password = (SpcPasswdConfig_t *) (page->data);
+    return (password->status == EnterOldPasswd) ? 0 : 1;
 }
 
 PageEntity_t *Page_Func_Password(KeyEnum_t key, Logger logger, PageEntity_t *page)
@@ -309,16 +330,29 @@ PageEntity_t *Page_Func_Password(KeyEnum_t key, Logger logger, PageEntity_t *pag
         return Page_CreatePage(Program, logger, page->publisher);
     case Def:
         return Page_CreatePage(Default, logger, page->publisher);
-    /*case Right:
-        return Page_CreatePage(HeaterType, logger, page->publisher);*/
+    case Right:
+        //return Page_CreatePage(HeaterType, logger, page->publisher);
+        {
+            if (PasswordPageLock(logger, page)) {
+                Page_Update_Password(key, logger, page);
+                return NULL;
+            }
+        }
     case Left:
-        return Page_CreatePage(HeaterEn, logger, page->publisher);
+        {
+            if (PasswordPageLock(logger, page)) {
+                Page_Update_Password(key, logger, page);
+                return NULL;
+            } else {
+                return Page_CreatePage(PasswdEn, logger, page->publisher);
+            }
+        }
     case Up:
     case Down:
-        Page_Update_Password(logger, page, key);
+        Page_Update_Password(key, logger, page);
         return NULL;
     case Enter:
-        Page_Config_Password(logger, page, key);
+        Page_Config_Password(key, logger, page);
         return NULL;
     case Reset:
     case Restore:

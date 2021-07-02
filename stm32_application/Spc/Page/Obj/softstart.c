@@ -103,7 +103,7 @@ void Page_Init_SoftStart(Logger logger, PageEntity_t *page)
     if ((page == NULL) || (page->publisher == NULL)) return;
 
     SpcData_SetRefreshMask(DISABLE_REFRESH);
-    strncpy((char *)(page->info.Title), "Power Limiting", MAX_INFO_LEN);
+    strncpy((char *)(page->info.Title), "Soft Start Mode", MAX_INFO_LEN);
 
     if (page->data != NULL) free(page->data);
     page->data = (SpcUint16Config_t *) malloc(sizeof(SpcUint16Config_t));
@@ -111,7 +111,7 @@ void Page_Init_SoftStart(Logger logger, PageEntity_t *page)
     if (SpcData_GetSoftStart(page->data)) {
         SoftStartStoreProcess(page);
     } else {
-        strncpy((char *)(page->info.Content), "Cant read Lmt", MAX_INFO_LEN);
+        strncpy((char *)(page->info.Content), "Cant read SS", MAX_INFO_LEN);
     }
     page->publisher(&(page->info));
 }

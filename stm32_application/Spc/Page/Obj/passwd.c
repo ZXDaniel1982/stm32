@@ -163,7 +163,6 @@ static void Page_Update_Password(KeyEnum_t key, Logger logger, PageEntity_t *pag
 //=================  Start =============================//
 static void OldPasswordRequireConfig(KeyEnum_t key, Logger logger, PageEntity_t *page)
 {
-    logger("\r\n%s\r\n", __func__);
     if ((page == NULL) || (page->data == NULL)) return;
     SpcPasswdConfig_t *password = (SpcPasswdConfig_t *) (page->data);
 
@@ -176,7 +175,6 @@ static void OldPasswordRequireConfig(KeyEnum_t key, Logger logger, PageEntity_t 
 
 static void OldPasswordChangeConfig(KeyEnum_t key, Logger logger, PageEntity_t *page)
 {
-    logger("\r\n%s\r\n", __func__);
     if ((page == NULL) || (page->data == NULL)) return;
     SpcPasswdConfig_t *password = (SpcPasswdConfig_t *) (page->data);
     SpcStringConfig_t *oldPasswd = &(password->oldPasswd);
@@ -198,7 +196,6 @@ static void OldPasswordChangeConfig(KeyEnum_t key, Logger logger, PageEntity_t *
 
 static void NewPasswordChangeConfig(KeyEnum_t key, Logger logger, PageEntity_t *page)
 {
-    logger("\r\n%s\r\n", __func__);
     if ((page == NULL) || (page->data == NULL)) return;
     SpcPasswdConfig_t *password = (SpcPasswdConfig_t *) (page->data);
 
@@ -209,11 +206,13 @@ static void NewPasswordChangeConfig(KeyEnum_t key, Logger logger, PageEntity_t *
 
 static void NewPasswordChangeAgainConfig(KeyEnum_t key, Logger logger, PageEntity_t *page)
 {
-    logger("\r\n%s\r\n", __func__);
     if ((page == NULL) || (page->data == NULL)) return;
     SpcPasswdConfig_t *password = (SpcPasswdConfig_t *) (page->data);
     SpcStringConfig_t *newPasswd = &(password->newPasswd);
     SpcStringConfig_t *newPasswdAgain = &(password->newPasswdAgain);
+        
+    SpcTimer_StopTimer(Flash);
+    SpcTimer_StartTimer(Restore, 40, false);
     
     if (strncmp((char *)(newPasswd->value), (char *)(newPasswdAgain->value), MAX_INFO_LEN) == 0) {
         strncpy((char *)(page->info.Title), "Operate success", MAX_INFO_LEN);
@@ -222,9 +221,6 @@ static void NewPasswordChangeAgainConfig(KeyEnum_t key, Logger logger, PageEntit
 
         SpcData_SetPassword(newPasswd->value);
     } else {
-        SpcTimer_StopTimer(Flash);
-        SpcTimer_StartTimer(Restore, 40, false);
-        
         strncpy((char *)(page->info.Title), "Not match", MAX_INFO_LEN);
         memset((char *)(page->info.Content), 0, MAX_INFO_LEN);
         password->status = EnterOldPasswd;
@@ -233,9 +229,6 @@ static void NewPasswordChangeAgainConfig(KeyEnum_t key, Logger logger, PageEntit
 
 static void Page_Config_Password(KeyEnum_t key, Logger logger, PageEntity_t *page)
 {
-    SpcTimer_StopTimer(Restore);
-    SpcTimer_StartTimer(Flash, 40, true);
-
     ExecutePasswdSwitchFunction(key, logger, page);
     page->publisher(&(page->info));
 }
@@ -271,9 +264,9 @@ static void Page_Flash_Password(Logger logger, PageEntity_t *page)
             memset((char *)(page->info.Content), 0, MAX_INFO_LEN);
         } else {
             SpcStringConfig_t *passwordSingle = GetPasswordType(password);
-            uint8_t index = passwordSingle->index;
-            strncpy((char *)(page->info.Content), (char *)(passwordSingle->value), MAX_INFO_LEN);
-            page->info.Content[index] = '-';
+            memset((char *)(page->info.Content), 0, MAX_INFO_LEN);
+            memset((char *)(page->info.Content), '*', strlen((char *)(passwordSingle->value)));
+            page->info.Content[passwordSingle->index] = '-';
         }
     } else {
         if (password->status == EnterOldPasswd) {
@@ -284,7 +277,9 @@ static void Page_Flash_Password(Logger logger, PageEntity_t *page)
             }
         } else {
             SpcStringConfig_t *passwordSingle = GetPasswordType(password);
-            strncpy((char *)(page->info.Content), (char *)(passwordSingle->value), MAX_INFO_LEN);
+            memset((char *)(page->info.Content), 0, MAX_INFO_LEN);
+            memset((char *)(page->info.Content), '*', strlen((char *)(passwordSingle->value)));
+            page->info.Content[passwordSingle->index] = passwordSingle->value[passwordSingle->index];
         }
     }
 

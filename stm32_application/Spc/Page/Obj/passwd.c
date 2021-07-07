@@ -326,11 +326,12 @@ PageEntity_t *Page_Func_Password(KeyEnum_t key, Logger logger, PageEntity_t *pag
     case Def:
         return Page_CreatePage(Default, logger, page->publisher);
     case Right:
-        //return Page_CreatePage(HeaterType, logger, page->publisher);
         {
             if (PasswordPageLock(logger, page)) {
                 Page_Update_Password(key, logger, page);
                 return NULL;
+            } else {
+                return Page_CreatePage(TempUnits, logger, page->publisher);
             }
         }
     case Left:

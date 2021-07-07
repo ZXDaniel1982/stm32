@@ -62,7 +62,15 @@ typedef int (*Logger)(const char* fmt, ...);
     PAGE_OPT(RtdOptMode, type) \
     PAGE_OPT(SystemSetup, type) \
     PAGE_OPT(PasswdEn, type) \
-    PAGE_OPT(Password, type)
+    PAGE_OPT(Password, type) \
+    PAGE_OPT(TempUnits, type) \
+    PAGE_OPT(PowerPrice, type) \
+    PAGE_OPT(DisplayMode, type) \
+    PAGE_OPT(DefaultDisplay, type) \
+    PAGE_OPT(Timeout, type) \
+    PAGE_OPT(ScanSpeed, type) \
+    PAGE_OPT(ModbusAddress, type) \
+    PAGE_OPT(Baudrate, type)
 
 #define OBJ_ENUM(TYPE, type) TYPE,
 #define PAGE_INIT_DECLARE(TYPE, type) void Page_Init_##TYPE(Logger, PageEntity_t *);

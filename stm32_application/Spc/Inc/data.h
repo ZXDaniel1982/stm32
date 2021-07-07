@@ -88,6 +88,15 @@ typedef enum {
     EnterNewPasswdAgainBusy
 } SpcPasswdConfig_Enum_t;
 
+typedef enum {
+    Baudrate1200 = 0,
+    Baudrate2400,
+    Baudrate4800,
+    Baudrate9600,
+    Baudrate19200,
+    Baudrate115200
+} SpcBaudrateConfig_Enum_t;
+
 /* Data type in Ram */
 typedef struct {
     SpcTempStatus_Enum_t status;
@@ -162,9 +171,8 @@ typedef struct {
             uint64_t rtdFailMode : 1;
             uint64_t passwdEn : 1;
             uint64_t advanced : 1;
-            uint64_t defaultDisplay : 1;
             uint64_t baudrate : 3;
-            uint64_t reserve : 47;
+            uint64_t reserve : 48;
         } bits;
         uint64_t SpcMaskRom;
     };

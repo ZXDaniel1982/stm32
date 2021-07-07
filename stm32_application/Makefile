@@ -110,6 +110,14 @@ Spc/Page/Obj/rtdoptmode.c \
 Spc/Page/Obj/systemsetup.c \
 Spc/Page/Obj/passwden.c \
 Spc/Page/Obj/passwd.c \
+Spc/Page/Obj/units.c \
+Spc/Page/Obj/powerprice.c \
+Spc/Page/Obj/displaymode.c \
+Spc/Page/Obj/defaultdisplay.c \
+Spc/Page/Obj/displaytimeout.c \
+Spc/Page/Obj/scanspeed.c \
+Spc/Page/Obj/modbusaddress.c \
+Spc/Page/Obj/baudrate.c \
 Spc/Data/data.c \
 Spc/Timer/spctimer.c \
 Gui/gui.c \
@@ -167,6 +175,14 @@ Spc/Page/Obj/rtdoptmode.c \
 Spc/Page/Obj/systemsetup.c \
 Spc/Page/Obj/passwden.c \
 Spc/Page/Obj/passwd.c \
+Spc/Page/Obj/units.c \
+Spc/Page/Obj/powerprice.c \
+Spc/Page/Obj/displaymode.c \
+Spc/Page/Obj/defaultdisplay.c \
+Spc/Page/Obj/displaytimeout.c \
+Spc/Page/Obj/scanspeed.c \
+Spc/Page/Obj/modbusaddress.c \
+Spc/Page/Obj/baudrate.c \
 Spc/Timer/spctimermock.c \
 Vector/vector.c
 

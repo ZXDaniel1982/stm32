@@ -2,7 +2,7 @@
 #include "spctimer.h"
 
 #define BAUDRATE_POS (13)
-#define BAUDRATE_MSK (0x111U)
+#define BAUDRATE_MSK (0x7U)
 #define BAUDRATE_POS_MSK (BAUDRATE_MSK << BAUDRATE_POS)
 
 static const ByteStatus_t BaudrateMap[] = {

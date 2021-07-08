@@ -2,7 +2,7 @@
 #include "spctimer.h"
 
 #define DEFAULT_DISPLAY_POS (0)
-#define DEFAULT_DISPLAY_MSK (0x11U)
+#define DEFAULT_DISPLAY_MSK (0x3U)
 #define DEFAULT_DISPLAY_POS_MSK (DEFAULT_DISPLAY_MSK << DEFAULT_DISPLAY_POS)
 
 static const ByteStatus_t DefaultDisplayMap[] = {

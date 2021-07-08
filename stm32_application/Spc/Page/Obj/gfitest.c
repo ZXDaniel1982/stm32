@@ -2,7 +2,7 @@
 #include "spctimer.h"
 
 #define GFI_TEST_POS (16)
-#define GFI_TEST_MSK (0x11U)
+#define GFI_TEST_MSK (0x3U)
 #define GFI_TEST_POS_MSK (GFI_TEST_MSK << GFI_TEST_POS)
 
 static const ByteStatus_t GfiTestMap[] = {

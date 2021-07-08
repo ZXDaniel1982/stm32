@@ -2,7 +2,7 @@
 #include "spctimer.h"
 
 #define RTD_OPT_MODE_POS (7)
-#define RTD_OPT_MODE_MSK (0x111U)
+#define RTD_OPT_MODE_MSK (0x7U)
 #define RTD_OPT_MODE_POS_MSK (RTD_OPT_MODE_MSK << RTD_OPT_MODE_POS)
 
 static const ByteStatus_t RtdOptModeMap[] = {

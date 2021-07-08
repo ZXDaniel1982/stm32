@@ -19,8 +19,8 @@ PageEntity_t *Page_Func_SystemTest(KeyEnum_t key, Logger logger, PageEntity_t *p
 		return Page_CreatePage(Default, logger, page->publisher);
 	case Act:
 		return Page_CreatePage(Actual, logger, page->publisher);
-    /*case Prog:
-        return Page_CreatePage(Program, logger, page->publisher);*/
+    case Prog:
+        return Page_CreatePage(Program, logger, page->publisher);
     case Left:
         return Page_CreatePage(ResetModule, logger, page->publisher);
     case Right:

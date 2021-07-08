@@ -1135,6 +1135,30 @@ bool SpcData_GetAlarmOutput(SpcUint16Config_t *alarmoutput)
     return true;
 }
 
+bool SpcData_SetHeaterTest(SpcUint16Config_t *heatertest)
+{
+    if (heatertest == NULL) return false;
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    memcpy(&(SpcDataRom.SpcHeaterTest), heatertest, sizeof(SpcUint16Config_t));
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
+bool SpcData_GetHeaterTest(SpcUint16Config_t *heatertest)
+{
+    if (heatertest == NULL) return false;
+
+    memset(heatertest, 0, sizeof(SpcUint16Config_t));
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    memcpy(heatertest, &(SpcDataRom.SpcHeaterTest), sizeof(SpcUint16Config_t));
+    xSemaphoreGive(DataMutex);
+
+    return true;
+}
+
 bool SpcData_SetPassword(uint8_t *passwd)
 {
     if (passwd == NULL) return false;

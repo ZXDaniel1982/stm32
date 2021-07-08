@@ -97,6 +97,12 @@ typedef enum {
     Baudrate115200
 } SpcBaudrateConfig_Enum_t;
 
+typedef enum {
+    GfiTest_Auto = 0,
+    GfiTest_Now,
+    GfiTest_Disable
+} SpcGfiTestConfig_Enum_t;
+
 /* Data type in Ram */
 typedef struct {
     SpcTempStatus_Enum_t status;
@@ -172,7 +178,8 @@ typedef struct {
             uint64_t passwdEn : 1;
             uint64_t advanced : 1;
             uint64_t baudrate : 3;
-            uint64_t reserve : 48;
+            uint64_t gfiTest : 2;
+            uint64_t reserve : 46;
         } bits;
         uint64_t SpcMaskRom;
     };
@@ -194,6 +201,7 @@ typedef struct {
     SpcUint16Config_t SpcScanSpeed;
     SpcUint16Config_t SpcModbusAddress;
     SpcUint16Config_t SpcAlarmOutput;
+    SpcUint16Config_t SpcHeaterTest;
     uint8_t HeaterName[MAX_INFO_LEN];
     uint8_t Password[MAX_INFO_LEN];
 } SpcDataRom_t;
@@ -340,6 +348,8 @@ bool SpcData_SetModbusAddress(SpcUint16Config_t *modbusaddress);
 bool SpcData_GetModbusAddress(SpcUint16Config_t *modbusaddress);
 bool SpcData_SetAlarmOutput(SpcUint16Config_t *alarmoutput);
 bool SpcData_GetAlarmOutput(SpcUint16Config_t *alarmoutput);
+bool SpcData_SetHeaterTest(SpcUint16Config_t *heatertest);
+bool SpcData_GetHeaterTest(SpcUint16Config_t *heatertest);
 bool SpcData_SetPassword(uint8_t *passwd);
 bool SpcData_GetPassword(uint8_t *passwd);
 

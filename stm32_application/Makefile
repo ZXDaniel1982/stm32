@@ -118,6 +118,11 @@ Spc/Page/Obj/displaytimeout.c \
 Spc/Page/Obj/scanspeed.c \
 Spc/Page/Obj/modbusaddress.c \
 Spc/Page/Obj/baudrate.c \
+Spc/Page/Obj/resetmodule.c \
+Spc/Page/Obj/systemtest.c \
+Spc/Page/Obj/alarmoutput.c \
+Spc/Page/Obj/heatertest.c \
+Spc/Page/Obj/gfitest.c \
 Spc/Data/data.c \
 Spc/Timer/spctimer.c \
 Gui/gui.c \
@@ -183,6 +188,11 @@ Spc/Page/Obj/displaytimeout.c \
 Spc/Page/Obj/scanspeed.c \
 Spc/Page/Obj/modbusaddress.c \
 Spc/Page/Obj/baudrate.c \
+Spc/Page/Obj/resetmodule.c \
+Spc/Page/Obj/systemtest.c \
+Spc/Page/Obj/alarmoutput.c \
+Spc/Page/Obj/heatertest.c \
+Spc/Page/Obj/gfitest.c \
 Spc/Timer/spctimermock.c \
 Vector/vector.c
 

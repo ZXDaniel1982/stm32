@@ -35,42 +35,73 @@ extern "C" {
 
 /* For Default display */
 typedef enum {
-  SysStatus = 0,
-  HeatStatus,
-  HeatTemp
+    SysStatus = 0,
+    HeatStatus,
+    HeatTemp
 } LcdDef_Enum_t;
 
 /* For Heater status */
 typedef enum {
-  HeatIsOff = 0,
-  HeatIsOn,
-  HeatIsManOff,
-  HeatIsManOn
+    HeatIsOff = 0,
+    HeatIsOn,
+    HeatIsManOff,
+    HeatIsManOn
 } HeatStatus_Enum_t;
 
+typedef enum {
+    OneRtdMode = 0,
+    BackupMode,
+    AverageMode,
+    LowestMode,
+    HighestMode,
+    HighTempCutOffMode
+} RtdFailMode_Enum_t;
+
 typedef struct {
-  HeatStatus_Enum_t type;
-  uint8_t info[MAX_INFO_LEN];
-} HeatStatus_t;
+    uint8_t type;
+    uint8_t info[MAX_INFO_LEN];
+} ByteStatus_t;
 
 /* For temperature */
 typedef enum {
-  Normal = 0,
-  RTD_OPEN,
-  RTD_SHORT
+    Normal = 0,
+    RTD_OPEN,
+    RTD_SHORT
 } SpcTempStatus_Enum_t;
 
 /* For temperature config */
 typedef enum {
-  Uint16Opt = 0,
-  Uint16OFF
+    Uint16Opt = 0,
+    Uint16OFF
 } SpcUint16Config_Enum_t;
 
 typedef enum {
-  Opt = 0,
-  OFF,
-  NONE
+    Opt = 0,
+    OFF,
+    NONE
 } SpcTempConfig_Enum_t;
+
+typedef enum {
+    EnterOldPasswd = 0,
+    EnterOldPasswdBusy,
+    EnterNewPasswdBusy,
+    EnterNewPasswdAgainBusy
+} SpcPasswdConfig_Enum_t;
+
+typedef enum {
+    Baudrate1200 = 0,
+    Baudrate2400,
+    Baudrate4800,
+    Baudrate9600,
+    Baudrate19200,
+    Baudrate115200
+} SpcBaudrateConfig_Enum_t;
+
+typedef enum {
+    GfiTest_Auto = 0,
+    GfiTest_Now,
+    GfiTest_Disable
+} SpcGfiTestConfig_Enum_t;
 
 /* Data type in Ram */
 typedef struct {
@@ -120,8 +151,17 @@ typedef struct {
 /* Heater name for Page */
 typedef struct {
     uint8_t index;
-    uint8_t name[MAX_INFO_LEN];
-} SpcHeaterNameConfig_t;
+    uint8_t value[MAX_INFO_LEN];
+} SpcStringConfig_t;
+
+typedef struct {
+    SpcPasswdConfig_Enum_t status;
+    uint8_t           changePasswd;
+    SpcStringConfig_t oldPasswd;
+    SpcStringConfig_t oldPasswdInput;
+    SpcStringConfig_t newPasswd;
+    SpcStringConfig_t newPasswdAgain;
+} SpcPasswdConfig_t;
 
 /* Global values */
 typedef struct {
@@ -133,7 +173,13 @@ typedef struct {
             uint64_t heaterEn : 1;
             uint64_t heatertype : 1;
             uint64_t manualoverride : 1;
-            uint64_t reserve : 57;
+            uint64_t rtdOpt : 3;
+            uint64_t rtdFailMode : 1;
+            uint64_t passwdEn : 1;
+            uint64_t advanced : 1;
+            uint64_t baudrate : 3;
+            uint64_t gfiTest : 2;
+            uint64_t reserve : 46;
         } bits;
         uint64_t SpcMaskRom;
     };
@@ -147,7 +193,17 @@ typedef struct {
     SpcUint16Config_t SpcGFITrip;
     SpcUint16Config_t SpcLowVoltage;
     SpcUint16Config_t SpcHighVoltage;
+    SpcUint16Config_t SpcCurrentLimit;
+    SpcUint16Config_t SpcSoftStart;
+    SpcUint16Config_t SpcAutoTest;
+    SpcUint16Config_t SpcPowerPrice;
+    SpcUint16Config_t SpcTimeout;
+    SpcUint16Config_t SpcScanSpeed;
+    SpcUint16Config_t SpcModbusAddress;
+    SpcUint16Config_t SpcAlarmOutput;
+    SpcUint16Config_t SpcHeaterTest;
     uint8_t HeaterName[MAX_INFO_LEN];
+    uint8_t Password[MAX_INFO_LEN];
 } SpcDataRom_t;
 
 typedef struct {
@@ -276,6 +332,26 @@ bool SpcData_GetVoltageGroup(SpcVoltageGroupConfig_t *voltagegroup);
 bool SpcData_SetVoltageGroup(SpcVoltageGroupConfig_t *voltagegroup);
 bool SpcData_SetHeaterName(uint8_t *name);
 bool SpcData_GetHeaterName(uint8_t *name);
+bool SpcData_SetCurrentLimit(SpcUint16Config_t *currentlimit);
+bool SpcData_GetCurrentLimit(SpcUint16Config_t *currentlimit);
+bool SpcData_SetSoftStart(SpcUint16Config_t *softstart);
+bool SpcData_GetSoftStart(SpcUint16Config_t *softstart);
+bool SpcData_SetAutoTest(SpcUint16Config_t *autotest);
+bool SpcData_GetAutoTest(SpcUint16Config_t *autotest);
+bool SpcData_SetPowerPrice(SpcUint16Config_t *powerprice);
+bool SpcData_GetPowerPrice(SpcUint16Config_t *powerprice);
+bool SpcData_SetTimeout(SpcUint16Config_t *timeout);
+bool SpcData_GetTimeout(SpcUint16Config_t *timeout);
+bool SpcData_SetScanSpeed(SpcUint16Config_t *scanspeed);
+bool SpcData_GetScanSpeed(SpcUint16Config_t *scanspeed);
+bool SpcData_SetModbusAddress(SpcUint16Config_t *modbusaddress);
+bool SpcData_GetModbusAddress(SpcUint16Config_t *modbusaddress);
+bool SpcData_SetAlarmOutput(SpcUint16Config_t *alarmoutput);
+bool SpcData_GetAlarmOutput(SpcUint16Config_t *alarmoutput);
+bool SpcData_SetHeaterTest(SpcUint16Config_t *heatertest);
+bool SpcData_GetHeaterTest(SpcUint16Config_t *heatertest);
+bool SpcData_SetPassword(uint8_t *passwd);
+bool SpcData_GetPassword(uint8_t *passwd);
 
 #ifdef __cplusplus
 }

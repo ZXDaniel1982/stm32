@@ -1,52 +1,52 @@
 #include "spc.h"
 #include "spctimer.h"
 
-#define CONTROL_TYPE_POS (3)
-#define CONTROL_TYPE_MSK (0x1U)
-#define CONTROL_TYPE_POS_MSK (CONTROL_TYPE_MSK << CONTROL_TYPE_POS)
+#define TEMP_UNITS_POS (2)
+#define TEMP_UNITS_MSK (0x1U)
+#define TEMP_UNITS_POS_MSK (TEMP_UNITS_MSK << TEMP_UNITS_POS)
 
-void ControlTypeStoreProcess(PageEntity_t *page)
+void TempUnitsStoreProcess(PageEntity_t *page)
 {
     if ((page == NULL) || (page->data == NULL)) return;
 
     uint64_t *mask = (uint64_t *) page->data;
-    uint8_t ctltype = (uint8_t) (((*mask) >> CONTROL_TYPE_POS) & CONTROL_TYPE_MSK);
+    uint8_t tempunits = (uint8_t) (((*mask) >> TEMP_UNITS_POS) & TEMP_UNITS_MSK);
 
-    if (ctltype) {
-        strncpy((char *)(page->info.Content), "Proportional", MAX_INFO_LEN);
+    if (tempunits) {
+        strncpy((char *)(page->info.Content), "F", MAX_INFO_LEN);
     } else {
-        strncpy((char *)(page->info.Content), "On_off", MAX_INFO_LEN);
+        strncpy((char *)(page->info.Content), "C", MAX_INFO_LEN);
     }
 }
 
-static void Page_Update_ControlType(Logger logger, PageEntity_t *page, KeyEnum_t key)
+static void Page_Update_TempUnits(Logger logger, PageEntity_t *page, KeyEnum_t key)
 {
     uint64_t *mask = (uint64_t *) page->data;
-    uint8_t ctltype = (uint8_t) (((*mask) >> CONTROL_TYPE_POS) & CONTROL_TYPE_MSK);
+    uint8_t tempunits = (uint8_t) (((*mask) >> TEMP_UNITS_POS) & TEMP_UNITS_MSK);
     
     SpcTimer_StopTimer(Restore);
     SpcTimer_StartTimer(Flash, 40, true);
   
     if (key == Up) {
-        if (ctltype) {
+        if (tempunits) {
             return;
         } else {
-            ctltype = 1;
-            MODIFY_MASK(*mask, CONTROL_TYPE_POS_MSK, ctltype << CONTROL_TYPE_POS);
+            tempunits = 1;
+            MODIFY_MASK(*mask, TEMP_UNITS_POS_MSK, tempunits << TEMP_UNITS_POS);
         }
     } else if (key == Down) {
-        if (ctltype) {
-            ctltype = 0;
-            MODIFY_MASK(*mask, CONTROL_TYPE_POS_MSK, ctltype << CONTROL_TYPE_POS);
+        if (tempunits) {
+            tempunits = 0;
+            MODIFY_MASK(*mask, TEMP_UNITS_POS_MSK, tempunits << TEMP_UNITS_POS);
         } else {
             return;
         }
     }
-    ControlTypeStoreProcess(page);
+    TempUnitsStoreProcess(page);
     page->publisher(&(page->info));
 }
 
-static void Page_Config_ControlType(Logger logger, PageEntity_t *page)
+static void Page_Config_TempUnits(Logger logger, PageEntity_t *page)
 {
     if ((page == NULL) || (page->publisher == NULL) || (page->data == NULL)) return;
 
@@ -58,7 +58,7 @@ static void Page_Config_ControlType(Logger logger, PageEntity_t *page)
     page->publisher(&(page->info));
 }
 
-static void Page_Reset_ControlType(Logger logger, PageEntity_t *page)
+static void Page_Reset_TempUnits(Logger logger, PageEntity_t *page)
 {
     if ((page == NULL) || (page->publisher == NULL) || (page->data == NULL)) return;
 
@@ -68,11 +68,11 @@ static void Page_Reset_ControlType(Logger logger, PageEntity_t *page)
     SpcTimer_StopTimer(Restore);
 
     SpcData_GetMaskRom(page->data);
-    ControlTypeStoreProcess(page);
+    TempUnitsStoreProcess(page);
     page->publisher(&(page->info));
 }
 
-static void Page_Flash_ControlType(Logger logger, PageEntity_t *page)
+static void Page_Flash_TempUnits(Logger logger, PageEntity_t *page)
 {
     if ((page == NULL) || (page->publisher == NULL) || (page->data == NULL)) return;
 
@@ -81,44 +81,44 @@ static void Page_Flash_ControlType(Logger logger, PageEntity_t *page)
     if (flash) {
         memset(page->info.Content, 0, MAX_INFO_LEN);
     } else {
-        ControlTypeStoreProcess(page);
+        TempUnitsStoreProcess(page);
     }
 
     flash = !flash;
     page->publisher(&(page->info));
 }
 
-static void Page_Restore_ControlType(Logger logger, PageEntity_t *page)
+static void Page_Restore_TempUnits(Logger logger, PageEntity_t *page)
 {
     if ((page == NULL) || (page->publisher == NULL) || (page->data == NULL)) return;
 
     SpcTimer_StopTimer(Flash);
     SpcTimer_StopTimer(Restore);
 
-    ControlTypeStoreProcess(page);
+    TempUnitsStoreProcess(page);
     page->publisher(&(page->info));
 }
 
-void Page_Init_ControlType(Logger logger, PageEntity_t *page)
+void Page_Init_TempUnits(Logger logger, PageEntity_t *page)
 {
     //logger("\r\nActual\r\n");
     if ((page == NULL) || (page->publisher == NULL)) return;
 
     SpcData_SetRefreshMask(DISABLE_REFRESH);
-    strncpy((char *)(page->info.Title), "Control Type", MAX_INFO_LEN);
+    strncpy((char *)(page->info.Title), "Units", MAX_INFO_LEN);
 
     if (page->data != NULL) free(page->data);
     page->data = (uint64_t *) malloc(sizeof(uint64_t));
     memset(page->data, 0, sizeof(uint64_t));
     if (SpcData_GetMaskRom(page->data)) {
-        ControlTypeStoreProcess(page);
+        TempUnitsStoreProcess(page);
     } else {
-        strncpy((char *)(page->info.Content), "Cant read Type", MAX_INFO_LEN);
+        strncpy((char *)(page->info.Content), "Cant read Uni", MAX_INFO_LEN);
     }
     page->publisher(&(page->info));
 }
 
-PageEntity_t *Page_Func_ControlType(KeyEnum_t key, Logger logger, PageEntity_t *page)
+PageEntity_t *Page_Func_TempUnits(KeyEnum_t key, Logger logger, PageEntity_t *page)
 {
     switch (key) {
     case Act:
@@ -128,24 +128,24 @@ PageEntity_t *Page_Func_ControlType(KeyEnum_t key, Logger logger, PageEntity_t *
     case Def:
         return Page_CreatePage(Default, logger, page->publisher);
     case Right:
-        return Page_CreatePage(CurrentLimit, logger, page->publisher);
+        return Page_CreatePage(PowerPrice, logger, page->publisher);
     case Left:
-        return Page_CreatePage(DeadBand, logger, page->publisher);
+        return Page_CreatePage(Password, logger, page->publisher);
     case Up:
     case Down:
-        Page_Update_ControlType(logger, page, key);
+        Page_Update_TempUnits(logger, page, key);
         return NULL;
     case Enter:
-        Page_Config_ControlType(logger, page);
+        Page_Config_TempUnits(logger, page);
         return NULL;
     case Reset:
-        Page_Reset_ControlType(logger, page);
+        Page_Reset_TempUnits(logger, page);
         return NULL;
     case Flash:
-        Page_Flash_ControlType(logger, page);
+        Page_Flash_TempUnits(logger, page);
         return NULL;
     case Restore:
-        Page_Restore_ControlType(logger, page);
+        Page_Restore_TempUnits(logger, page);
         return NULL;
     default:
         return NULL;

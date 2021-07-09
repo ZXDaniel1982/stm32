@@ -54,7 +54,28 @@ typedef int (*Logger)(const char* fmt, ...);
     PAGE_OPT(HeaterType, type) \
     PAGE_OPT(ManualOverride, type) \
     PAGE_OPT(DeadBand, type) \
-    PAGE_OPT(ControlType, type)
+    PAGE_OPT(ControlType, type) \
+    PAGE_OPT(CurrentLimit, type) \
+    PAGE_OPT(SoftStart, type) \
+    PAGE_OPT(AutoTest, type) \
+    PAGE_OPT(RtdFailMode, type) \
+    PAGE_OPT(RtdOptMode, type) \
+    PAGE_OPT(SystemSetup, type) \
+    PAGE_OPT(PasswdEn, type) \
+    PAGE_OPT(Password, type) \
+    PAGE_OPT(TempUnits, type) \
+    PAGE_OPT(PowerPrice, type) \
+    PAGE_OPT(DisplayMode, type) \
+    PAGE_OPT(DefaultDisplay, type) \
+    PAGE_OPT(Timeout, type) \
+    PAGE_OPT(ScanSpeed, type) \
+    PAGE_OPT(ModbusAddress, type) \
+    PAGE_OPT(Baudrate, type) \
+    PAGE_OPT(ResetModule, type) \
+    PAGE_OPT(SystemTest, type) \
+    PAGE_OPT(AlarmOutput, type) \
+    PAGE_OPT(HeaterTest, type) \
+    PAGE_OPT(GfiTest, type)
 
 #define OBJ_ENUM(TYPE, type) TYPE,
 #define PAGE_INIT_DECLARE(TYPE, type) void Page_Init_##TYPE(Logger, PageEntity_t *);

@@ -1,52 +1,63 @@
 #include "spc.h"
 #include "spctimer.h"
 
-#define CONTROL_TYPE_POS (3)
-#define CONTROL_TYPE_MSK (0x1U)
-#define CONTROL_TYPE_POS_MSK (CONTROL_TYPE_MSK << CONTROL_TYPE_POS)
+#define GFI_TEST_POS (16)
+#define GFI_TEST_MSK (0x3U)
+#define GFI_TEST_POS_MSK (GFI_TEST_MSK << GFI_TEST_POS)
 
-void ControlTypeStoreProcess(PageEntity_t *page)
+static const ByteStatus_t GfiTestMap[] = {
+    {GfiTest_Auto,             "Autotest Cycle"},
+    {GfiTest_Now,              "Now"},
+    {GfiTest_Disable,          "Disable"}
+};
+
+static const uint8_t *Def_GfiTest(uint8_t mode)
+{
+    for (uint8_t i = 0; i < NUM_ROWS(GfiTestMap); ++i) {
+        if (mode == GfiTestMap[i].type) {
+           return GfiTestMap[i].info;
+        }
+    }
+    return NULL;
+}
+
+void GfiTestStoreProcess(PageEntity_t *page)
 {
     if ((page == NULL) || (page->data == NULL)) return;
 
     uint64_t *mask = (uint64_t *) page->data;
-    uint8_t ctltype = (uint8_t) (((*mask) >> CONTROL_TYPE_POS) & CONTROL_TYPE_MSK);
-
-    if (ctltype) {
-        strncpy((char *)(page->info.Content), "Proportional", MAX_INFO_LEN);
-    } else {
-        strncpy((char *)(page->info.Content), "On_off", MAX_INFO_LEN);
-    }
+    uint8_t gfitest = (uint8_t) (((*mask) >> GFI_TEST_POS) & GFI_TEST_MSK);
+    strncpy((char *)(page->info.Content), (char *)Def_GfiTest(gfitest), MAX_INFO_LEN);
 }
 
-static void Page_Update_ControlType(Logger logger, PageEntity_t *page, KeyEnum_t key)
+static void Page_Update_GfiTest(Logger logger, PageEntity_t *page, KeyEnum_t key)
 {
     uint64_t *mask = (uint64_t *) page->data;
-    uint8_t ctltype = (uint8_t) (((*mask) >> CONTROL_TYPE_POS) & CONTROL_TYPE_MSK);
+    uint8_t gfitest = (uint8_t) (((*mask) >> GFI_TEST_POS) & GFI_TEST_MSK);
     
     SpcTimer_StopTimer(Restore);
     SpcTimer_StartTimer(Flash, 40, true);
   
     if (key == Up) {
-        if (ctltype) {
+        if (gfitest >= GfiTest_Disable) {
             return;
         } else {
-            ctltype = 1;
-            MODIFY_MASK(*mask, CONTROL_TYPE_POS_MSK, ctltype << CONTROL_TYPE_POS);
+            gfitest++;
+            MODIFY_MASK(*mask, GFI_TEST_POS_MSK, gfitest << GFI_TEST_POS);
         }
     } else if (key == Down) {
-        if (ctltype) {
-            ctltype = 0;
-            MODIFY_MASK(*mask, CONTROL_TYPE_POS_MSK, ctltype << CONTROL_TYPE_POS);
-        } else {
+        if (gfitest <= GfiTest_Auto) {
             return;
+        } else {
+            gfitest--;
+            MODIFY_MASK(*mask, GFI_TEST_POS_MSK, gfitest << GFI_TEST_POS);
         }
     }
-    ControlTypeStoreProcess(page);
+    GfiTestStoreProcess(page);
     page->publisher(&(page->info));
 }
 
-static void Page_Config_ControlType(Logger logger, PageEntity_t *page)
+static void Page_Config_GfiTest(Logger logger, PageEntity_t *page)
 {
     if ((page == NULL) || (page->publisher == NULL) || (page->data == NULL)) return;
 
@@ -58,7 +69,7 @@ static void Page_Config_ControlType(Logger logger, PageEntity_t *page)
     page->publisher(&(page->info));
 }
 
-static void Page_Reset_ControlType(Logger logger, PageEntity_t *page)
+static void Page_Reset_GfiTest(Logger logger, PageEntity_t *page)
 {
     if ((page == NULL) || (page->publisher == NULL) || (page->data == NULL)) return;
 
@@ -68,11 +79,11 @@ static void Page_Reset_ControlType(Logger logger, PageEntity_t *page)
     SpcTimer_StopTimer(Restore);
 
     SpcData_GetMaskRom(page->data);
-    ControlTypeStoreProcess(page);
+    GfiTestStoreProcess(page);
     page->publisher(&(page->info));
 }
 
-static void Page_Flash_ControlType(Logger logger, PageEntity_t *page)
+static void Page_Flash_GfiTest(Logger logger, PageEntity_t *page)
 {
     if ((page == NULL) || (page->publisher == NULL) || (page->data == NULL)) return;
 
@@ -81,44 +92,44 @@ static void Page_Flash_ControlType(Logger logger, PageEntity_t *page)
     if (flash) {
         memset(page->info.Content, 0, MAX_INFO_LEN);
     } else {
-        ControlTypeStoreProcess(page);
+        GfiTestStoreProcess(page);
     }
 
     flash = !flash;
     page->publisher(&(page->info));
 }
 
-static void Page_Restore_ControlType(Logger logger, PageEntity_t *page)
+static void Page_Restore_GfiTest(Logger logger, PageEntity_t *page)
 {
     if ((page == NULL) || (page->publisher == NULL) || (page->data == NULL)) return;
 
     SpcTimer_StopTimer(Flash);
     SpcTimer_StopTimer(Restore);
 
-    ControlTypeStoreProcess(page);
+    GfiTestStoreProcess(page);
     page->publisher(&(page->info));
 }
 
-void Page_Init_ControlType(Logger logger, PageEntity_t *page)
+void Page_Init_GfiTest(Logger logger, PageEntity_t *page)
 {
     //logger("\r\nActual\r\n");
     if ((page == NULL) || (page->publisher == NULL)) return;
 
     SpcData_SetRefreshMask(DISABLE_REFRESH);
-    strncpy((char *)(page->info.Title), "Control Type", MAX_INFO_LEN);
+    strncpy((char *)(page->info.Title), "GFI Test", MAX_INFO_LEN);
 
     if (page->data != NULL) free(page->data);
     page->data = (uint64_t *) malloc(sizeof(uint64_t));
     memset(page->data, 0, sizeof(uint64_t));
     if (SpcData_GetMaskRom(page->data)) {
-        ControlTypeStoreProcess(page);
+        GfiTestStoreProcess(page);
     } else {
-        strncpy((char *)(page->info.Content), "Cant read Type", MAX_INFO_LEN);
+        strncpy((char *)(page->info.Content), "Cant read GT", MAX_INFO_LEN);
     }
     page->publisher(&(page->info));
 }
 
-PageEntity_t *Page_Func_ControlType(KeyEnum_t key, Logger logger, PageEntity_t *page)
+PageEntity_t *Page_Func_GfiTest(KeyEnum_t key, Logger logger, PageEntity_t *page)
 {
     switch (key) {
     case Act:
@@ -127,25 +138,25 @@ PageEntity_t *Page_Func_ControlType(KeyEnum_t key, Logger logger, PageEntity_t *
         return Page_CreatePage(Program, logger, page->publisher);
     case Def:
         return Page_CreatePage(Default, logger, page->publisher);
-    case Right:
-        return Page_CreatePage(CurrentLimit, logger, page->publisher);
+    /*case Right:
+        return Page_CreatePage(ResetModule, logger, page->publisher);*/
     case Left:
-        return Page_CreatePage(DeadBand, logger, page->publisher);
+        return Page_CreatePage(HeaterTest, logger, page->publisher);
     case Up:
     case Down:
-        Page_Update_ControlType(logger, page, key);
+        Page_Update_GfiTest(logger, page, key);
         return NULL;
     case Enter:
-        Page_Config_ControlType(logger, page);
+        Page_Config_GfiTest(logger, page);
         return NULL;
     case Reset:
-        Page_Reset_ControlType(logger, page);
+        Page_Reset_GfiTest(logger, page);
         return NULL;
     case Flash:
-        Page_Flash_ControlType(logger, page);
+        Page_Flash_GfiTest(logger, page);
         return NULL;
     case Restore:
-        Page_Restore_ControlType(logger, page);
+        Page_Restore_GfiTest(logger, page);
         return NULL;
     default:
         return NULL;

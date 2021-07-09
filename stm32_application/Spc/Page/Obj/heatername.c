@@ -25,37 +25,37 @@ static uint8_t HeaterNameGetCharactor(uint8_t charator)
 void HeaterNameStoreProcess(PageEntity_t *page)
 {
     if ((page == NULL) || (page->data == NULL)) return;
-    SpcHeaterNameConfig_t *heatername = (SpcHeaterNameConfig_t *) (page->data);
-    strncpy((char *)(page->info.Content), (char *)(heatername->name), MAX_INFO_LEN);
+    SpcStringConfig_t *heatername = (SpcStringConfig_t *) (page->data);
+    strncpy((char *)(page->info.Content), (char *)(heatername->value), MAX_INFO_LEN);
 }
 
 static void Page_Update_HeaterName(Logger logger, PageEntity_t *page, KeyEnum_t key)
 {
-    SpcHeaterNameConfig_t *heatername = (SpcHeaterNameConfig_t *) (page->data);
+    SpcStringConfig_t *heatername = (SpcStringConfig_t *) (page->data);
     uint8_t index = heatername->index;
     
     SpcTimer_StopTimer(Restore);
     SpcTimer_StartTimer(Flash, 40, true);
   
     if (key == Up) {
-        if (heatername->name[index] == '\0') {
-            heatername->name[index] = ' ';
+        if (heatername->value[index] == '\0') {
+            heatername->value[index] = ' ';
         } else {
-            uint8_t charator = HeaterNameGetCharactor(heatername->name[index]);
+            uint8_t charator = HeaterNameGetCharactor(heatername->value[index]);
             uint8_t charatorNum = NUM_ROWS(kMapCharactor);
             charator = (charator + charatorNum + 1) % charatorNum;
             if ((index == 0) && (charator == 0)) charator++;
-            heatername->name[index] = kMapCharactor[charator];
+            heatername->value[index] = kMapCharactor[charator];
         }
     } else if (key == Down) {
-        if (heatername->name[index] == '\0') {
-            heatername->name[index] = ' ';
+        if (heatername->value[index] == '\0') {
+            heatername->value[index] = ' ';
         } else {
-            uint8_t charator = HeaterNameGetCharactor(heatername->name[index]);
+            uint8_t charator = HeaterNameGetCharactor(heatername->value[index]);
             uint8_t charatorNum = NUM_ROWS(kMapCharactor);
             charator = (charator + charatorNum - 1) % charatorNum;
             if ((index == 0) && (charator == 0)) charator = charatorNum - 1;
-            heatername->name[index] = kMapCharactor[charator];
+            heatername->value[index] = kMapCharactor[charator];
         }
     }
     HeaterNameStoreProcess(page);
@@ -66,17 +66,17 @@ static void Page_Config_HeaterName(Logger logger, PageEntity_t *page)
 {
     if ((page == NULL) || (page->publisher == NULL) || (page->data == NULL)) return;
 
-    SpcHeaterNameConfig_t *heatername = (SpcHeaterNameConfig_t *) (page->data);
+    SpcStringConfig_t *heatername = (SpcStringConfig_t *) (page->data);
     if (heatername->index == MAX_HEATERNAME_LEN) {
         SpcTimer_StopTimer(Flash);
         SpcTimer_StartTimer(Restore, 40, false);
 
-        SpcData_SetHeaterName(heatername->name);
+        SpcData_SetHeaterName(heatername->value);
         strncpy((char *)(page->info.Content), "Stored", MAX_INFO_LEN);
     } else {
         heatername->index++;
-        if (heatername->name[heatername->index] == '\0')
-            heatername->name[heatername->index] = ' ';
+        if (heatername->value[heatername->index] == '\0')
+            heatername->value[heatername->index] = ' ';
     }
     page->publisher(&(page->info));
 }
@@ -85,13 +85,13 @@ static void Page_Reset_HeaterName(Logger logger, PageEntity_t *page)
 {
     if ((page == NULL) || (page->publisher == NULL) || (page->data == NULL)) return;
 
-    memset(page->data, 0, sizeof(SpcHeaterNameConfig_t));
+    memset(page->data, 0, sizeof(SpcStringConfig_t));
 
     SpcTimer_StopTimer(Flash);
     SpcTimer_StopTimer(Restore);
 
-    SpcHeaterNameConfig_t *heatername = (SpcHeaterNameConfig_t *) (page->data);
-    SpcData_GetHeaterName(heatername->name);
+    SpcStringConfig_t *heatername = (SpcStringConfig_t *) (page->data);
+    SpcData_GetHeaterName(heatername->value);
     HeaterNameStoreProcess(page);
     page->publisher(&(page->info));
 }
@@ -100,11 +100,11 @@ static void Page_Flash_HeaterName(Logger logger, PageEntity_t *page)
 {
     if ((page == NULL) || (page->publisher == NULL) || (page->data == NULL)) return;
 
-    SpcHeaterNameConfig_t *heatername = (SpcHeaterNameConfig_t *) (page->data);
+    SpcStringConfig_t *heatername = (SpcStringConfig_t *) (page->data);
     static bool flash = false;
     if (flash) {
         uint8_t index = heatername->index;
-        strncpy((char *)(page->info.Content), (char *)(heatername->name), MAX_INFO_LEN);
+        strncpy((char *)(page->info.Content), (char *)(heatername->value), MAX_INFO_LEN);
         page->info.Content[index] = '-';
     } else {
         HeaterNameStoreProcess(page);
@@ -134,12 +134,12 @@ void Page_Init_HeaterName(Logger logger, PageEntity_t *page)
     strncpy((char *)(page->info.Title), "Heater ID", MAX_INFO_LEN);
 
     if (page->data != NULL) free(page->data);
-    page->data = (SpcHeaterNameConfig_t *) malloc(sizeof(SpcHeaterNameConfig_t));
-    memset(page->data, 0, sizeof(SpcHeaterNameConfig_t));
-    SpcHeaterNameConfig_t *heatername = (SpcHeaterNameConfig_t *) (page->data);
-    if (SpcData_GetHeaterName(heatername->name)) {
-        if (heatername->name[0] == '\0' || heatername->name[0] == ' ') {
-            heatername->name[0] = '0';
+    page->data = (SpcStringConfig_t *) malloc(sizeof(SpcStringConfig_t));
+    memset(page->data, 0, sizeof(SpcStringConfig_t));
+    SpcStringConfig_t *heatername = (SpcStringConfig_t *) (page->data);
+    if (SpcData_GetHeaterName(heatername->value)) {
+        if (heatername->value[0] == '\0' || heatername->value[0] == ' ') {
+            heatername->value[0] = '0';
         }
         HeaterNameStoreProcess(page);
     } else {

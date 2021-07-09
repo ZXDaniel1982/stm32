@@ -1,6 +1,6 @@
 #include "spc.h"
 
-static const HeatStatus_t HeatStatusMap[] = {
+static const ByteStatus_t HeatStatusMap[] = {
   {HeatIsOff,     "Heater is Off"},
   {HeatIsOn,      "Heater is On"},
   {HeatIsManOff,  "Heater is ManOff"},

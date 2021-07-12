@@ -50,14 +50,6 @@ void SpcDataInit(void)
     memcpy(&SpcDataRom, &SpcDataRomDefault, sizeof(SpcDataRom_t));
 
     DataMutex = xSemaphoreCreateMutex();
-
-    // TODO, for test, delete in future
-    /*SpcData_SetPower(60);
-    SpcData_SetPassword((uint8_t *)"1234");
-
-    SpcDataRom.SpcMaintain.status = Opt;
-    SpcDataRom.SpcMaintain.temperature[0] = 50;
-    SpcDataRom.SpcMaintain.temperature[1] = 10;*/
 }
 
 uint8_t SpcData_GetLcdDef(void)

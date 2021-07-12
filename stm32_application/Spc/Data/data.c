@@ -5,7 +5,7 @@
 #include "key.h"
 
 static const SpcDataRom_t SpcDataRomDefault = {
-    .SpcMaskRom = 0,
+    .SpcMaskRom = 0x27831,
     .SpcMaintain = {.status = Opt, {10, 50}},
     .SpcLowTemp = {.status = Opt, {5, 41}},
     .SpcHighTemp = {.status = OFF, {0, 0}},

@@ -4,6 +4,31 @@
 #include "data.h"
 #include "key.h"
 
+static const SpcDataRom_t SpcDataRomDefault = {
+    .SpcMaskRom = 0x27831,
+    .SpcMaintain = {.status = Opt, {10, 50}},
+    .SpcLowTemp = {.status = Opt, {5, 41}},
+    .SpcHighTemp = {.status = OFF, {0, 0}},
+    .SpcDeadBand = {.status = Opt, {2, 1}},
+    .SpcLowCurrent = {.status = Uint16OFF, 0},
+    .SpcHighCurrent = {.status = Uint16OFF, 0},
+    .SpcGFIAlarm = {.status = Uint16Opt, 30},
+    .SpcGFITrip = {.status = Uint16Opt, 50},
+    .SpcLowVoltage = {.status = Uint16OFF, 0},
+    .SpcHighVoltage = {.status = Uint16OFF, 0},
+    .SpcCurrentLimit = {.status = Uint16OFF, 0},
+    .SpcSoftStart = {.status = Uint16OFF, 0},
+    .SpcAutoTest = {.status = Uint16Opt, 24},
+    .SpcPowerPrice = {.status = Uint16Opt, 5},
+    .SpcTimeout = {.status = Uint16Opt, 120},
+    .SpcScanSpeed = {.status = Uint16Opt, 3},
+    .SpcModbusAddress = {.status = Uint16Opt, 1},
+    .SpcAlarmOutput = {.status = Uint16OFF, 0},
+    .SpcHeaterTest = {.status = Uint16OFF, 0},
+    .HeaterName = "Spc",
+    .Password = "1234"
+};
+
 extern xQueueHandle UartQueue;
 
 static SemaphoreHandle_t DataMutex;
@@ -22,15 +47,9 @@ void SpcDataInit(void)
     memset(&SpcDataRom, 0, sizeof(SpcDataRom_t));
     memset(&SpcDataRam, 0, sizeof(SpcDataRam_t));
 
+    memcpy(&SpcDataRom, &SpcDataRomDefault, sizeof(SpcDataRom_t));
+
     DataMutex = xSemaphoreCreateMutex();
-
-    // TODO, for test, delete in future
-    SpcData_SetPower(60);
-    SpcData_SetPassword((uint8_t *)"1234");
-
-    SpcDataRom.SpcMaintain.status = Opt;
-    SpcDataRom.SpcMaintain.temperature[0] = 50;
-    SpcDataRom.SpcMaintain.temperature[1] = 10;
 }
 
 uint8_t SpcData_GetLcdDef(void)

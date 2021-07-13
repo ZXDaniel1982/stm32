@@ -22,9 +22,8 @@ PageEntity_t *Page_Func_SystemTest(KeyEnum_t key, Logger logger, PageEntity_t *p
     case Prog:
         return Page_CreatePage(Program, logger, page->publisher);
     case Left:
-        return Page_CreatePage(ResetModule, logger, page->publisher);
     case Right:
-        return Page_CreatePage(AlarmOutput, logger, page->publisher);
+        return Page_CreatePage(Spc_GetNextPage(logger, key, SystemTest), logger, page->publisher);
 	default:
 		return NULL;
 	}

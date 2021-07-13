@@ -122,13 +122,12 @@ PageEntity_t *Page_Func_AutoTest(KeyEnum_t key, Logger logger, PageEntity_t *pag
     case Act:
         return Page_CreatePage(Actual, logger, page->publisher);
     case Prog:
-        return Page_CreatePage(Program, logger, page->publisher);
+        return Page_CreatePage(SystemSetup, logger, page->publisher);
     case Def:
         return Page_CreatePage(Default, logger, page->publisher);
     case Right:
-        return Page_CreatePage(RtdOptMode, logger, page->publisher);
     case Left:
-        return Page_CreatePage(SoftStart, logger, page->publisher);
+        return Page_CreatePage(Spc_GetNextPage(logger, key, AutoTest), logger, page->publisher);
     case Up:
     case Down:
         Page_Update_AutoTest(logger, page, key);

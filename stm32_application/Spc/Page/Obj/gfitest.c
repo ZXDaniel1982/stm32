@@ -138,10 +138,9 @@ PageEntity_t *Page_Func_GfiTest(KeyEnum_t key, Logger logger, PageEntity_t *page
         return Page_CreatePage(Program, logger, page->publisher);
     case Def:
         return Page_CreatePage(Default, logger, page->publisher);
-    /*case Right:
-        return Page_CreatePage(ResetModule, logger, page->publisher);*/
+    case Right:
     case Left:
-        return Page_CreatePage(HeaterTest, logger, page->publisher);
+        return Page_CreatePage(Spc_GetNextPage(logger, key, GfiTest), logger, page->publisher);
     case Up:
     case Down:
         Page_Update_GfiTest(logger, page, key);

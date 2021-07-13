@@ -159,13 +159,12 @@ PageEntity_t *Page_Func_GFITrip(KeyEnum_t key, Logger logger, PageEntity_t *page
     case Act:
         return Page_CreatePage(Actual, logger, page->publisher);
     case Prog:
-        return Page_CreatePage(Program, logger, page->publisher);
+        return Page_CreatePage(HeaterSetup, logger, page->publisher);
     case Def:
         return Page_CreatePage(Default, logger, page->publisher);
     case Right:
-        return Page_CreatePage(LowVoltage, logger, page->publisher);
     case Left:
-        return Page_CreatePage(GFIAlarm, logger, page->publisher);
+        return Page_CreatePage(Spc_GetNextPage(logger, key, GFITrip), logger, page->publisher);
     case Up:
     case Down:
         Page_Update_GFITrip(logger, page, key);

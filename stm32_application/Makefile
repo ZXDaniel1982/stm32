@@ -123,6 +123,8 @@ Spc/Page/Obj/systemtest.c \
 Spc/Page/Obj/alarmoutput.c \
 Spc/Page/Obj/heatertest.c \
 Spc/Page/Obj/gfitest.c \
+Spc/Page/Common/access.c \
+Spc/Page/Common/navigate.c \
 Spc/Data/data.c \
 Spc/Timer/spctimer.c \
 Gui/gui.c \
@@ -193,6 +195,8 @@ Spc/Page/Obj/systemtest.c \
 Spc/Page/Obj/alarmoutput.c \
 Spc/Page/Obj/heatertest.c \
 Spc/Page/Obj/gfitest.c \
+Spc/Page/Common/access.c \
+Spc/Page/Common/navigate.c \
 Spc/Timer/spctimermock.c \
 Vector/vector.c
 

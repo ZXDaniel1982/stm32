@@ -160,13 +160,12 @@ PageEntity_t *Page_Func_LowVoltage(KeyEnum_t key, Logger logger, PageEntity_t *p
     case Act:
         return Page_CreatePage(Actual, logger, page->publisher);
     case Prog:
-        return Page_CreatePage(Program, logger, page->publisher);
+        return Page_CreatePage(HeaterSetup, logger, page->publisher);
     case Def:
         return Page_CreatePage(Default, logger, page->publisher);
     case Right:
-        return Page_CreatePage(HighVoltage, logger, page->publisher);
     case Left:
-        return Page_CreatePage(GFITrip, logger, page->publisher);
+        return Page_CreatePage(Spc_GetNextPage(logger, key, LowVoltage), logger, page->publisher);
     case Up:
     case Down:
         Page_Update_LowVoltage(logger, page, key);

@@ -322,7 +322,10 @@ PageEntity_t *Page_Func_Password(KeyEnum_t key, Logger logger, PageEntity_t *pag
     case Act:
         return Page_CreatePage(Actual, logger, page->publisher);
     case Prog:
-        return Page_CreatePage(Program, logger, page->publisher);
+        if (!MenuIsNotAdvance())
+            return Page_CreatePage(SystemTest, logger, page->publisher);
+        else
+            return Page_CreatePage(Program, logger, page->publisher);
     case Def:
         return Page_CreatePage(Default, logger, page->publisher);
     case Right:
@@ -331,7 +334,7 @@ PageEntity_t *Page_Func_Password(KeyEnum_t key, Logger logger, PageEntity_t *pag
                 Page_Update_Password(key, logger, page);
                 return NULL;
             } else {
-                return Page_CreatePage(TempUnits, logger, page->publisher);
+                return Page_CreatePage(Spc_GetNextPage(logger, key, Password), logger, page->publisher);
             }
         }
     case Left:
@@ -340,7 +343,7 @@ PageEntity_t *Page_Func_Password(KeyEnum_t key, Logger logger, PageEntity_t *pag
                 Page_Update_Password(key, logger, page);
                 return NULL;
             } else {
-                return Page_CreatePage(PasswdEn, logger, page->publisher);
+                return Page_CreatePage(Spc_GetNextPage(logger, key, Password), logger, page->publisher);
             }
         }
     case Up:

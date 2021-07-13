@@ -263,6 +263,8 @@ void SpcDataInit(void);
 uint8_t SpcData_GetLcdDef(void);
 uint8_t SpcData_GetTempUint(void);
 uint8_t SpcData_GetCtrlType(void);
+uint8_t SpcData_GetAdvance(void);
+uint8_t SpcData_GetHeaterType(void);
 bool SpcData_GetMaskRom(uint64_t *mask);
 bool SpcData_SetMaskRom(uint64_t *mask);
 uint64_t SpcData_GetMaskRam(void);

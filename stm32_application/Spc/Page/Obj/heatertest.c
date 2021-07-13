@@ -126,9 +126,8 @@ PageEntity_t *Page_Func_HeaterTest(KeyEnum_t key, Logger logger, PageEntity_t *p
     case Def:
         return Page_CreatePage(Default, logger, page->publisher);
     case Right:
-        return Page_CreatePage(GfiTest, logger, page->publisher);
     case Left:
-        return Page_CreatePage(AlarmOutput, logger, page->publisher);
+        return Page_CreatePage(Spc_GetNextPage(logger, key, HeaterTest), logger, page->publisher);
     case Up:
     case Down:
         Page_Update_HeaterTest(logger, page, key);

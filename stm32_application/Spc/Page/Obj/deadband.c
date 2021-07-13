@@ -2,11 +2,11 @@
 #include "spctimer.h"
 
 static inline int16_t FetchMaxDeadBand(bool unit) {
-  return unit ? 10 : 5;
+    return unit ? 10 : 5;
 }
 
 static inline int16_t FetchMinDeadBand() {
-  return 1;
+    return 1;
 }
 
 static void SpcData_CorrectDeadBand(SpcTempGroupConfig_t *tempgroup)
@@ -151,13 +151,12 @@ PageEntity_t *Page_Func_DeadBand(KeyEnum_t key, Logger logger, PageEntity_t *pag
     case Act:
         return Page_CreatePage(Actual, logger, page->publisher);
     case Prog:
-        return Page_CreatePage(Program, logger, page->publisher);
+        return Page_CreatePage(SystemSetup, logger, page->publisher);
     case Def:
         return Page_CreatePage(Default, logger, page->publisher);
     case Right:
-        return Page_CreatePage(ControlType, logger, page->publisher);
     case Left:
-        return Page_CreatePage(ManualOverride, logger, page->publisher);
+        return Page_CreatePage(Spc_GetNextPage(logger, key, DeadBand), logger, page->publisher);
     case Up:
     case Down:
         Page_Update_DeadBand(logger, page, key);

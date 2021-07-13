@@ -6,18 +6,18 @@
 void Page_Init_MaxCurrent(Logger logger, PageEntity_t *page)
 {
     //logger("\r\nActual\r\n");
-  if ((page == NULL) || (page->publisher == NULL)) return;
+    if ((page == NULL) || (page->publisher == NULL)) return;
 
-  SpcData_SetRefreshMask(Refresh_MaxCurrent_Msk);
-  strncpy((char *)(page->info.Title), "Max Current", MAX_INFO_LEN);
+    SpcData_SetRefreshMask(Refresh_MaxCurrent_Msk);
+    strncpy((char *)(page->info.Title), "Max Current", MAX_INFO_LEN);
 
-  SpcUint16_t current;
-  if (SpcData_GetMaxCurrent(&current)) {
-    CurrentProcess(page, &current);
-  } else {
-    strncpy((char *)(page->info.Content), "Cant read maxC", MAX_INFO_LEN);
-  }
-  page->publisher(&(page->info));
+    SpcUint16_t current;
+    if (SpcData_GetMaxCurrent(&current)) {
+        CurrentProcess(page, &current);
+    } else {
+        strncpy((char *)(page->info.Content), "Cant read maxC", MAX_INFO_LEN);
+    }
+    page->publisher(&(page->info));
 }
 
 PageEntity_t *Page_Func_MaxCurrent(KeyEnum_t key, Logger logger, PageEntity_t *page)
@@ -30,9 +30,8 @@ PageEntity_t *Page_Func_MaxCurrent(KeyEnum_t key, Logger logger, PageEntity_t *p
     case Def:
         return Page_CreatePage(Default, logger, page->publisher);
     case Right:
-        return Page_CreatePage(MaxGfi, logger, page->publisher);
     case Left:
-        return Page_CreatePage(MinTemperature, logger, page->publisher);
+        return Page_CreatePage(Spc_GetNextPage(logger, key, MaxCurrent), logger, page->publisher);
     case Update:
         Page_Init_MaxCurrent(logger, page);
         return NULL;

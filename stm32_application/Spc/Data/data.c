@@ -85,6 +85,28 @@ uint8_t SpcData_GetCtrlType(void)
     return val;
 }
 
+uint8_t SpcData_GetAdvance(void)
+{
+    uint8_t val = 0;
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    val = (uint8_t) SpcDataRom.bits.advanced;
+    xSemaphoreGive(DataMutex);
+
+    return val;
+}
+
+uint8_t SpcData_GetHeaterType(void)
+{
+    uint8_t val = 0;
+
+    xSemaphoreTake(DataMutex, portMAX_DELAY);
+    val = (uint8_t) SpcDataRom.bits.heatertype;
+    xSemaphoreGive(DataMutex);
+
+    return val;
+}
+
 bool SpcData_GetMaskRom(uint64_t *mask)
 {
     if (mask == NULL) return false;

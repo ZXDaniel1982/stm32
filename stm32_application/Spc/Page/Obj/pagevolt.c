@@ -5,45 +5,47 @@
 
 void VoltageProcess(PageEntity_t *page, SpcUint16_t *voltage)
 {
-  if (voltage->hasValue) {
-    uint8_t content[MAX_INFO_LEN] = {0};
-    snprintf((char *)content, MAX_INFO_LEN, "%d %s", voltage->value, "V");
-    strncpy((char *)(page->info.Content), (char *)content, MAX_INFO_LEN);
-  } else {
-    strncpy((char *)(page->info.Content), "No voltage", MAX_INFO_LEN);
-  }
+    if (voltage->hasValue) {
+        uint8_t content[MAX_INFO_LEN] = {0};
+        snprintf((char *)content, MAX_INFO_LEN, "%d %s", voltage->value, "V");
+        strncpy((char *)(page->info.Content), (char *)content, MAX_INFO_LEN);
+    } else {
+        strncpy((char *)(page->info.Content), "No voltage", MAX_INFO_LEN);
+    }
 }
 
 void Page_Init_Voltage(Logger logger, PageEntity_t *page)
 {
     //logger("\r\nActual\r\n");
-  if ((page == NULL) || (page->publisher == NULL)) return;
+    if ((page == NULL) || (page->publisher == NULL)) return;
 
-  SpcData_SetRefreshMask(Refresh_Voltage_Msk);
-  strncpy((char *)(page->info.Title), "Voltage", MAX_INFO_LEN);
- 
-  SpcUint16_t voltage;
-  if (SpcData_GetVoltage(&voltage)) {
-    VoltageProcess(page, &voltage);
-  } else {
-    strncpy((char *)(page->info.Content), "Cant read volt", MAX_INFO_LEN);
-  }
-  page->publisher(&(page->info));
+    SpcData_SetRefreshMask(Refresh_Voltage_Msk);
+    strncpy((char *)(page->info.Title), "Voltage", MAX_INFO_LEN);
+
+    SpcUint16_t voltage;
+    if (SpcData_GetVoltage(&voltage)) {
+        VoltageProcess(page, &voltage);
+    } else {
+        strncpy((char *)(page->info.Content), "Cant read volt", MAX_INFO_LEN);
+    }
+    page->publisher(&(page->info));
 }
 
 PageEntity_t *Page_Func_Voltage(KeyEnum_t key, Logger logger, PageEntity_t *page)
 {
     switch (key) {
     case Act:
-        return Page_CreatePage(Actual, logger, page->publisher);
-    case Left:
-        return Page_CreatePage(Gfi, logger, page->publisher);
+        if (!MenuIsNotAdvance())
+            return Page_CreatePage(Statistic, logger, page->publisher);
+        else
+            return Page_CreatePage(Actual, logger, page->publisher);
     case Prog:
         return Page_CreatePage(Program, logger, page->publisher);
     case Def:
         return Page_CreatePage(Default, logger, page->publisher);
+    case Left:
     case Right:
-        return Page_CreatePage(Statistic, logger, page->publisher);
+        return Page_CreatePage(Spc_GetNextPage(logger, key, Voltage), logger, page->publisher);
     case Update:
         Page_Init_Voltage(logger, page);
         return NULL;

@@ -138,13 +138,15 @@ PageEntity_t *Page_Func_Baudrate(KeyEnum_t key, Logger logger, PageEntity_t *pag
     case Act:
         return Page_CreatePage(Actual, logger, page->publisher);
     case Prog:
-        return Page_CreatePage(Program, logger, page->publisher);
+        if (!MenuIsNotAdvance())
+            return Page_CreatePage(SystemTest, logger, page->publisher);
+        else
+            return Page_CreatePage(Program, logger, page->publisher);
     case Def:
         return Page_CreatePage(Default, logger, page->publisher);
     case Right:
-        return Page_CreatePage(ResetModule, logger, page->publisher);
     case Left:
-        return Page_CreatePage(ModbusAddress, logger, page->publisher);
+        return Page_CreatePage(Spc_GetNextPage(logger, key, Baudrate), logger, page->publisher);
     case Up:
     case Down:
         Page_Update_Baudrate(logger, page, key);

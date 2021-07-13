@@ -126,9 +126,8 @@ PageEntity_t *Page_Func_AlarmOutput(KeyEnum_t key, Logger logger, PageEntity_t *
     case Def:
         return Page_CreatePage(Default, logger, page->publisher);
     case Right:
-        return Page_CreatePage(HeaterTest, logger, page->publisher);
     case Left:
-        return Page_CreatePage(SystemTest, logger, page->publisher);
+        return Page_CreatePage(Spc_GetNextPage(logger, key, AlarmOutput), logger, page->publisher);
     case Up:
     case Down:
         Page_Update_AlarmOutput(logger, page, key);

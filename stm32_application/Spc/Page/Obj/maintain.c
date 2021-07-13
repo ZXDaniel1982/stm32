@@ -2,11 +2,11 @@
 #include "spctimer.h"
 
 static inline int16_t FetchMaxMaint(bool unit) {
-  return unit ? 932 : 500;
+    return unit ? 932 : 500;
 }
 
 static inline int16_t FetchMinMaint(bool unit) {
-  return unit ? -58 : -50;
+    return unit ? -58 : -50;
 }
 
 static void SpcData_CorrectMaintain(SpcTempGroupConfig_t *tempgroup)
@@ -173,13 +173,12 @@ PageEntity_t *Page_Func_Maintain(KeyEnum_t key, Logger logger, PageEntity_t *pag
     case Act:
         return Page_CreatePage(Actual, logger, page->publisher);
     case Prog:
-        return Page_CreatePage(Program, logger, page->publisher);
+        return Page_CreatePage(HeaterSetup, logger, page->publisher);
     case Def:
         return Page_CreatePage(Default, logger, page->publisher);
     case Right:
-        return Page_CreatePage(LowTemp, logger, page->publisher);
     case Left:
-        return Page_CreatePage(Program, logger, page->publisher);
+        return Page_CreatePage(Spc_GetNextPage(logger, key, Maintain), logger, page->publisher);
     case Up:
     case Down:
         Page_Update_Maintain(logger, page, key);

@@ -3,6 +3,31 @@
 #include "data.h"
 #include "spctimer.h"
 
+static const SpcDataRom_t SpcDataRomDefault = {
+    .SpcMaskRom = 0x27831,
+    .SpcMaintain = {.status = Opt, {10, 50}},
+    .SpcLowTemp = {.status = Opt, {5, 41}},
+    .SpcHighTemp = {.status = OFF, {0, 0}},
+    .SpcDeadBand = {.status = Opt, {2, 1}},
+    .SpcLowCurrent = {.status = Uint16OFF, 0},
+    .SpcHighCurrent = {.status = Uint16OFF, 0},
+    .SpcGFIAlarm = {.status = Uint16Opt, 30},
+    .SpcGFITrip = {.status = Uint16Opt, 50},
+    .SpcLowVoltage = {.status = Uint16OFF, 0},
+    .SpcHighVoltage = {.status = Uint16OFF, 0},
+    .SpcCurrentLimit = {.status = Uint16OFF, 0},
+    .SpcSoftStart = {.status = Uint16OFF, 0},
+    .SpcAutoTest = {.status = Uint16Opt, 24},
+    .SpcPowerPrice = {.status = Uint16Opt, 5},
+    .SpcTimeout = {.status = Uint16Opt, 120},
+    .SpcScanSpeed = {.status = Uint16Opt, 3},
+    .SpcModbusAddress = {.status = Uint16Opt, 1},
+    .SpcAlarmOutput = {.status = Uint16OFF, 0},
+    .SpcHeaterTest = {.status = Uint16OFF, 0},
+    .HeaterName = "Spc",
+    .Password = "1234"
+};
+
 static SpcDataRom_t SpcDataRom;
 static SpcDataRam_t SpcDataRam;
 
@@ -19,29 +44,32 @@ void SpcDataInit(void)
     memset(&SpcDataRom, 0, sizeof(SpcDataRom_t));
     memset(&SpcDataRam, 0, sizeof(SpcDataRam_t));
     
-    SpcDataRom.SpcMaintain.status = Opt;
-    SpcDataRom.SpcMaintain.temperature[0] = 50;
-    SpcDataRom.SpcMaintain.temperature[1] = 10;
-
-    strncpy(SpcDataRom.Password, "1234", MAX_INFO_LEN);
+    memcpy(&SpcDataRom, &SpcDataRomDefault, sizeof(SpcDataRom_t));
 }
 
 uint8_t SpcData_GetLcdDef(void)
 {
-    SpcDataRom.bits.lcdDef = 2;
     return (uint8_t) SpcDataRom.bits.lcdDef;
 }
 
 uint8_t SpcData_GetTempUint(void)
 {
-    SpcDataRom.bits.tempUint = 1;
     return (uint8_t) SpcDataRom.bits.tempUint;
 }
 
 uint8_t SpcData_GetCtrlType(void)
 {
-    SpcDataRom.bits.ctrType = 1;
     return (uint8_t) SpcDataRom.bits.ctrType;
+}
+
+uint8_t SpcData_GetAdvance(void)
+{
+    return (uint8_t) SpcDataRom.bits.advanced;
+}
+
+uint8_t SpcData_GetHeaterType(void)
+{
+    return (uint8_t) SpcDataRom.bits.heatertype;
 }
 
 bool SpcData_GetMaskRom(uint64_t *mask)
@@ -63,18 +91,12 @@ bool SpcData_SetMaskRom(uint64_t *mask)
 
 uint64_t SpcData_GetMaskRam(void)
 {
-    SpcDataRam.SpcMaskBits.hasHeatStatus = 1;
-    SpcDataRam.SpcMaskBits.heatStatus = 1;
     return SpcDataRam.SpcMaskRam;
 }
 
 bool SpcData_GetTemperature(SpcTemp_t *temp)
 {
     if (temp == NULL) return false;
-
-    SpcDataRam.SpcTemp.hasValue = 1;
-    SpcDataRam.SpcTemp.temperature[0] = 16;
-    SpcDataRam.SpcTemp.temperature[1] = 32;
 
     memset(temp, 0, sizeof(SpcTemp_t));
     memcpy(temp, &(SpcDataRam.SpcTemp), sizeof(SpcTemp_t));
@@ -86,11 +108,6 @@ bool SpcData_GetTempRTDA(SpcTemp_t *temp)
 {
     if (temp == NULL) return false;
 
-    SpcDataRam.SpcTempRTDA.hasValue = 1;
-    SpcDataRam.SpcTempRTDA.status = RTD_SHORT;
-    SpcDataRam.SpcTempRTDA.temperature[0] = 160;
-    SpcDataRam.SpcTempRTDA.temperature[1] = 320;
-
     memset(temp, 0, sizeof(SpcTemp_t));
     memcpy(temp, &(SpcDataRam.SpcTempRTDA), sizeof(SpcTemp_t));
 
@@ -100,11 +117,6 @@ bool SpcData_GetTempRTDA(SpcTemp_t *temp)
 bool SpcData_GetTempRTDB(SpcTemp_t *temp)
 {
     if (temp == NULL) return false;
-
-    SpcDataRam.SpcTempRTDB.hasValue = 1;
-    SpcDataRam.SpcTempRTDB.status = RTD_OPEN;
-    SpcDataRam.SpcTempRTDB.temperature[0] = 16;
-    SpcDataRam.SpcTempRTDB.temperature[1] = 32;
 
     memset(temp, 0, sizeof(SpcTemp_t));
     memcpy(temp, &(SpcDataRam.SpcTempRTDB), sizeof(SpcTemp_t));
@@ -116,10 +128,6 @@ bool SpcData_GetMaxTemperature(SpcTemp_t *temp)
 {
     if (temp == NULL) return false;
 
-    SpcDataRam.SpcMaxTemp.hasValue = 1;
-    SpcDataRam.SpcMaxTemp.temperature[0] = 16;
-    SpcDataRam.SpcMaxTemp.temperature[1] = 32;
-
     memset(temp, 0, sizeof(SpcTemp_t));
     memcpy(temp, &(SpcDataRam.SpcMaxTemp), sizeof(SpcTemp_t));
 
@@ -129,10 +137,6 @@ bool SpcData_GetMaxTemperature(SpcTemp_t *temp)
 bool SpcData_GetMinTemperature(SpcTemp_t *temp)
 {
     if (temp == NULL) return false;
-
-    SpcDataRam.SpcMinTemp.hasValue = 1;
-    SpcDataRam.SpcMinTemp.temperature[0] = 16;
-    SpcDataRam.SpcMinTemp.temperature[1] = 32;
 
     memset(temp, 0, sizeof(SpcTemp_t));
     memcpy(temp, &(SpcDataRam.SpcMinTemp), sizeof(SpcTemp_t));
@@ -144,9 +148,6 @@ bool SpcData_GetPower(SpcUint16_t *power)
 {
     if (power == NULL) return false;
 
-    SpcDataRam.SpcPower.hasValue = 1;
-    SpcDataRam.SpcPower.value = 102;
-
     memset(power, 0, sizeof(SpcUint16_t));
     memcpy(power, &(SpcDataRam.SpcPower), sizeof(SpcUint16_t));
 }
@@ -154,9 +155,6 @@ bool SpcData_GetPower(SpcUint16_t *power)
 bool SpcData_GetVoltage(SpcUint16_t *volt)
 {
     if (volt == NULL) return false;
-
-    SpcDataRam.SpcVoltage.hasValue = 1;
-    SpcDataRam.SpcVoltage.value = 102;
 
     memset(volt, 0, sizeof(SpcUint16_t));
     memcpy(volt, &(SpcDataRam.SpcVoltage), sizeof(SpcUint16_t));
@@ -166,9 +164,6 @@ bool SpcData_GetMaxVoltage(SpcUint16_t *volt)
 {
     if (volt == NULL) return false;
 
-    SpcDataRam.SpcMaxVoltage.hasValue = 1;
-    SpcDataRam.SpcMaxVoltage.value = 150;
-
     memset(volt, 0, sizeof(SpcUint16_t));
     memcpy(volt, &(SpcDataRam.SpcMaxVoltage), sizeof(SpcUint16_t));
 }
@@ -176,9 +171,6 @@ bool SpcData_GetMaxVoltage(SpcUint16_t *volt)
 bool SpcData_GetMinVoltage(SpcUint16_t *volt)
 {
     if (volt == NULL) return false;
-
-    SpcDataRam.SpcMinVoltage.hasValue = 1;
-    SpcDataRam.SpcMinVoltage.value = 80;
 
     memset(volt, 0, sizeof(SpcUint16_t));
     memcpy(volt, &(SpcDataRam.SpcMinVoltage), sizeof(SpcUint16_t));
@@ -188,9 +180,6 @@ bool SpcData_GetCurrent(SpcUint16_t *curr)
 {
     if (curr == NULL) return false;
 
-    SpcDataRam.SpcCurrent.hasValue = 1;
-    SpcDataRam.SpcCurrent.value = 102;
-
     memset(curr, 0, sizeof(SpcUint16_t));
     memcpy(curr, &(SpcDataRam.SpcCurrent), sizeof(SpcUint16_t));
 }
@@ -198,9 +187,6 @@ bool SpcData_GetCurrent(SpcUint16_t *curr)
 bool SpcData_GetMaxCurrent(SpcUint16_t *curr)
 {
     if (curr == NULL) return false;
-
-    SpcDataRam.SpcMaxCurrent.hasValue = 1;
-    SpcDataRam.SpcMaxCurrent.value = 102;
 
     memset(curr, 0, sizeof(SpcUint16_t));
     memcpy(curr, &(SpcDataRam.SpcMaxCurrent), sizeof(SpcUint16_t));
@@ -210,9 +196,6 @@ bool SpcData_GetGfi(SpcUint16_t *gfi)
 {
     if (gfi == NULL) return false;
 
-    SpcDataRam.SpcGfi.hasValue = 1;
-    SpcDataRam.SpcGfi.value = 102;
-
     memset(gfi, 0, sizeof(SpcUint16_t));
     memcpy(gfi, &(SpcDataRam.SpcGfi), sizeof(SpcUint16_t));
 }
@@ -220,9 +203,6 @@ bool SpcData_GetGfi(SpcUint16_t *gfi)
 bool SpcData_GetMaxGfi(SpcUint16_t *gfi)
 {
     if (gfi == NULL) return false;
-
-    SpcDataRam.SpcMaxGfi.hasValue = 1;
-    SpcDataRam.SpcMaxGfi.value = 102;
 
     memset(gfi, 0, sizeof(SpcUint16_t));
     memcpy(gfi, &(SpcDataRam.SpcMaxGfi), sizeof(SpcUint16_t));
@@ -232,9 +212,6 @@ bool SpcData_GetEnegy(SpcUint16_t *enegy)
 {
     if (enegy == NULL) return false;
 
-    SpcDataRam.SpcEnegy.hasValue = 1;
-    SpcDataRam.SpcEnegy.value = 102;
-
     memset(enegy, 0, sizeof(SpcUint16_t));
     memcpy(enegy, &(SpcDataRam.SpcEnegy), sizeof(SpcUint16_t));
 }
@@ -242,9 +219,6 @@ bool SpcData_GetEnegy(SpcUint16_t *enegy)
 bool SpcData_GetCost(SpcUint16_t *cost)
 {
     if (cost == NULL) return false;
-
-    SpcDataRam.SpcCost.hasValue = 1;
-    SpcDataRam.SpcCost.value = 102;
 
     memset(cost, 0, sizeof(SpcUint16_t));
     memcpy(cost, &(SpcDataRam.SpcCost), sizeof(SpcUint16_t));
@@ -254,9 +228,6 @@ bool SpcData_GetOnTime(SpcUint16_t *ontime)
 {
     if (ontime == NULL) return false;
 
-    SpcDataRam.SpcOnTime.hasValue = 1;
-    SpcDataRam.SpcOnTime.value = 1000;
-
     memset(ontime, 0, sizeof(SpcUint16_t));
     memcpy(ontime, &(SpcDataRam.SpcOnTime), sizeof(SpcUint16_t));
 }
@@ -264,9 +235,6 @@ bool SpcData_GetOnTime(SpcUint16_t *ontime)
 bool SpcData_GetOnPercent(SpcUint16_t *onpercent)
 {
     if (onpercent == NULL) return false;
-
-    SpcDataRam.SpcOnPercent.hasValue = 1;
-    SpcDataRam.SpcOnPercent.value = 78;
 
     memset(onpercent, 0, sizeof(SpcUint16_t));
     memcpy(onpercent, &(SpcDataRam.SpcOnPercent), sizeof(SpcUint16_t));

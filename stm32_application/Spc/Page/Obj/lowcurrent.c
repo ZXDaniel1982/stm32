@@ -158,13 +158,12 @@ PageEntity_t *Page_Func_LowCurrent(KeyEnum_t key, Logger logger, PageEntity_t *p
     case Act:
         return Page_CreatePage(Actual, logger, page->publisher);
     case Prog:
-        return Page_CreatePage(Program, logger, page->publisher);
+        return Page_CreatePage(HeaterSetup, logger, page->publisher);
     case Def:
         return Page_CreatePage(Default, logger, page->publisher);
     case Right:
-        return Page_CreatePage(HighCurrent, logger, page->publisher);
     case Left:
-        return Page_CreatePage(HighTemp, logger, page->publisher);
+        return Page_CreatePage(Spc_GetNextPage(logger, key, LowCurrent), logger, page->publisher);
     case Up:
     case Down:
         Page_Update_LowCurrent(logger, page, key);

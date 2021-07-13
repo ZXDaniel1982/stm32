@@ -103,6 +103,16 @@ typedef enum PageEnum {
     PAGE_INDEX(OBJ_ENUM, NULL)
 } PageEnum_t;
 
+typedef struct {
+    PageEnum_t type;
+    uint64_t mask;
+} PagePrivilege_t;
+
+typedef struct {
+    uint64_t mask;
+    bool (*validator)(void);
+} PageValidator_t;
+
 typedef struct PageEntity {
     PageEnum_t type;
     PageInfo_t info;
@@ -142,6 +152,14 @@ void GfiProcess(PageEntity_t *page, SpcUint16_t *gfi);
 
 /* From Page Voltage */
 void VoltageProcess(PageEntity_t *page, SpcUint16_t *voltage);
+
+/* For Common Access check */
+bool MaintainIsNone(void);
+bool MaintainIsOff(void);
+bool MenuIsNotAdvance(void);
+bool ControlIsProport(void);
+bool HeaterIsSelfRegular(void);
+PageEnum_t Spc_GetNextPage(Logger logger, KeyEnum_t key, PageEnum_t type);
 
 #ifdef __cplusplus
 }

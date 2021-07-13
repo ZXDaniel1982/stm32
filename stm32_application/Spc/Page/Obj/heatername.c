@@ -154,13 +154,12 @@ PageEntity_t *Page_Func_HeaterName(KeyEnum_t key, Logger logger, PageEntity_t *p
     case Act:
         return Page_CreatePage(Actual, logger, page->publisher);
     case Prog:
-        return Page_CreatePage(Program, logger, page->publisher);
+        return Page_CreatePage(SystemSetup, logger, page->publisher);
     case Def:
         return Page_CreatePage(Default, logger, page->publisher);
     case Right:
-        return Page_CreatePage(HeaterType, logger, page->publisher);
     case Left:
-        return Page_CreatePage(HeaterEn, logger, page->publisher);
+        return Page_CreatePage(Spc_GetNextPage(logger, key, HeaterName), logger, page->publisher);
     case Up:
     case Down:
         Page_Update_HeaterName(logger, page, key);

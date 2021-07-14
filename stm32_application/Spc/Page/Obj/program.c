@@ -2,14 +2,7 @@
 
 void Page_Init_Program(Logger logger, PageEntity_t *page)
 {
-    //logger("\r\nProgram\r\n");
-    if ((page == NULL) || (page->publisher == NULL)) return;
-
-    SpcData_SetRefreshMask(DISABLE_REFRESH);
-    strncpy((char *)(page->info.Title), "Program", MAX_INFO_LEN);
-    strncpy((char *)(page->info.Content), "Setpoints", MAX_INFO_LEN);
-
-    page->publisher(&(page->info));
+    Spc_Init_Page(logger, page, (uint8_t *)"Program", (uint8_t *)"Setpoints");
 }
 
 PageEntity_t *Page_Func_Program(KeyEnum_t key, Logger logger, PageEntity_t *page)

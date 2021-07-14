@@ -125,6 +125,7 @@ Spc/Page/Obj/heatertest.c \
 Spc/Page/Obj/gfitest.c \
 Spc/Page/Common/access.c \
 Spc/Page/Common/navigate.c \
+Spc/Page/Common/highlevelpage.c \
 Spc/Data/data.c \
 Spc/Timer/spctimer.c \
 Gui/gui.c \
@@ -197,6 +198,7 @@ Spc/Page/Obj/heatertest.c \
 Spc/Page/Obj/gfitest.c \
 Spc/Page/Common/access.c \
 Spc/Page/Common/navigate.c \
+Spc/Page/Common/highlevelpage.c \
 Spc/Timer/spctimermock.c \
 Vector/vector.c
 

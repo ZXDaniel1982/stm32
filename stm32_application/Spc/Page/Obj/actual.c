@@ -2,13 +2,7 @@
 
 void Page_Init_Actual(Logger logger, PageEntity_t *page)
 {
-    //logger("\r\nActual\r\n");
-    if ((page == NULL) || (page->publisher == NULL)) return;
-
-    SpcData_SetRefreshMask(DISABLE_REFRESH);
-    strncpy((char *)(page->info.Title), "Actual", MAX_INFO_LEN);
-    strncpy((char *)(page->info.Content), "Operating Values", MAX_INFO_LEN);
-    page->publisher(&(page->info));
+    Spc_Init_Page(logger, page, (uint8_t *)"Actual", (uint8_t *)"Operating Values");
 }
 
 PageEntity_t *Page_Func_Actual(KeyEnum_t key, Logger logger, PageEntity_t *page)

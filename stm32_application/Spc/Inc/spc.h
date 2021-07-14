@@ -161,6 +161,8 @@ bool ControlIsProport(void);
 bool HeaterIsSelfRegular(void);
 PageEnum_t Spc_GetNextPage(Logger logger, KeyEnum_t key, PageEnum_t type);
 
+void Spc_Init_Page(Logger, PageEntity_t *, const uint8_t*, const uint8_t*);
+
 #ifdef __cplusplus
 }
 #endif

@@ -2,14 +2,7 @@
 
 void Page_Init_SystemTest(Logger logger, PageEntity_t *page)
 {
-	//logger("\r\nProgram\r\n");
-  if ((page == NULL) || (page->publisher == NULL)) return;
-
-  SpcData_SetRefreshMask(DISABLE_REFRESH);
-  strncpy((char *)(page->info.Title), "Program", MAX_INFO_LEN);
-  strncpy((char *)(page->info.Content), "System Test", MAX_INFO_LEN);
-
-  page->publisher(&(page->info));
+	Spc_Init_Page(logger, page, (uint8_t *)"Program", (uint8_t *)"System Test");
 }
 
 PageEntity_t *Page_Func_SystemTest(KeyEnum_t key, Logger logger, PageEntity_t *page)

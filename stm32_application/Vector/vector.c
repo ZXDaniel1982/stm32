@@ -93,9 +93,9 @@ void Vector_List_WalkThrough(SubVector_t *list)
 
     if (list->func == NULL) return;
 
-	while (element) {
-		  list->func(element->data);
-      element = element->next;
-	}
+    while (element) {
+        list->func(element->data);
+        element = element->next;
+    }
 }
 

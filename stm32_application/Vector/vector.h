@@ -21,6 +21,7 @@ typedef enum {
 typedef struct vElement_t {
     uint8_t index;
     void* data;
+    struct vElement_t *last;
     struct vElement_t *next;
 } Element_t;
 

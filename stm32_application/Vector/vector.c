@@ -43,9 +43,11 @@ void *Vector_List_AddElement(SubVector_t *list, uint8_t index, uint16_t size)
     if (list->elementHead == NULL) {
         list->elementHead = NewElement;
         list->elementEnd = list->elementHead;
+        list->elementEnd->last = NULL;
         list->elementEnd->next = NULL;
     } else {
         list->elementEnd->next = NewElement;
+        NewElement->last = list->elementEnd;
         list->elementEnd = NewElement;
         list->elementEnd->next = NULL;
     }
@@ -68,17 +70,18 @@ void *Vector_List_GetElement(SubVector_t *list, uint8_t index)
 void Vector_List_DeleteElement(SubVector_t *list, uint8_t index)
 {
     Element_t *element = list->elementHead;
+    if (element->index == index) {
+        if (element->data != NULL) free(element->data);
+        list->elementHead = element->next;
+        free(element);
+        return;
+    }
 
     while (element) {
         Element_t *next = element->next;
-        if (element->index == index) {
-            if (element->data != NULL) free(element->data);
-            list->elementHead = element->next;
-            free(element);
-            return;
-        }
         if ((next != NULL) && (next->index == index)) {
             element->next = next->next;
+            if (next->next != NULL) next->next->last = element;
             if (next->data != NULL) free(next);
             free(next);
             return;
@@ -99,3 +102,14 @@ void Vector_List_WalkThrough(SubVector_t *list)
     }
 }
 
+void Vector_List_WalkThroughBack(SubVector_t *list)
+{
+    Element_t *element = list->elementEnd;
+
+    if (list->func == NULL) return;
+
+    while (element) {
+        list->func(element->data);
+        element = element->last;
+    }
+}

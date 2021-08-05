@@ -127,6 +127,7 @@ Spc/Page/Common/access.c \
 Spc/Page/Common/navigate.c \
 Spc/Data/data.c \
 Spc/Timer/spctimer.c \
+Spc/Alarm/alarm.c \
 Gui/gui.c \
 Gui/gui_button.c \
 Gui/gui_label.c \
